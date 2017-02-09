@@ -1,0 +1,27 @@
+#pound signs are used for denoting comments in makefiles
+
+#I think this calls the root libraries?
+ROOTLIBS = $(shell root-config --libs)
+
+#Compiler
+CXX = g++
+#Somehow gets the root libraries from where you want them..?
+CXXFLAGS = -O2 -fPIC -w -g $(shell root-config --cflags)
+
+#Target is the name of the output executable
+TARGET = delta_t_cut_ex
+
+#FILENAME is the name of the file you're putting in, but without the file type
+FILENAME = delta_t_cut
+
+#When you don't specify anything i.e. $ make => the function all is called
+#If you only want to clean then you can call the function clean with $ make clean
+#If you only want to make the main program then you can call $ make main
+
+all: clean main
+
+main: $(FILENAME).o
+	$(CXX) $(FILENAME).o -L. $(CXXFLAGS) $(ROOTLIBS) -o $(TARGET)
+
+clean:
+	-rm -f $(TARGET) $(FILENAME).o
