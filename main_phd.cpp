@@ -68,8 +68,19 @@ int main(){
             int e16_num = -1; 
             cout << "How many files would you like to add? (if all say -1): "; //Can load in any number of files up to 
             cin >> e16_num;
-            loadChain(&data,"e16_data.txt",e16_num);
+            loadChain(&data,"/home/mclauchlinc/Desktop/e16/nick.txt",e16_num);
             //data.AddFile("/Users/cmc/Desktop/arjun.root");
+        }
+    }
+
+    if(office == 'y')
+    {
+        if(use_e16 == 'y')
+        {
+            int e16_num = -1;
+            cout << "How many files would you like to add? (if all say -1): "; //Can load in any number of files up to 
+            cin >> e16_num;
+            loadChain(&data,"/",e16_num);
         }
     }
     cout<< "Done" <<std::endl;
