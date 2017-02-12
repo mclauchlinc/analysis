@@ -514,7 +514,7 @@ int main(){
                         }
                         if(get_sector(cx[0],cy[0]) == 2)
                         {
-                            two_plot["r_fid2"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid2"]->Fill(phi_lab, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 3)
                         {
@@ -541,7 +541,7 @@ int main(){
                             }
                             if(get_sector(cx[0],cy[0]) == 2)
                             {
-                                two_plot["r_fid8"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid8"]->Fill(phi_lab, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 3)
                             {
@@ -569,7 +569,7 @@ int main(){
                             }
                             if(get_sector(cx[0],cy[0]) == 2)
                             {
-                                two_plot["r_fid14"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid14"]->Fill(phi_lab, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 3)
                             {
