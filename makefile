@@ -6,9 +6,9 @@ ROOTSYS		= $(shell root-config --exec-prefix)
 CXX = g++
 CXXFLAGS =      -O2 -fPIC -w -g $(shell root-config --cflags)
 #Target is the name of the output executable
-TARGET =	analysis_1
+TARGET =	analysis
 #The name of the file you want to comilie usually something like main.cpp 
-FILENAME =	main_phd
+FILENAME =	main
 
 #When you don't specifiy anything i.e. $ make the function all is called
 #If you only want to clean the you can call the function clean with $ make clean
@@ -27,12 +27,13 @@ FILENAME =	main_phd
 
 #To run a makefile with a name other than make 
 #make -f <name of make file>
+all: clean analysis
 
-analysis_1: main_phd.o
-	g++ main_phd.o -L. $(CXXFLAGS) $(ROOTLIBS) -o analysis_1 
+analysis: main.o
+	g++ main.o -L. $(CXXFLAGS) $(ROOTLIBS) -o analysis 
 
-main_phd.o: main_phd.cpp
-	g++ $(CXXFLAGS) -c main_phd.cpp -o main_phd.o
+main.o: main.cpp
+	g++ $(CXXFLAGS) -c main.cpp -o main.o
 
 clean:
 	rm -f $(TARGET) $(FILENAME).o 
