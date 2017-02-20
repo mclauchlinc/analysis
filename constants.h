@@ -2,6 +2,7 @@
 #define DELTA_T_CUTS_H
 
 #include "TMath.h"
+#include "headers.h"
 
 const double c_special = 29.9792458; //speed of light in cm/ns
 
@@ -113,5 +114,44 @@ const Float_t p_min_e1f = 0.64;
 const Float_t ec_min_e1f_exp[6] = {0.058,0.064,0.060,0.056,0.058,0.056}; 
 const Float_t ec_min_e1f_sim[6] = {0.063,0.063,0.063,0.063,0.063,0.063}; 
 
+//Plot Formation Constants
+//W Q2
+const int WQxres = 500;
+const int WQyres = 500;
+const double WQxmin = -0.01;
+const double WQymin = -0.01;
+const double WQxmax = 3.99;
+const double WQymax = 8.99;
+//Electron Sampling Fraction
+const int SFxres = 100;
+const int SFyres = 100;
+const double SFxmin = 0.0;
+const double SFymin = 0.0;
+const double SFxmax = 6.0;
+const double SFymax = 1.0;
+//Minimum Electron Energy
+const int MEExres = 100;
+const int MEEyres = 100;
+const double MEExmin = 0.0;
+const double MEEymin = 0.0;
+const double MEExmax = 6.0;
+const double MEEymax = 1.0;
+//Fiducial Cuts
+const int FIDxres = 200;
+const int FIDyres = 200;
+const double FIDxmin = -30.0;
+const double FIDymin = 0.0;
+const double FIDxmax = 3.0;
+const double FIDymax = 180.0;
+//Delta_t
+const int DTxres = 300;
+const int DTyres = 200;
+const double DTxmin = 0.0;
+const double DTymin = -4.0;
+const double DTxmax = 7.0;
+const double DTymax = 4.0;
+
+const std::string species[4] = {"e","p","pip","pim"};
+const std::string cut[4] = {"pre","cut","anti","all"};
 
 #endif /* CONSTANTS_H */

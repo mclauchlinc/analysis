@@ -59,7 +59,7 @@ int main(){
 
     //Load in Files
     cout << "Loading Files: ";
-    TChain::TChain data("h10");
+    TChain data("h10");
 
     if(mac == 'y') 
     {
@@ -80,7 +80,7 @@ int main(){
             int e16_num = -1;
             cout << "How many files would you like to add? (if all say -1): "; //Can load in any number of files up to 
             cin >> e16_num;
-            loadChain(&data,"/",e16_num);
+            loadChain(&data,"/home/mclauchlinc/Desktop/e16/nick.txt",e16_num);
         }
     }
     cout<< "Done" <<std::endl;
@@ -90,7 +90,7 @@ int main(){
     cout << "Name your Output File (end in .root):  ";
     cin >> file_name;
     cout<< "Creating File: ";
-    TFile::TFile *output = Name_File(file_name); //Using this function to name a file 
+    TFile *output = Name_File(file_name); //Using this function to name a file 
     cout << "Done" <<std::endl;
 
     //Choose analysis
@@ -224,6 +224,7 @@ int main(){
     double delta_t; 
     double theta_lab;
     double phi_lab;
+    double phi_c;
     double sf;
 
     //Event Selection
@@ -278,31 +279,31 @@ int main(){
 
     //Create Plots
     cout<< "Creating Plots: " <<endl;
-    if(eid_level >=1)
-    {
-        if(eid_plots == 'y')
-        {
+    //if(eid_level >=1)
+    //{
+        //if(eid_plots == 'y')
+        //{
             //plots["plot1"] = new TH2F("WvQ2_Pre","W vs. Q2 pre_eid_cut",500,-0.01,3.99,500,-0.01,8.99);
             two_plot["plot1"] = new TH2F("WvQ2_Pre","W vs. Q2 pre_eid_cut",500,-0.01,3.99,500,-0.01,8.99);
             two_plot["plot2"] = new TH2F("WvQ2_Post","W vs. Q2 post_eid_cut",500,-0.01,3.99,500,-0.01,8.99);
             two_plot["plot3"] = new TH2F("WvQ2_Anti","W vs. Q2 anti_eid_cut",500,-0.01,3.99,500,-0.01,8.99);
             cout<< "W Q2 plots made" <<endl;
-        }
-        if(eid_level ==3 && sf_plots == 'y')
-        {
+        //}
+        //if(eid_level ==3 && sf_plots == 'y')
+        //{
             two_plot["sf1"] = new TH2F("sf_pre","Sample Fraction Pre Cut",100,0.0,6.0,100,0.0,1.0);
             two_plot["sf2"] = new TH2F("sf_cut","Sample Fraction Post Cut",100,0.0,6.0,100,0.0,1.0);
             two_plot["sf3"] = new TH2F("sf_anti","Sample Fraction Anit Cut",100,0.0,6.0,100,0.0,1.0);
             two_plot["sf4"] = new TH2F("sf_all","Sample Fraction All Cuts",100,0.0,6.0,100,0.0,1.0);
             cout<< "Sampling Fraction plots made" <<endl;
-        }
+       // }
         //if(eid_level == 3 && e)
         
-    }
-    if(fiducial_plots = 'y')
-    {
-        if(eid_level ==3 && electron_fid_plots == 'y')
-        {
+   // }
+    //if(fiducial_plots = 'y')
+   // {
+        //if(eid_level ==3 && electron_fid_plots == 'y')
+       // {
             two_plot["e_fid1"] = new TH2F("e_fid1_pre","Sector 1 Pre", 200,-30.0,30.0,200,0.0,180.0);
             two_plot["e_fid2"] = new TH2F("e_fid2_pre","Sector 2 pre", 200,-30.0,30.0,200,0.0,180.0);
             two_plot["e_fid3"] = new TH2F("e_fid3_pre","Sector 3 pre", 200,-30.0,30.0,200,0.0,180.0);
@@ -328,7 +329,7 @@ int main(){
             two_plot["e_fid23"] = new TH2F("e_fid5_all","Sector 5 all cuts", 200,-30.0,30.0,200,0.0,180.0);
             two_plot["e_fid24"] = new TH2F("e_fid6_all","Sector 6 all cuts", 200,-30.0,30.0,200,0.0,180.0);
             cout<< "Electron Fiducial plots made" <<endl;
-        }
+        //}
         if(proton_fid_plots == 'y')
         { 
             two_plot["p_fid1"] = new TH2F("p_fid1_pre","Sector 1 Pre", 200,-30.0,30.0,200,0.0,180.0);
@@ -413,7 +414,7 @@ int main(){
             two_plot["pim_fid24"] = new TH2F("pim_fid6_all","Sector 6 all cuts applied", 200,-30.0,30.0,200,0.0,180.0);
             cout<< "Pi- Fiducial plots made" <<endl;
         }
-    }
+    //}
     if(delta_t_plots == 'y')
     {
         if(proton_delta_t_plots == 'y')
@@ -463,6 +464,7 @@ int main(){
             //Get theta and phi for electron
             theta_lab = get_theta(cz[0]);
             phi_lab = get_phi(cx[0],cy[0]);
+            phi_c = phi_center(cx[0],cy[0]);
             //Sampling Fraction
             sf = etot[0]/p[0]; 
             //Electron Identification
@@ -510,54 +512,54 @@ int main(){
                         //Pre Cut
                         if(get_sector(cx[0],cy[0]) == 1)
                         {
-                            two_plot["e_fid1"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid1"]->Fill(phi_c, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 2)
                         {
-                            two_plot["r_fid2"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid2"]->Fill(phi_c, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 3)
                         {
-                            two_plot["e_fid3"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid3"]->Fill(phi_c, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 4)
                         {
-                            two_plot["e_fid4"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid4"]->Fill(phi_c, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 5)
                         {
-                            two_plot["e_fid5"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid5"]->Fill(phi_c, theta_lab);
                         }
                         if(get_sector(cx[0],cy[0]) == 6)
                         {
-                            two_plot["e_fid6"]->Fill(phi_lab, theta_lab);
+                            two_plot["e_fid6"]->Fill(phi_c, theta_lab);
                         }
                         // The Cut
                         if(is_e == kTRUE)
                         {
                             if(get_sector(cx[0],cy[0]) == 1)
                             {
-                                two_plot["e_fid7"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid7"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 2)
                             {
-                                two_plot["r_fid8"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid8"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 3)
                             {
-                                two_plot["e_fid9"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid9"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 4)
                             {
-                                two_plot["e_fid10"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid10"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 5)
                             {
-                                two_plot["e_fid11"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid11"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 6)
                             {
-                                two_plot["e_fid12"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid12"]->Fill(phi_c, theta_lab);
                             }
                         }
                         //The Anti Cut
@@ -565,27 +567,27 @@ int main(){
                         {
                             if(get_sector(cx[0],cy[0]) == 1)
                             {
-                                two_plot["e_fid13"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid13"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 2)
                             {
-                                two_plot["r_fid14"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid14"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 3)
                             {
-                                two_plot["e_fid15"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid15"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 4)
                             {
-                                two_plot["e_fid16"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid16"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 5)
                             {
-                                two_plot["e_fid17"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid17"]->Fill(phi_c, theta_lab);
                             }
                             if(get_sector(cx[0],cy[0]) == 6)
                             {
-                                two_plot["e_fid18"]->Fill(phi_lab, theta_lab);
+                                two_plot["e_fid18"]->Fill(phi_c, theta_lab);
                             }
                         }
                     }
@@ -890,5 +892,5 @@ int main(){
 
     //Watch->Stop();
     //cout << "The program has taken " << Watch->RealTime() << "sec to complete" << std::endl;
-    return 1;
+    return 0;
 }

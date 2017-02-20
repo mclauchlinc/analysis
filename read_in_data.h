@@ -6,6 +6,9 @@
 #include <fstream>
 #include <string>
 #include <TChain.h>
+#include "variables.h"
+#include "TTree.h"
+
 
 //Creates a vector of file names from a source file labeled "path"
 std::vector<std::string> read_file_list(std::string path) //Choose a vector of strings. Vector because adding things onto the end works fine. Also don't know how to use a list
@@ -40,6 +43,39 @@ void loadChain(TChain* c, std::string file, int max=-1)
 	}
 }
 
+void SetBranches(TChain* c)
+{
+	c->SetBranchAddress("q",&q);
+    c->SetBranchAddress("gpart",&gpart);
+    c->SetBranchAddress("sc_t",&sc_t);
+    c->SetBranchAddress("sc_r",&sc_r);
+    c->SetBranchAddress("sc",&sc);
+    c->SetBranchAddress("p",&p);
+    c->SetBranchAddress("cx",&cx);
+    c->SetBranchAddress("cy",&cy);
+    c->SetBranchAddress("cz",&cz);
+    c->SetBranchAddress("stat",&stat);
+    c->SetBranchAddress("dc_stat",&dc_stat);
+    c->SetBranchAddress("vx",&vx);
+    c->SetBranchAddress("vy",&vy);
+    c->SetBranchAddress("vz",&vz);
+    c->SetBranchAddress("dc",&dc);
+    c->SetBranchAddress("cc",&cc);
+    c->SetBranchAddress("ec",&ec);
+    c->SetBranchAddress("etot",&etot);
+}
+
+
+
+/*
+TChain LoadData(char q, TChain* chain){
+	if(q == 'd')
+	{
+		loadChain(&chain,"/home/mclauchlinc/Desktop/e16/nick.txt"); //This is specifically for the desktop
+	}
+	return data;
+}
+*/
 #endif
 
 /*

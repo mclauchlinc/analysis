@@ -29,27 +29,27 @@ int get_sector(Float_t cx, Float_t cy)
 	if(phi>=-30 && phi <=30)
 	{
 		sector = 1;
-	}
+	}else
 	if(phi>=30 && phi<=90)
 	{
 		sector = 2;
-	}
+	}else
 	if(phi>=90 && phi <=150)
 	{
 		sector = 3;
-	}
+	}else
 	if(phi>=150 || phi<=-150)
 	{
 		sector = 4;
-	}
+	}else
 	if(phi>=-150 && phi<=-90)
 	{
 		sector = 5;
-	}
+	}else
 	if(phi>=-90 && phi<=-30)
 	{
 		sector = 6;
-	}
+	}else
 	return sector;
 }
 
@@ -63,15 +63,15 @@ double phi_center( Float_t cx, Float_t cy)
 	if(sector ==1)
 	{
 		phi_corr = phi0;
-	}
+	}else
 	if(sector==2)
 	{
 		phi_corr = phi0-60;
-	}
+	}else
 	if(sector==3)
 	{
 		phi_corr = phi0-120;
-	}
+	}else
 	if(sector == 4)
 	{
 		if(phi0<=-150)
@@ -82,11 +82,11 @@ double phi_center( Float_t cx, Float_t cy)
 		{
 			phi_corr = phi0-180;
 		}
-	}
+	}else
 	if(sector==5)
 	{
 		phi_corr = phi0+120;
-	}
+	}else
 	if(sector==6)
 	{
 		phi_corr = phi0+60;
