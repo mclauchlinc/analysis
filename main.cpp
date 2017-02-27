@@ -39,6 +39,10 @@ int main(int argc, char** argv)
     	cout <<"Momentum is " <<p[1] <<endl;
     	Fill_fid("e", 1, cx[0], cy[0], cz[0]);
     }
+    for(int i = 0; i<4; i++){
+        cout <<"Species: " <<species[i] <<endl;
+        cout << "Cut type: " <<cut[i] <<endl;
+    }
 
     Fid_Write();
 
