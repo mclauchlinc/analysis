@@ -15,13 +15,12 @@ int main(int argc, char** argv)
 	char* input = argv[1];
 	char* output_name = argv[2];
 
-	TFile *output = Name_File(output_name);
-
+	TFile *output = Name_File(output_name); //read_in_data.h
 
 	//Load in Files
     cout << "Loading Files: ";
     TChain data("h10");
-   	loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1);
+   	loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1); //Located in read_in_data.h
     cout<< "Done" <<std::endl;
 
     //Number of events check
@@ -29,26 +28,32 @@ int main(int argc, char** argv)
     events = data.GetEntries();
     cout <<"There are "<< events <<" events loaded" <<endl;
 
-    SetBranches(&data);
-
-    MakeHist_fid();
-
+    cout << 1 <<endl;
+    SetBranches(&data); // Located in read_in_data.h
+    cout<< 2 <<endl;
+    MakeHist_fid(); // Located in histograms.h
+    cout<< 3 <<endl;
+    //Progress
+    int progress;
+    cout << 4 <<endl;
     for(int i = 0; i< 10 ; i++)
     {
-    	data.GetEntry(i);
-    	cout <<"Momentum is " <<p[1] <<endl;
-    	Fill_fid("e", 1, cx[0], cy[0], cz[0]);
+    	cout<< "event " << i <<endl;
+        //Update on the progress
+        //progress = (int) 100.0*(((double)i+1.0)/(double)events);
+        //cout<<"Progess Percent " <<progress <<"\r";
+
+        //Get info for event i
+        data.GetEntry(i);
+
+        //Electron ID
+    	Fill_fid(0 , 0, cx[0], cy[0], cz[0]); //histograms.h
     }
-    for(int i = 0; i<4; i++){
-        cout <<"Species: " <<species[i] <<endl;
-        cout << "Cut type: " <<cut[i] <<endl;
-    }
 
-    Fid_Write();
+    //Fid_Write(); //Located in make_files.h
 
-
-    gpart = 2;
-    cout<< "gpart is " <<gpart <<endl;
+    output->Write();
+    output->Close();
 
 	return 0;
 }
