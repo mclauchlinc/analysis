@@ -141,7 +141,7 @@ const int FIDxres = 200;
 const int FIDyres = 200;
 const double FIDxmin = -30.0;
 const double FIDymin = 0.0;
-const double FIDxmax = 3.0;
+const double FIDxmax = 30.0;
 const double FIDymax = 180.0;
 //Delta_t
 const int DTxres = 300;
