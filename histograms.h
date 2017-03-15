@@ -65,6 +65,9 @@ void MakeHist_WQ2(){
     WQ2_hist[w] = new TH2D( hname, htitle, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
     delete hname; 
     delete htitle;
+    //std::cout <<"hname: "<<hname <<std::endl;
+    hisname = "";
+    htitle = "";
   }
 }
 
@@ -108,13 +111,19 @@ void MakeHist_fid(){
 		//sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	sprintf(htitle, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D(hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-      hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
+      std::cout << "species: " <<species[cart[1]] <<std::endl <<"sector: " <<(cart[0]+1) <<std::endl <<"cut: " <<cut[cart[2]] <<std::endl;
+      hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + "_" + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
       histitle = hisname; //For Fiducial I can make them both the same thing. 
       htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
       hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
       fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+      std::cout <<"hisname (pre): "<<hname <<std::endl;
       delete hname; //Problems with seg violations
       delete htitle; //Problems with seg violations
+      
+      hisname = "";
+      htitle = "";
+      std::cout <<"hisname (post): "<<hname <<std::endl;
     }
 }
 

@@ -36,13 +36,11 @@ int main(int argc, char** argv)
     //Progress
     int progress;
 
-    cout<< energy_e16;
-
     for(int i = 0; i< 10 ; i++)
     {
         //Update on the progress
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
-        cout<<"Progess Percent " <<progress <<"\r";
+        cout <<"Progess Percent " <<progress <<"\r";
 
         //Get info for event i
         data.GetEntry(i);
@@ -50,14 +48,14 @@ int main(int argc, char** argv)
         //Electron ID
             //EID Precut
     	Fill_fid( 0 , 0, cx[0], cy[0], cz[0]); //histograms.h
-        Fill_WQ2( 1, 0, p[0], cx[0], cy[0], cz[0]); //histograms.h
+        Fill_WQ2( 0, 0, p[0], cx[0], cy[0], cz[0]); //histograms.h
             //EID Cut and Anti-Cut
         if(eid( p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], 3)){   //eid.h
             Fill_fid( 0, 1, cx[0], cy[0], cz[0]);    //histograms.h
-            Fill_WQ2( 1, 1, p[0], cx[0], cy[0], cz[0]); //histograms.h
+            Fill_WQ2( 0, 1, p[0], cx[0], cy[0], cz[0]); //histograms.h
         }else{
             Fill_fid( 0, 2, cx[0], cy[0], cz[0]);    //histograms.h
-            Fill_WQ2( 1, 2, p[0], cx[0], cy[0], cz[0]); // histograms.h
+            Fill_WQ2( 0, 2, p[0], cx[0], cy[0], cz[0]); // histograms.h
         }
         //cout<< i+1 <<endl;
     }
