@@ -6,6 +6,23 @@
 #include "headers.h"
 #include "CartesianGenerator.hh"
 
+//Declare all title pointers and plots first
+char * htitle; //The name on the graph itself (can have spaces)
+char * hname; //The name shown in the TBrowser (should have no spaces)
+TH2D* fid_hist[6][4][4]; 
+TH2D* WQ2_hist[4];
+
+std::string histitle; //It is easier to manipulate strings so I put what I want in first then convert to a char*
+std::string hisname;
+
+//Conversion from string to char *
+char* Str2CharS( std::string str){
+  char * write = new char[str.size()+1]; //Creates a char* with the proper dimensions for the string
+  std::copy(str.begin(),str.end(),write); //Copies the string over into the char array that is the char*
+  return write; 
+}
+
+
 /* Gary stuff
 #include "CartesianGenerator.hh"
 //Sector, species, cut_status
@@ -25,6 +42,41 @@
   }
 */
 
+//W vs. Q^2
+/*
+Cut Types: 
+*/
+
+void MakeHist_WQ2(){
+  //Create Pointer for Histograms
+  /*Indexed: Cut_Status
+    - Pre = no cut
+    - Cut = EID Cut
+    - Anti-Cut = !EID
+    - All = All cuts
+  */
+  int space_dims = 4;//The cuts
+
+  for(int w = 0; w<space_dims ; w++){
+    hisname = "W_Q2_" +cut[w]; //Make the name for the plot 
+    histitle = hisname;
+    htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
+    hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
+    WQ2_hist[w] = new TH2D( hname, htitle, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
+    delete hname; 
+    delete htitle;
+  }
+}
+
+void Fill_WQ2(int set, int cut, Float_t p, Float_t cx, Float_t cy, Float_t cz){
+  double W, Q2;
+  //Set refers to the data set, due to them having different beam energies: 1->e16 and 2->e1f
+  W = WP(set, p, cx, cy, cz); // physics.h  
+  Q2 = Qsquared(set , p, cx, cy, cz); // physics.h
+  // Cut: {0,1,2,3} -> {pre,cut,anti,all}
+  WQ2_hist[cut]->Fill(W,Q2);
+}
+
 //Fiducial
 /*int fid_num = 6;
 int fid_types = 4;
@@ -35,19 +87,9 @@ TH2D * pip_fid_hist[24];
 TH2D * pim_fid_hist[24];
 */
 
-char * htitle; //The name on the graph itself (can have spaces)
-char * hname; //The name shown in the TBrowser (should have no spaces)
-TH2D* fid_hist[6][4][4]; 
 
-std::string histitle; //It is easier to manipulate strings so I put what I want in first then convert to a char*
-std::string hisname;
 
-//Conversion from string to char *
-char* Str2CharS( std::string str){
-  char * write = new char[str.size()+1]; //Creates a char* with the proper dimensions for the string
-  std::copy(str.begin(),str.end(),write); //Copies the string over into the char array that is the char*
-  return write; 
-}
+
 
 void MakeHist_fid(){
 	//Create Pointer for Histograms
@@ -62,7 +104,7 @@ void MakeHist_fid(){
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	
   	//in the loop
-  	while(cart.GetNextCombination()) {
+  	while(cart.GetNextCombination()) {//CartesianGenerator.hh
 		//sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	sprintf(htitle, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D(hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
@@ -71,19 +113,21 @@ void MakeHist_fid(){
       htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
       hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
       fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-      delete hname;
-      delete htitle; 
+      delete hname; //Problems with seg violations
+      delete htitle; //Problems with seg violations
     }
 }
 
 void Fill_fid(int type, int level, Float_t cx, Float_t cy, Float_t cz)
 {
-	double phi = phi_center(cx, cy);
-	double theta = get_theta(cz);
-	int sec = get_sector(cx, cy);
+	double phi = phi_center(cx, cy); //fiducial.h
+	double theta = get_theta(cz);  //fiducial.h
+	int sec = get_sector(cx, cy);  //fiducial.h
+  int sidx = sec-1;
+  //std::cout << sidx <<std::endl;
 	//Level {0,1,2,3} -> {no cut, cut, anti-cut, all cuts}
   //Type {0,1,2,3} -> {e, p, pip, pim}
-	fid_hist[sec-1][type][level]->Fill(phi, theta);
+	fid_hist[sidx][type][level]->Fill(phi, theta);
 }
 
 
@@ -106,6 +150,11 @@ void Fid_Write()
 */
 
 //Delta t
+
+void MakeHist(){
+  MakeHist_fid();
+  MakeHist_WQ2();
+}
 
 
 #endif
