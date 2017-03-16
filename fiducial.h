@@ -49,7 +49,7 @@ int get_sector(Float_t cx, Float_t cy)
 	if(phi>=-90 && phi<=-30)
 	{
 		sector = 6;
-	}else
+	}//got rid of pointless "else" statement 3/10/2017
 	return sector;
 }
 

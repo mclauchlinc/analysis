@@ -19,35 +19,45 @@ int main(int argc, char** argv)
 
 	//Load in Files
     cout << "Loading Files: ";
-    TChain data("h10");
+    TChain data("h10"); //Create a TChain
    	loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1); //Located in read_in_data.h
-    cout<< "Done" <<std::endl;
+    cout<< "Done" <<std::endl;  //Just to let me know
 
     //Number of events check
     int events;
     events = data.GetEntries();
     cout <<"There are "<< events <<" events loaded" <<endl;
 
-    cout << 1 <<endl;
+  
     SetBranches(&data); // Located in read_in_data.h
-    cout<< 2 <<endl;
-    MakeHist_fid(); // Located in histograms.h
-    cout<< 3 <<endl;
+    
+    MakeHist();
+ 
     //Progress
     int progress;
-    cout << 4 <<endl;
+
     for(int i = 0; i< 10 ; i++)
     {
-    	cout<< "event " << i <<endl;
         //Update on the progress
-        //progress = (int) 100.0*(((double)i+1.0)/(double)events);
-        //cout<<"Progess Percent " <<progress <<"\r";
+        progress = (int) 100.0*(((double)i+1.0)/(double)events);
+        cout <<"Progess Percent " <<progress <<"\r";
 
         //Get info for event i
         data.GetEntry(i);
 
         //Electron ID
-    	Fill_fid(0 , 0, cx[0], cy[0], cz[0]); //histograms.h
+            //EID Precut
+    	Fill_fid( 0 , 0, cx[0], cy[0], cz[0]); //histograms.h
+        Fill_WQ2( 0, 0, p[0], cx[0], cy[0], cz[0]); //histograms.h
+            //EID Cut and Anti-Cut
+        if(eid( p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], 3)){   //eid.h
+            Fill_fid( 0, 1, cx[0], cy[0], cz[0]);    //histograms.h
+            Fill_WQ2( 0, 1, p[0], cx[0], cy[0], cz[0]); //histograms.h
+        }else{
+            Fill_fid( 0, 2, cx[0], cy[0], cz[0]);    //histograms.h
+            Fill_WQ2( 0, 2, p[0], cx[0], cy[0], cz[0]); // histograms.h
+        }
+        //cout<< i+1 <<endl;
     }
 
     //Fid_Write(); //Located in make_files.h

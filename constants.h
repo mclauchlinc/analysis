@@ -1,5 +1,5 @@
-#ifndef DELTA_T_CUTS_H
-#define DELTA_T_CUTS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include "TMath.h"
 #include "headers.h"
@@ -7,7 +7,8 @@
 const double c_special = 29.9792458; //speed of light in cm/ns
 
 //Beam energies in GeV
-const double energy_e16 = 5.754;
+const double energy_e16 = 5.759;
+//3_14 was 5.754, but led to bad results: updated to 5.759 after reading Paremuzyan's thesis 
 //Check 4.794 GeV for e16
 const double energy_e1f = 5.499;
 
@@ -15,6 +16,11 @@ const double energy_e1f = 5.499;
 const	double me = 0.0005109989; //mass of electron in GeV
 const	double mp = 0.93828;	//Mass of proton in GeV
 const	double mpi = 0.1395;	//Mass of pion in GeV
+
+//Initial Four Vectors
+TLorentzVector k_mu_e16(0.0,0.0,energy_e16,energy_e16);
+TLorentzVector k_mu_e1f(0.0,0.0,energy_e1f,energy_e1f);
+TLorentzVector p_mu(0.0,0.0,0.0,mp);
 
 //Particle ID Numbers
 //anti particles are negative

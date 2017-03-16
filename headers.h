@@ -5,6 +5,7 @@
 #include <iostream>     //Allow in and out standard functions
 #include "main_phd.h"   //Standard functions for top down analysis
 //#include "TStopwatch.h" //Function to show how long this takes
+#include "TLorentzVector.h"	//Allows use of Lorentz 4-Vectors 
 #include "read_in_data.h" //Functions to create TChains
 #include "constants.h"  //All the various constants that will be used throughout the analysis
 #include "TTree.h"	//Allows access to R00t Trees
