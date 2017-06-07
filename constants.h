@@ -157,7 +157,7 @@ const double DTymin = -4.0;
 const double DTxmax = 7.0;
 const double DTymax = 4.0;
 
-const std::string species[4] = {"e","p","pip","pim"};
-const std::string cut[4] = {"pre","cut","anti","all"};
+const std::string species[4] = {"ele","pro","pip","pim"};
+const std::string cut[4] = {"pre_","cut_","anti","all_"};
 
 #endif /* CONSTANTS_H */

@@ -15,51 +15,73 @@ Fiducial Cuts: p, cx, cy, cz
 Min Energy in EC cuts: 
 Sampling Fraction Cut: 
  */
+//Level 1 is it registering in all detector systems
+bool eid_1 ( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc){
+	bool pass = kFALSE;
+	if( (int)dc>0 && (int)cc>0 && (int)sc>0 && (int)ec>0){
+		pass = kTRUE;
+	}
+	return pass;
+}
+
+//Level 2 is a sanity check on charge and stats
+bool eid_2( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, Char_t q, UChar_t stat){
+	bool pass = kFALSE;
+	//pass Level 1 && Sanity Electron
+	if(eid_1(dc,cc,ec,sc) && (int)q == -1 && (int)dc_stat > 0 && (int)stat >0){
+		pass = kTRUE;
+	}
+	return pass;
+}
+
+//Level 3 are adding fiducial cuts
+bool eid_3(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, UChar_t stat){
+	bool pass = kFALSE;
+	//pass Level 1 & 2 plus fiducial
+	if(eid_2(dc,cc,ec,sc,dc_stat,q,stat) && fid_e(p,cx,cy,cz)){
+		pass = kTRUE;
+	}
+	return pass;
+}
+
+//Level 4 adds minimum energy and sampling fraction 
+bool eid_4(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, UChar_t stat, Float_t etot){
+	//Pass Level 1, 2, & 3 plus EC things
+	bool pass = kFALSE;
+	if(eid_3(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat) && min_ec(etot) && sf_e(p,etot,cx,cy)){
+		pass = kTRUE;
+	}
+	return pass;
+}
+
+//Level 5 adds vertex corrections and cuts
+//bool eid_5
+//Not done yet
+
 bool eid( Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, Float_t vx, Float_t vy, Float_t vz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, Float_t etot, Char_t stat, int level)
 {
 	bool is_electron = kFALSE;
-	bool sane_elec = kFALSE;
-	bool vertex = kFALSE;
-	bool fiducial_cut = kFALSE;
-	bool min_energy_cut = kFALSE;
-	bool sf_cut = kFALSE;
-	//int dc_index = dc-1;
-	sane_elec = sanity_electron( dc, cc, ec, sc, stat, dc_stat, q );
-	vertex = vertex_cut(vz); //For now this has no vertex correction as the function makes no sense. 
-	fiducial_cut = fid_e( p, cx, cy, cz);
-	min_energy_cut = min_ec(etot); 
-	sf_cut = sf_e( p , etot, cx, cy);
-	if(level >= 1)
-	{
-		if(dc>0 && cc>0 && sc>0 && q==-1)
-		{
-			if(level == 1)
-			{
-				is_electron = kTRUE;
-			}
-			if(level >= 2)
-			{
-				if(sane_elec == kTRUE)
-				{
-					if(level == 2)
-					{
-						is_electron = kTRUE;
-					}
-					if(level == 3)
-					{
-						if(fiducial_cut == kTRUE)
-						{
-							if(min_energy_cut == kTRUE)
-							{
-								if(sf_cut == kTRUE)
-								{
-									is_electron = kTRUE;
-								}
-							}
-						}
-					}
-				}	
-			}
+	
+	if(level>=1){
+		switch(level){
+			case 1:
+				if(eid_1(dc,cc,ec,sc)){
+					is_electron = kTRUE;
+				}
+			case 2:
+				if(eid_2(dc,cc,ec,sc,dc_stat,q,stat)){
+					is_electron = kTRUE;
+				}
+			case 3:
+				if(eid_3(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat)){
+					is_electron = kTRUE;
+				}
+			case 4:
+				if(eid_4(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat,etot)){
+					is_electron = kTRUE;
+				}
+			//default:
+			//	std::cout<<"Improper level choice" <<std::endl;
 		}
 	}
 

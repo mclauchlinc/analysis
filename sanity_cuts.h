@@ -17,6 +17,7 @@
  m = mass you're looking for 
  */
 
+//OUtdated 5/31/17
 bool sanity_electron( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, Char_t stat, Char_t dc_stat, Char_t q )
 {
 	bool sane_elec = kFALSE;
