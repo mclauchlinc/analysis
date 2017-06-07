@@ -11,6 +11,7 @@ char * htitle; //The name on the graph itself (can have spaces)
 char * hname; //The name shown in the TBrowser (should have no spaces)
 TH2D* fid_hist[6][4][4]; 
 TH2D* WQ2_hist[4];
+TH2D* SF_hist[4];
 
 std::string histitle; //It is easier to manipulate strings so I put what I want in first then convert to a char*
 std::string hisname;
@@ -59,13 +60,13 @@ void MakeHist_WQ2(){
 
   for(int w = 0; w<space_dims ; w++){
     hisname = "W_Q2_" +cut[w]; //Make the name for the plot 
+    // and add the __ at the end so it doesn't look weird. Issue with names keeping longest bits 3/17/17
     histitle = hisname;
     htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
     hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
     WQ2_hist[w] = new TH2D( hname, htitle, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
     delete hname; 
     delete htitle;
-    //std::cout <<"hname: "<<hname <<std::endl;
     hisname = "";
     htitle = "";
   }
@@ -111,19 +112,24 @@ void MakeHist_fid(){
 		//sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	sprintf(htitle, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
     //	fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D(hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-      std::cout << "species: " <<species[cart[1]] <<std::endl <<"sector: " <<(cart[0]+1) <<std::endl <<"cut: " <<cut[cart[2]] <<std::endl;
-      hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + "_" + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
+     
+    // std::cout<< "hello" <<std::endl; 
+     hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
+     //std::cout<< cart[0] <<" " <<cart[1] <<" " <<cart[2] << " " <<std::endl;
+    // std::cout<< cart[0] <<" " <<species[cart[1]] <<" " <<cut[cart[2]] << " " <<std::endl;
+      //sprintf(hname,"%s_fid_sec%i_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
+   // std::cout<< "hello, again" <<std::endl;
+      //htitle = hname;
+     // std::cout<< "hello, yet again" <<std::endl;
       histitle = hisname; //For Fiducial I can make them both the same thing. 
       htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
       hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
       fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-      std::cout <<"hisname (pre): "<<hname <<std::endl;
       delete hname; //Problems with seg violations
       delete htitle; //Problems with seg violations
       
-      hisname = "";
-      htitle = "";
-      std::cout <<"hisname (post): "<<hname <<std::endl;
+     // hisname = "";
+     // htitle = "";
     }
 }
 
@@ -158,11 +164,42 @@ void Fid_Write()
 }
 */
 
+void MakeHist_SF(){
+  //Create Pointer for Histograms
+  /*Indexed: Cut_Status
+    - Pre = no cut
+    - Cut = EID Cut
+    - Anti-Cut = !EID
+    - All = All cuts
+  */
+  int space_dims = 4;//The cuts
+
+  for(int w = 0; w<space_dims ; w++){
+    hisname = "SF_" +cut[w]; //Make the name for the plot 
+    // and add the __ at the end so it doesn't look weird. Issue with names keeping longest bits 3/17/17
+    histitle = hisname;
+    htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
+    hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
+    SF_hist[w] = new TH2D( hname, htitle, SFxres, SFxmin, SFxmax, SFyres, SFymin, SFymax); // constants.h
+    delete hname; 
+    delete htitle;
+    hisname = "";
+    htitle = "";
+  }
+}
+
+void Fill_sf(int level, Float_t etot, Float_t p){
+  double sf_thing = sf(etot,p);
+  // Cut: {0,1,2,3} -> {pre,cut,anti,all}
+  SF_hist[level]->Fill(sf_thing,p);
+}
+
 //Delta t
 
 void MakeHist(){
   MakeHist_fid();
   MakeHist_WQ2();
+  MakeHist_SF();
 }
 
 
