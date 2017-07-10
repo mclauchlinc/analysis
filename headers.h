@@ -27,5 +27,6 @@
 //#include "cuts.h"
 #include "CartesianGenerator.hh" //Allows loops over species, cut_status, and other things. finds the combinations thereof
 #include "make_files.h"
+#include "partitions.h" //Functions that fill the plots relevant to specific things: eid, hid, etc. 
 
 #endif

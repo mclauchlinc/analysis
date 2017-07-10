@@ -7,21 +7,22 @@
 #include "CartesianGenerator.hh"
 
 //Declare all title pointers and plots first
-char * htitle; //The name on the graph itself (can have spaces)
-char * hname; //The name shown in the TBrowser (should have no spaces)
-TH2D* fid_hist[6][4][4]; 
-TH2D* WQ2_hist[4];
-TH2D* SF_hist[4];
+char  htitle[100]; //The name on the graph itself (can have spaces)
+char  hname[100]; //The name shown in the TBrowser (should have no spaces)
+TH2D* fid_hist[6][4][5]; //Sector, species, cut
+TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
+TH2D* SF_hist[5]; //cuts 
+TH2D* dt_hits[3][5]; //delta t, cuts
 
-std::string histitle; //It is easier to manipulate strings so I put what I want in first then convert to a char*
-std::string hisname;
 
+/*
 //Conversion from string to char *
 char* Str2CharS( std::string str){
   char * write = new char[str.size()+1]; //Creates a char* with the proper dimensions for the string
   std::copy(str.begin(),str.end(),write); //Copies the string over into the char array that is the char*
   return write; 
 }
+*/
 
 
 /* Gary stuff
@@ -56,19 +57,11 @@ void MakeHist_WQ2(){
     - Anti-Cut = !EID
     - All = All cuts
   */
-  int space_dims = 4;//The cuts
-
-  for(int w = 0; w<space_dims ; w++){
-    hisname = "W_Q2_" +cut[w]; //Make the name for the plot 
-    // and add the __ at the end so it doesn't look weird. Issue with names keeping longest bits 3/17/17
-    histitle = hisname;
-    htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
-    hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
-    WQ2_hist[w] = new TH2D( hname, htitle, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
-    delete hname; 
-    delete htitle;
-    hisname = "";
-    htitle = "";
+  int space_dims = 9;//The cuts in constants.h
+  std::cout<<space_dims <<" out of loop" <<std::endl;
+  for(int w = 0; (w < 9); w++){ 
+    sprintf(hname,"W_Q2_%s",eid_cut[w]); //constants.h and otherwise writing the specific cut to the right plot
+    WQ2_hist[w] = new TH2D( hname, hname, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
   }
 }
 
@@ -103,33 +96,16 @@ void MakeHist_fid(){
   	std::vector<long> space_dims(3);
   	space_dims[0] = 6; //Six sectors
   	space_dims[1] = 4; //electron, proton, pi+, pi-
-  	space_dims[2] = 4; //No cut, cut, anti-cut, all cuts
+  	space_dims[2] = 5; //No cut, cut, anti-cut, all cuts, bank
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	
   	//in the loop
   	while(cart.GetNextCombination()) {//CartesianGenerator.hh
-		//sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
-    //	sprintf(htitle, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
-    //	fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D(hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-     
-    // std::cout<< "hello" <<std::endl; 
-     hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
-     //std::cout<< cart[0] <<" " <<cart[1] <<" " <<cart[2] << " " <<std::endl;
-    // std::cout<< cart[0] <<" " <<species[cart[1]] <<" " <<cut[cart[2]] << " " <<std::endl;
-      //sprintf(hname,"%s_fid_sec%i_%s",species[cart[1]],cart[0]+1,cut[cart[2]]);
-   // std::cout<< "hello, again" <<std::endl;
-      //htitle = hname;
-     // std::cout<< "hello, yet again" <<std::endl;
-      histitle = hisname; //For Fiducial I can make them both the same thing. 
-      htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
-      hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
-      fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, htitle, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
-      delete hname; //Problems with seg violations
-      delete htitle; //Problems with seg violations
-      
-     // hisname = "";
-     // htitle = "";
+		  sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,norm_cut[cart[2]]); 
+     //hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
+      //histitle = hisname; //For Fiducial I can make them both the same thing. 
+      fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
     }
 }
 
@@ -139,7 +115,6 @@ void Fill_fid(int type, int level, Float_t cx, Float_t cy, Float_t cz)
 	double theta = get_theta(cz);  //fiducial.h
 	int sec = get_sector(cx, cy);  //fiducial.h
   int sidx = sec-1;
-  //std::cout << sidx <<std::endl;
 	//Level {0,1,2,3} -> {no cut, cut, anti-cut, all cuts}
   //Type {0,1,2,3} -> {e, p, pip, pim}
 	fid_hist[sidx][type][level]->Fill(phi, theta);
@@ -172,29 +147,38 @@ void MakeHist_SF(){
     - Anti-Cut = !EID
     - All = All cuts
   */
-  int space_dims = 4;//The cuts
+
+  int space_dims = 5;//pre, cut, anti, pid, bank
 
   for(int w = 0; w<space_dims ; w++){
-    hisname = "SF_" +cut[w]; //Make the name for the plot 
-    // and add the __ at the end so it doesn't look weird. Issue with names keeping longest bits 3/17/17
-    histitle = hisname;
-    htitle = Str2CharS(histitle); //TH2D takes char* into it as opposed to strings
-    hname = Str2CharS(hisname); //TH2D takes char * into it as opposed to strings so one must convert
-    SF_hist[w] = new TH2D( hname, htitle, SFxres, SFxmin, SFxmax, SFyres, SFymin, SFymax); // constants.h
-    delete hname; 
-    delete htitle;
-    hisname = "";
-    htitle = "";
+    sprintf(hname,"sf_%s",norm_cut[w]); 
+    SF_hist[w] = new TH2D( hname, hname, SFxres, SFxmin, SFxmax, SFyres, SFymin, SFymax); // constants.h
   }
 }
 
 void Fill_sf(int level, Float_t etot, Float_t p){
   double sf_thing = sf(etot,p);
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
-  SF_hist[level]->Fill(sf_thing,p);
+  SF_hist[level]->Fill(p,sf_thing);
 }
 
 //Delta t
+/*
+species: {p, pip, pim}  3
+cut: {pre, cut, anti, pid, bank}  5
+*/
+void MakeHist_dt(){
+  std::vector<long> space_dims(2);
+    space_dims[0] = 3; //species
+    space_dims[1] = 5; //cut
+
+    CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+    
+    //in the loop
+    while(cart.GetNextCombination()) {//CartesianGenerator.hh
+      sprintf(hname, "%s_delta_t_%s",species[cart[1]],cart[0]+1,norm_cut[cart[2]]);  
+      dt_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+}
 
 void MakeHist(){
   MakeHist_fid();

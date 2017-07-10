@@ -80,8 +80,6 @@ bool eid( Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, Float_t vx, F
 				if(eid_4(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat,etot)){
 					is_electron = kTRUE;
 				}
-			//default:
-			//	std::cout<<"Improper level choice" <<std::endl;
 		}
 	}
 

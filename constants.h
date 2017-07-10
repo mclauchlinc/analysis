@@ -157,7 +157,30 @@ const double DTymin = -4.0;
 const double DTxmax = 7.0;
 const double DTymax = 4.0;
 
-const std::string species[4] = {"ele","pro","pip","pim"};
-const std::string cut[4] = {"pre_","cut_","anti","all_"};
+const char * species[] = {"e","p","pip","pim"};
+const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
+const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
+/*
+Types of Cuts
+	Electron ID
+		0 Sanity
+		1 Fiducial
+		2 Sampling Fraction
+		3 Min Energy
+		4 Vertex
+		5 CC
+		6 Built in Particle ID
+	Hadron ID
+		7 Santiy
+		8 Fiducial
+		9 Delta T
+		10 Built in Particle ID
+	Event Selection
+		11 Full Topology
+		12 MM Proton
+		13 MM Pip
+		14 MM Pim
+*/
+//const std::string cut_type[] = {"e_san", "e_fid", "e_sf_", "e_min", "e_vtx", "e_cc_", "e_PID", "h_san", "h_fid", "h_d_t", "h_PID", "fulltp", "mm_pr", "mmpip", "mmpim"};
 
 #endif /* CONSTANTS_H */

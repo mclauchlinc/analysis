@@ -63,6 +63,7 @@ void SetBranches(TChain* c)
     c->SetBranchAddress("cc",&cc);
     c->SetBranchAddress("ec",&ec);
     c->SetBranchAddress("etot",&etot);
+    c->SetBranchAddress("id",&id);
 }
 
 
