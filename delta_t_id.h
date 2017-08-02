@@ -20,29 +20,37 @@
 //NOTE modified input to accept full banks and just input a single index 7-26-16
 
  //sc index
-int sc_index( UChar_t sc)
+int sc_index( int sc)
 {
  	int scidx = (int)sc-1;
  	return scidx;
 }
 
-bool delta_t_proton(Float_t p0, Float_t p, Float_t d0, Float_t d, Float_t t0, Float_t t) //Note: d and t need the sc_index 
+//Proton Formulae from Arjun
+double dt_p_low(double p){
+	return DTL[0]+DTL[1]*p+DTL[2]*p*p+DTL[3]*p*p*p;
+}
+
+double dt_p_high(double p){
+	return DTH[0]+DTH[1]*p+DTH[2]*p*p+DTH[3]*p*p*p;
+}
+
+bool delta_t_proton(double p0, double p, double d0, double d, double t0, double t) //Note: d and t need the sc_index 
 {
 	bool isproton = kFALSE;
 	double dt = delta_t( p, p0, d, d0, t, t0, mp );
-	if(dt>(DTL[0]+DTL[1]*p+DTL[2]*p*p+DTL[3]*p*p*p) && dt<(DTH[0]+DTH[1]*p+DTH[2]*p*p+DTH[3]*p*p*p) )
+	if(dt>dt_p_low(p) && dt<dt_p_high(p) )
 	{
 		isproton = kTRUE;
 	}
 	return isproton;
 }
 
-bool delta_t_pion(Float_t p0, Float_t p, Float_t d0, Float_t d, Float_t t0, Float_t t)
+bool delta_t_pion(double p0, double p, double d0, double d, double t0, double t)
 {
 	bool ispion = kFALSE;
 	double dt = delta_t( p, p0, d, d0, t, t0, mpi);
-	if(dt>(DTL[0]+DTL[1]*p+DTL[2]*p*p+DTL[3]*p*p*p) && dt<(DTH[0]+DTH[1]*p+DTH[2]*p*p+DTH[3]*p*p*p) )
-	{
+	if(dt>dt_p_low(p) && dt<dt_p_high(p) ){
 		ispion = kTRUE;
 	}
 	return ispion;

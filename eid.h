@@ -16,7 +16,7 @@ Min Energy in EC cuts:
 Sampling Fraction Cut: 
  */
 //Level 1 is it registering in all detector systems
-bool eid_1 ( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc){
+bool eid_1 ( int dc, int cc, int ec, int sc){
 	bool pass = kFALSE;
 	if( (int)dc>0 && (int)cc>0 && (int)sc>0 && (int)ec>0){
 		pass = kTRUE;
@@ -25,7 +25,7 @@ bool eid_1 ( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc){
 }
 
 //Level 2 is a sanity check on charge and stats
-bool eid_2( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, Char_t q, UChar_t stat){
+bool eid_2( int dc, int cc, int ec, int sc, int dc_stat, int q, int stat){
 	bool pass = kFALSE;
 	//pass Level 1 && Sanity Electron
 	if(eid_1(dc,cc,ec,sc) && (int)q == -1 && (int)dc_stat > 0 && (int)stat >0){
@@ -35,7 +35,7 @@ bool eid_2( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, Cha
 }
 
 //Level 3 are adding fiducial cuts
-bool eid_3(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, UChar_t stat){
+bool eid_3(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat){
 	bool pass = kFALSE;
 	//pass Level 1 & 2 plus fiducial
 	if(eid_2(dc,cc,ec,sc,dc_stat,q,stat) && fid_e(p,cx,cy,cz)){
@@ -45,7 +45,7 @@ bool eid_3(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, 
 }
 
 //Level 4 adds minimum energy and sampling fraction 
-bool eid_4(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, UChar_t stat, Float_t etot){
+bool eid_4(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot){
 	//Pass Level 1, 2, & 3 plus EC things
 	bool pass = kFALSE;
 	if(eid_3(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat) && min_ec(etot) && sf_e(p,etot,cx,cy)){
@@ -58,7 +58,7 @@ bool eid_4(Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, UChar_t dc, 
 //bool eid_5
 //Not done yet
 
-bool eid( Float_t p, Char_t q, Float_t cx, Float_t cy, Float_t cz, Float_t vx, Float_t vy, Float_t vz, UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, UChar_t dc_stat, Float_t etot, Char_t stat, int level)
+bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level)
 {
 	bool is_electron = kFALSE;
 	

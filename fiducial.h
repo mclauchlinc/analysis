@@ -7,14 +7,14 @@
 
 //Calculating Theta and Phi 
 //Phi has sector 1 centered at phi = 0
-double get_theta(Float_t cz)
+double get_theta(double cz)
 {
 	double degree = 180.0/TMath::Pi();
 	double theta = TMath::ACos((double)cz)*degree; //Calculates theta in the lab frame using cz
 	return theta;
 }
 
-double get_phi( Float_t cx, Float_t cy)
+double get_phi( double cx, double cy)
 {
 	double degree = 180.0/TMath::Pi();
 	double phi0 = TMath::ATan2((double)cy,(double)cx)*degree; // Calculates phi in the lab frame using cx and cy
@@ -22,7 +22,7 @@ double get_phi( Float_t cx, Float_t cy)
 }
 
 //Figures out which sector you are in based on phi
-int get_sector(Float_t cx, Float_t cy)
+int get_sector(double cx, double cy)
 {
 	int sector;
 	double phi = get_phi(cx, cy);
@@ -54,7 +54,7 @@ int get_sector(Float_t cx, Float_t cy)
 }
 
 //Phi centering 
-double phi_center( Float_t cx, Float_t cy)
+double phi_center( double cx, double cy)
 {
 	double phi_corr;
 	double phi0 = get_phi(cx, cy);
@@ -102,7 +102,7 @@ double phi_center( Float_t cx, Float_t cy)
 
 
 //Fiducial cut for the electron
-bool fid_e ( Float_t p, Float_t cx, Float_t cy, Float_t cz)
+bool fid_e ( double p, double cx, double cy, double cz)
 {
 	bool in_fid = kFALSE;
 
@@ -130,7 +130,15 @@ bool fid_e ( Float_t p, Float_t cx, Float_t cy, Float_t cz)
 }
 //Fiducial cut for hadrons
 //momentum is in there in case a dependence is added later
-bool fid_h ( Float_t p, Float_t cx, Float_t cy, Float_t cz)
+double phi_min(double theta, int idx){
+	return -(a0mh[idx]*(1.0-TMath::Exp(-a1mh[idx]*(theta-a2mh[idx])))-a3mh[idx]);
+}
+
+double phi_max(double theta, int idx){
+	return (a0xh[idx]*(1.0-TMath::Exp(-a1xh[idx]*(theta-a2xh[idx])))+a3xh[idx]);
+}
+
+bool fid_h ( double p, double cx, double cy, double cz)
 {
 	bool in_fid = kFALSE;
 
@@ -161,13 +169,13 @@ bool fid_h ( Float_t p, Float_t cx, Float_t cy, Float_t cz)
 	*/
 
 	//Creating the cut functions for each sector from Arjun's fiducuial cut
-	double phi_min = -(a0mh[sec_indx])*(1.0-TMath::Exp(-a1mh[sec_indx]*(theta-a2mh[sec_indx])))+a3mh[sec_indx];
-	double phi_max = a0xh[sec_indx]*(1.0-TMath::Exp(-a1xh[sec_indx]*(theta-a2xh[sec_indx])))+a3xh[sec_indx];
+	//double phi_min = -(a0mh[sec_indx])*(1.0-TMath::Exp(-a1mh[sec_indx]*(theta-a2mh[sec_indx])))+a3mh[sec_indx];
+	//double phi_max = a0xh[sec_indx]*(1.0-TMath::Exp(-a1xh[sec_indx]*(theta-a2xh[sec_indx])))+a3xh[sec_indx];
 
 	//Not sure why electrons get a momentum dependence while hadrons don't
 
 	//Actual application of the cut
-	if(phi_c>=phi_min && phi_c<=phi_max)
+	if(phi_c>=phi_min(theta , sec_indx) && phi_c<=phi_max(theta, sec_indx))
 	{
 		in_fid = kTRUE;
 	}

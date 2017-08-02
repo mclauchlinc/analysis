@@ -12,7 +12,9 @@ char  hname[100]; //The name shown in the TBrowser (should have no spaces)
 TH2D* fid_hist[6][4][5]; //Sector, species, cut
 TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
 TH2D* SF_hist[5]; //cuts 
-TH2D* dt_hits[3][5]; //delta t, cuts
+TH2D* dt_hist[3][5]; //delta t, cuts
+TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
+TH1I* sc_plot;
 
 
 /*
@@ -65,7 +67,7 @@ void MakeHist_WQ2(){
   }
 }
 
-void Fill_WQ2(int set, int cut, Float_t p, Float_t cx, Float_t cy, Float_t cz){
+void Fill_WQ2(int set, int cut, double p, double cx, double cy, double cz){
   double W, Q2;
   //Set refers to the data set, due to them having different beam energies: 1->e16 and 2->e1f
   W = WP(set, p, cx, cy, cz); // physics.h  
@@ -109,7 +111,7 @@ void MakeHist_fid(){
     }
 }
 
-void Fill_fid(int type, int level, Float_t cx, Float_t cy, Float_t cz)
+void Fill_fid(int type, int level, double cx, double cy, double cz)
 {
 	double phi = phi_center(cx, cy); //fiducial.h
 	double theta = get_theta(cz);  //fiducial.h
@@ -156,7 +158,7 @@ void MakeHist_SF(){
   }
 }
 
-void Fill_sf(int level, Float_t etot, Float_t p){
+void Fill_sf(int level, double etot, double p){
   double sf_thing = sf(etot,p);
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
   SF_hist[level]->Fill(p,sf_thing);
@@ -167,6 +169,7 @@ void Fill_sf(int level, Float_t etot, Float_t p){
 species: {p, pip, pim}  3
 cut: {pre, cut, anti, pid, bank}  5
 */
+
 void MakeHist_dt(){
   std::vector<long> space_dims(2);
     space_dims[0] = 3; //species
@@ -176,14 +179,72 @@ void MakeHist_dt(){
     
     //in the loop
     while(cart.GetNextCombination()) {//CartesianGenerator.hh
-      sprintf(hname, "%s_delta_t_%s",species[cart[1]],cart[0]+1,norm_cut[cart[2]]);  
-      dt_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+      sprintf(hname, "%s_delta_t_%s",species[cart[0]+1],norm_cut[cart[1]]);  
+      dt_hist[cart[0]][cart[1]] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+    }
 }
+
+//Fill_dt(0,0,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+void Fill_dt(int s, int cut, double p, double p0, double d, double d0, double t, double t0){
+  /*
+  for species: {p,pip,pim} -> {0,1,2}
+  cut: {pre, cut, anti, pid, bank} -> {0,1,2,3,4}
+  */
+  int mass = 10000;
+  int q = 0;
+  if(s == 0){
+    mass = mp;
+  }
+  if(s == 1 || s == 2){
+    mass = PION;
+  }
+  if(s >2 || s < 0){
+    std::cout << "you fucked up, friend" <<std::endl;
+  }
+  double dt = delta_t(p, p0, d, d0, t, t0, mass );
+  dt_hist[s][cut] -> Fill(p,dt);
+}
+
+void MakeHist_dt_vert(){
+  for(int w = 0; w<3; w++){
+    sprintf(hname,"%s_dt_vertex", species[w+1]);
+    dt_vertex[w] = new TH1D(hname, hname, DTyres, DTymin, DTymax);
+  }
+}
+
+void Fill_dt_vert(int s, double p, double d,double t ){
+  int mass = 10000;
+  int q = 0;
+  if(s == 0){
+    mass = mp;
+  }
+  if(s == 1 || s == 2){
+    mass = PION;
+  }
+  if(s >2 || s < 0){
+    std::cout << "you fucked up, friend" <<std::endl;
+  }
+  double vertex = vert_p(p,d,t, mass );
+  dt_vertex[s] -> Fill(vertex);
+}
+
+void MakeHist_sc(){
+  sprintf(hname,"sc");
+  sc_plot = new TH1I(hname,hname, 7,-0.5,6.5);
+}
+
+void Fill_sc(int sc){
+  sc_plot -> Fill(sc);
+}
+
 
 void MakeHist(){
   MakeHist_fid();
   MakeHist_WQ2();
   MakeHist_SF();
+  MakeHist_dt();
+  MakeHist_dt_vert();
+  MakeHist_sc();
 }
 
 

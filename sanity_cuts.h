@@ -18,7 +18,7 @@
  */
 
 //OUtdated 5/31/17
-bool sanity_electron( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, Char_t stat, Char_t dc_stat, Char_t q )
+bool sanity_electron( int dc, int cc, int ec, int sc, int stat, int dc_stat, int q )
 {
 	bool sane_elec = kFALSE;
 	if((int)dc>0)
@@ -49,7 +49,7 @@ bool sanity_electron( UChar_t dc, UChar_t cc, UChar_t ec, UChar_t sc, Char_t sta
 
 //Note that q is set to +1. This is because I'll only be looking for protons and positive pions
 //Getting rid of charge due to multiple topography. Putting the charge into hid.h
-bool sanity_hadron( UChar_t dc, UChar_t sc, Char_t stat, Char_t dc_stat)
+bool sanity_hadron( int dc, int sc, int stat, int dc_stat)
 {
 	bool sane_elec = kFALSE;
 	if((int)dc>0)

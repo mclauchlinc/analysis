@@ -45,25 +45,25 @@ void loadChain(TChain* c, std::string file, int max=-1)
 
 void SetBranches(TChain* c)
 {
-	c->SetBranchAddress("q",&q);
+	c->SetBranchAddress("q",&q_b);
     c->SetBranchAddress("gpart",&gpart);
-    c->SetBranchAddress("sc_t",&sc_t);
-    c->SetBranchAddress("sc_r",&sc_r);
-    c->SetBranchAddress("sc",&sc);
-    c->SetBranchAddress("p",&p);
-    c->SetBranchAddress("cx",&cx);
-    c->SetBranchAddress("cy",&cy);
-    c->SetBranchAddress("cz",&cz);
-    c->SetBranchAddress("stat",&stat);
-    c->SetBranchAddress("dc_stat",&dc_stat);
-    c->SetBranchAddress("vx",&vx);
-    c->SetBranchAddress("vy",&vy);
-    c->SetBranchAddress("vz",&vz);
-    c->SetBranchAddress("dc",&dc);
-    c->SetBranchAddress("cc",&cc);
-    c->SetBranchAddress("ec",&ec);
-    c->SetBranchAddress("etot",&etot);
-    c->SetBranchAddress("id",&id);
+    c->SetBranchAddress("sc_t",&sc_t_b);
+    c->SetBranchAddress("sc_r",&sc_r_b);
+    c->SetBranchAddress("sc",&sc_b);
+    c->SetBranchAddress("p",&p_b);
+    c->SetBranchAddress("cx",&cx_b);
+    c->SetBranchAddress("cy",&cy_b);
+    c->SetBranchAddress("cz",&cz_b);
+    c->SetBranchAddress("stat",&stat_b);
+    c->SetBranchAddress("dc_stat",&dc_stat_b);
+    c->SetBranchAddress("vx",&vx_b);
+    c->SetBranchAddress("vy",&vy_b);
+    c->SetBranchAddress("vz",&vz_b);
+    c->SetBranchAddress("dc",&dc_b);
+    c->SetBranchAddress("cc",&cc_b);
+    c->SetBranchAddress("ec",&ec_b);
+    c->SetBranchAddress("etot",&etot_b);
+    c->SetBranchAddress("id",&id_b);
 }
 
 

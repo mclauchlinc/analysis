@@ -16,17 +16,17 @@
  t0 = sc_t[sc[0]-1]
  m = mass you're looking for 
  */
-double vert_e(Float_t d, Float_t t)
+double vert_e(double d, double t)
 {
-	return (double)t - (double)d/c_special;
+	return t -( d/c_special);
 }
 
-double vert_p(Float_t p, Float_t d, Float_t t, double m)
+double vert_p(double p, double d, double t, double m)
 {
-	return (double)t-((double)d/c_special)*sqrt(1.0 + m*m/((double)p*(double)p));
+	return t-((d/c_special)*sqrt(1.0 + m*m/(p*p)));
 }
 
-double delta_t( Float_t p, Float_t p0, Float_t d, Float_t d0, Float_t t, Float_t t0, double m )
+double delta_t( double p, double p0, double d, double d0, double t, double t0, double m )
 {
 	double vertex_e = vert_e(d0, t0);
 	double vertex_p = vert_p(p, d, t, m);
