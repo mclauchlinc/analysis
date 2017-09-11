@@ -3,6 +3,7 @@
 
 #include "TROOT.h"      //Allow access to all root libraries 
 #include <iostream>     //Allow in and out standard functions
+#include "TDirectory.h"	//Allows for use of Directories 
 #include "main_phd.h"   //Standard functions for top down analysis
 //#include "TStopwatch.h" //Function to show how long this takes
 #include "TLorentzVector.h"	//Allows use of Lorentz 4-Vectors 
@@ -28,5 +29,7 @@
 #include "CartesianGenerator.hh" //Allows loops over species, cut_status, and other things. finds the combinations thereof
 #include "make_files.h"
 #include "partitions.h" //Functions that fill the plots relevant to specific things: eid, hid, etc. 
+#include "debugger.h"
+#include "event_selection.h"//slecting events 
 
 #endif

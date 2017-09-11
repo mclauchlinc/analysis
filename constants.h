@@ -76,6 +76,10 @@ const double pip_sig = 0.0366;
 const double p_center = 0.782;
 const double p_sig = 0.0433;
 
+//My Own MM cut parameters
+const double MM_zero_center = 0.0;
+const double MM_zero_sigma = 0.04;
+
 //Delta T cut parameters
 /*
 //Currently cannot find Arjun's so they are just guesses of flat numbers. Will adjust when I can 8/4/16
@@ -156,8 +160,13 @@ const double DTxmin = 0.0;
 const double DTymin = -4.0;
 const double DTxmax = 7.0;
 const double DTymax = 4.0;
+//Missing Mass
+const int MMxres = 300;
+const double MMxmin = -1.0;
+const double MMxmax = 2.0;
 
-const char * species[] = {"e","p","pip","pim"};
+
+const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
 /*

@@ -29,13 +29,13 @@
     Char_t q_b[100]; //The charge of each given particle
     Float_t sc_t_b[100]; //The time taken for a particle to travel through as found by the sc
     Float_t sc_r_b[100]; //The distance taken by a particle through the detector as found by the sc
-    UChar_t sc_b[100]; //The index used to navigate any sc banks
+    Int_t sc_b[100]; //The index used to navigate any sc banks
     Float_t p_b[100]; //The momentum of given particles calculated from the curavture through the dc
     Float_t cx_b[100]; //The Cosine projection of the particle's intitial trajectory in x-axis the lab frame
     Float_t cy_b[100]; //The Cosine projection of the particle's intitial trajectory in y-axis the lab frame
     Float_t cz_b[100]; //The Cosine projection of the particle's intitial trajectory in z-axis the lab frame
     Char_t stat_b[100]; //Shows how statistically sound the particular particle is 
-    UChar_t dc_stat_b[100]; //Shows how statistically sound the particular event is using data from the dc
+    Int_t dc_stat_b[100]; //Shows how statistically sound the particular event is using data from the dc
     Float_t vx_b[100]; //Vertex of interaction measured in cm in x-axis in lab frame
     Float_t vy_b[100]; //Vertex of interaction measured in cm in y-axis in lab frame
     Float_t vz_b[100]; //Vertex of interaction measured in cm in z-axis in lab frame
@@ -89,6 +89,9 @@
             id[i] = (int) id_b[i];
         }
     }
+
+    //Form Directories
+    TDirectory 
     
 
    //The distance taken by a particle through the detector as found by the sc

@@ -8,63 +8,60 @@
 #include "delta_t.h"
 #include "fiducial.h"
 
+bool hid_sanity(int dc, int sc, int stat, int dc_stat){
+	bool pass = false;
+	if(dc > 0 && sc > 0 && stat > 0 && dc_stat >0){
+		pass = true;
+	}
+	return pass;
+}
 
-bool is_proton( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r)
+
+bool is_proton( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0)
 {
-	bool proton = kFALSE;
-	if(sanity_hadron(dc,sc,stat,dc_stat)==kTRUE && (int)q==1)
+	bool proton = false;
+	if(hid_sanity(dc, sc, stat, dc_stat) && q == 1)
 	{
-		if(delta_t_proton(p, sc_r, sc_t, sc) == kTRUE)
+		if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 		{
-			if( fid_h( p, cx, cy, cz) == kTRUE)
+			if( fid_h( p, cx, cy, cz))
 			{
-				proton = kTRUE;
+				proton = true;
 			}
 		}
 	}
 	return proton;
 }
 
-bool is_pion(double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r)
+bool is_pip( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0)
 {
-	bool pion = kFALSE;
-	if(sanity_hadron(dc,sc,stat,dc_stat)==kTRUE)
+	bool pass = false;
+	if(hid_sanity(dc, sc, stat, dc_stat) && q == 1 )
 	{
-		if(delta_t_pion( p, sc_r, sc_t, sc) == kTRUE)
+		if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 		{
-			if( fid_h( p, cx, cy, cz) == kTRUE)
+			if( fid_h( p, cx, cy, cz))
 			{
-				pion = kTRUE;
+				pass = true;
 			}
 		}
 	}
-	return pion;
+	return pass;
 }
-
-bool is_pip( int q, double p,  double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r)
+bool is_pim( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0)
 {
-	bool pip = kFALSE;
-	if(is_pion( p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r) == kTRUE)
+	bool pass = false;
+	if(hid_sanity(dc, sc, stat, dc_stat) && q == -1)
 	{
-		if( (int)q == 1)
+		if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 		{
-			pip = kTRUE;
+			if( fid_h( p, cx, cy, cz))
+			{
+				pass = true;
+			}
 		}
 	}
-	return pip;
-}
-
-bool is_pim( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r)
-{
-	bool pim = kFALSE;
-	if(is_pion( p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r) == kTRUE)
-	{
-		if( (int)q == -1)
-		{
-			pim = kTRUE;
-		}
-	}
-	return pim;
+	return pass;
 }
 
 #endif /* HID_H */

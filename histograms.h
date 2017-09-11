@@ -5,6 +5,7 @@
 #include "constants.h"
 #include "headers.h"
 #include "CartesianGenerator.hh"
+#include "debugger.h"
 
 //Declare all title pointers and plots first
 char  htitle[100]; //The name on the graph itself (can have spaces)
@@ -15,6 +16,7 @@ TH2D* SF_hist[5]; //cuts
 TH2D* dt_hist[3][5]; //delta t, cuts
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
+TH1D* MM_hist[4][3];//Particle, cut
 
 
 /*
@@ -119,6 +121,12 @@ void Fill_fid(int type, int level, double cx, double cy, double cz)
   int sidx = sec-1;
 	//Level {0,1,2,3} -> {no cut, cut, anti-cut, all cuts}
   //Type {0,1,2,3} -> {e, p, pip, pim}
+  if(type == 1){
+   // std::cout<<"PROTON FID" ;
+  }
+  if(type == 2 || type == 3){
+  //  std::cout<<"PION FID" ;
+  }
 	fid_hist[sidx][type][level]->Fill(phi, theta);
 }
 
@@ -185,24 +193,28 @@ void MakeHist_dt(){
 }
 
 //Fill_dt(0,0,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-void Fill_dt(int s, int cut, double p, double p0, double d, double d0, double t, double t0){
+void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, double t, double t0){
   /*
   for species: {p,pip,pim} -> {0,1,2}
   cut: {pre, cut, anti, pid, bank} -> {0,1,2,3,4}
   */
-  int mass = 10000;
-  int q = 0;
-  if(s == 0){
-    mass = mp;
+  if(sc != 0){
+    double mass = 10000;
+    int q = 0;
+    if(s == 0){
+      mass = mp;
+     // std::cout<< " Proton dt! " ;
+    }
+    if(s == 1 || s == 2){
+      mass = mpi;
+     // std::cout<< "Pion dt! " ;
+    }
+    if(s >2 || s < 0){
+      std::cout << "you fucked up, friend" <<std::endl;
+    }
+    double dt = delta_t(p, p0, d, d0, t, t0, mass );
+    dt_hist[s][cut] -> Fill(p,dt);
   }
-  if(s == 1 || s == 2){
-    mass = PION;
-  }
-  if(s >2 || s < 0){
-    std::cout << "you fucked up, friend" <<std::endl;
-  }
-  double dt = delta_t(p, p0, d, d0, t, t0, mass );
-  dt_hist[s][cut] -> Fill(p,dt);
 }
 
 void MakeHist_dt_vert(){
@@ -230,11 +242,36 @@ void Fill_dt_vert(int s, double p, double d,double t ){
 
 void MakeHist_sc(){
   sprintf(hname,"sc");
-  sc_plot = new TH1I(hname,hname, 7,-0.5,6.5);
+  sc_plot = new TH1I(hname,hname, 10,-0.5,9.5);
 }
 
 void Fill_sc(int sc){
+  if(DEBUG){
+
+  }
   sc_plot -> Fill(sc);
+}
+
+void MakeHist_MM(){
+  std::vector<long> space_dims(2);
+    space_dims[0] = 4; //species
+    space_dims[1] = 3; //cut
+
+  CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+    
+  //in the loop
+  while(cart.GetNextCombination()) {//CartesianGenerator.hh
+    sprintf(hname, "%s_MM_%s",species[cart[0]+1],norm_cut[cart[1]]);  
+    MM_hist[cart[0]][cart[1]] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }   
+}
+
+/*
+species missing {0,1,2,3} -> {proton, pip, pim, zero}
+cut {0,1,2} -> {pre, cut, anti} 
+*/
+void Fill_MM(int species, int cut, double mm){
+  MM_hist[species][cut] ->Fill(mm);
 }
 
 
@@ -245,6 +282,7 @@ void MakeHist(){
   MakeHist_dt();
   MakeHist_dt_vert();
   MakeHist_sc();
+  MakeHist_MM();
 }
 
 
