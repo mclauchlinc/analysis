@@ -29,7 +29,7 @@ std::vector<std::string> read_file_list(std::string path) //Choose a vector of s
 //Optional number of files to load
 void loadChain(TChain* c, std::string file, int max=-1)
 {
-	std::vector<std::string> filelist = result;//read_file_list(file); //creates a vector of file names
+	std::vector<std::string> filelist = read_file_list(file);//read_file_list(file); //creates a vector of file names
 	//If not specified will take in all the files in the text file
 	int test = filelist.size();
 	if(max > test)

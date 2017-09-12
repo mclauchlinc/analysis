@@ -113,6 +113,63 @@ void MakeHist_fid(){
     }
 }
 
+//Make each individual particle's fiducial plots
+//electron
+void MakeHist_fide(){
+  std::vector<long> space_dims(2);
+  space_dims[0] =6;//sectors
+  space_dims[1] = 5; //no cut, cut, anti, all, bank
+
+  CartesianGenerator cart(space_dims);
+
+  while(cart.GetNextCombination()){
+    sprintf(hname,"e_fid_sec%d_%s",cart[0]+1,norm_cut[cart[1]]);
+    fid_hist[0][cart[0]][cart[1]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+  }
+}
+
+//proton
+void MakeHist_fidp(){
+  std::vector<long> space_dims(2);
+  space_dims[0] =6;//sectors
+  space_dims[1] = 5; //no cut, cut, anti, all, bank
+
+  CartesianGenerator cart(space_dims);
+
+  while(cart.GetNextCombination()){
+    sprintf(hname,"p_fid_sec%d_%s",cart[0]+1,norm_cut[cart[1]]);
+    fid_hist[1][cart[0]][cart[1]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+  }
+}
+
+//pi+
+void MakeHist_fidpip(){
+  std::vector<long> space_dims(2);
+  space_dims[0] =6;//sectors
+  space_dims[1] = 5; //no cut, cut, anti, all, bank
+
+  CartesianGenerator cart(space_dims);
+
+  while(cart.GetNextCombination()){
+    sprintf(hname,"pip_fid_sec%d_%s",cart[0]+1,norm_cut[cart[1]]);
+    fid_hist[2][cart[0]][cart[1]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+  }
+}
+
+//Pi-
+void MakeHist_fidpim(){
+  std::vector<long> space_dims(2);
+  space_dims[0] =6;//sectors
+  space_dims[1] = 5; //no cut, cut, anti, all, bank
+
+  CartesianGenerator cart(space_dims);
+
+  while(cart.GetNextCombination()){
+    sprintf(hname,"pim_fid_sec%d_%s",cart[0]+1,norm_cut[cart[1]]);
+    fid_hist[3][cart[0]][cart[1]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+  }
+}
+
 void Fill_fid(int type, int level, double cx, double cy, double cz)
 {
 	double phi = phi_center(cx, cy); //fiducial.h
@@ -192,6 +249,30 @@ void MakeHist_dt(){
     }
 }
 
+//delta t plots for individual hadrons
+//proton
+void MakeHist_dtp(){
+  for(int i=0;i<5;i++){
+    sprintf(hname,"p_delta_t_%s",norm_cut[i]);
+    dt_hist[0][i] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+  }
+}
+
+//pi+
+void MakeHist_dtpip(){
+  for(int i=0;i<5;i++){
+    sprintf(hname,"pip_delta_t_%s",norm_cut[i]);
+    dt_hist[1][i] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+  }
+}
+//pi-
+void MakeHist_dtpim(){
+  for(int i=0;i<5;i++){
+    sprintf(hname,"pim_delta_t_%s",norm_cut[i]);
+    dt_hist[2][i] = new TH2D( hname, hname, DTxres, DTxmin, DTxmax, DTyres, DTymin, DTymax);
+  }
+}
+
 //Fill_dt(0,0,p, p0, sc_r, sc_r0, sc_t, sc_t0);
 void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, double t, double t0){
   /*
@@ -252,6 +333,7 @@ void Fill_sc(int sc){
   sc_plot -> Fill(sc);
 }
 
+//Makes all Missing mass plots
 void MakeHist_MM(){
   std::vector<long> space_dims(2);
     space_dims[0] = 4; //species
@@ -264,6 +346,30 @@ void MakeHist_MM(){
     sprintf(hname, "%s_MM_%s",species[cart[0]+1],norm_cut[cart[1]]);  
     MM_hist[cart[0]][cart[1]] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
   }   
+}
+
+//Makes Missing Mass Plots for just Proton Missing
+void MakeHist_MMp(){
+  for(int i=0;i<3;i++){
+    sprintf(hname,"p_MM_%s",norm_cut[i]);
+    MM_hist[0][i] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }
+}
+
+//Makes Missing Mass Plot for just Pi+ Missing
+void MakeHist_MMpip(){
+  for(int i=0;i<3;i++){
+    sprintf(hname,"pip_MM_%s",norm_cut[i]);
+    MM_hist[1][i] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }
+}
+
+//Makes Missing Mass Plot for just Pi- Missing
+void MakeHist_MMpim(){
+  for(int i=0;i<3;i++){
+    sprintf(hname,"pim_MM_%s",norm_cut[i]);
+    MM_hist[2][i] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }
 }
 
 /*
@@ -283,6 +389,28 @@ void MakeHist(){
   MakeHist_dt_vert();
   MakeHist_sc();
   MakeHist_MM();
+}
+
+void MakeHist_p(){
+  MakeHist_dtp();
+  MakeHist_fidp();
+  MakeHist_MMp();
+}
+
+void MakeHist_e(){
+  MakeHist_fide();
+  MakeHist_SF();
+}
+
+void MakeHist_pip(){
+  MakeHist_dtpip();
+  MakeHist_fidpip();
+  MakeHist_MMpip();
+}
+void MakeHist_pim(){
+  MakeHist_dtpim();
+  MakeHist_fidpim();
+  MakeHist_MMpim();
 }
 
 

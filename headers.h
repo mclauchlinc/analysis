@@ -21,7 +21,7 @@
 #include "delta_t_id.h" //The library for delta_t functions and delta_t id functions
 #include "fiducial.h"   //Functions to do fiducial cuts 
 #include "eid.h"    //All functions used for electron identification 
-//#include "hid.h"    //All function used for hadron identification. This contains other libraries as well
+#include "hid.h"    //All function used for hadron identification. This contains other libraries as well
 #include "physics.h"	//Fun physics functions that will be used. 
 #include "variables.h" // Initialize all variables that will be used
 #include "histograms.h"//Functions to make and write histograms 
