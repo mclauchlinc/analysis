@@ -85,8 +85,9 @@ bool MM_p(double p1, double p2, double p3, double cx1, double cx2, double cx3, d
 	TLorentzVector k3_mu = Make_4Vector(p3,cx3,cy3,cz3,m3);
 	//double MM = (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
 	double MM = MM_3(k1_mu,k2_mu,k3_mu);
-	double cut_MM = MM - p_center;
-	if(cut_MM <= p_sig && cut_MM >= (-p_sig)){
+	double upper = p_center + p_sig;
+	double lower = p_center - p_sig;
+	if(MM < upper && MM > lower){
 		pass = true;
 	}
 	return pass;
@@ -101,8 +102,9 @@ bool MM_pi(double p1, double p2, double p3, double cx1, double cx2, double cx3, 
 
 	//double MM = (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
 	double MM = MM_3(k1_mu,k2_mu,k3_mu);
-	double cut_MM = MM - pip_center;
-	if(cut_MM <= pip_sig && cut_MM >= -(pip_sig)){
+	double upper = pip_center + pip_sig;
+	double lower = pip_center - pip_sig;
+	if(MM > lower && MM < upper){
 		pass = true;
 	}
 	return pass;
@@ -116,10 +118,39 @@ bool MM_zero(double p1, double p2, double p3, double p4, double cx1, double cx2,
 	TLorentzVector k4_mu = Make_4Vector(p4,cx4,cy4,cz4,m4);//physics.h
 	//double MM = (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
 	double MM = MM_4(k1_mu,k2_mu,k3_mu,k4_mu);
-	if(MM <= (MM_zero_center + MM_zero_sigma) && MM >= (MM_zero_center - MM_zero_sigma)){
+	double upper = MM_zero_center + MM_zero_sigma;
+	double lower = MM_zero_center - MM_zero_sigma;
+	if(MM > lower && MM < upper){
 		pass = true;
 	}
 	return pass;
+}
+
+bool MM_p2(double MM){
+	bool pass = false;
+	double upper = p_center + p_sig;
+	double lower = p_center - p_sig;
+	if(MM < upper){
+		pass = true;
+	}
+}
+
+bool MM_pi2(double MM){
+	bool pass = false;
+	double upper = pip_center + pip_sig;
+	double lower = pip_center - pip_sig;
+	if((MM < upper) && (MM > lower)){
+		pass = true;
+	}
+}
+
+bool MM_all2(double MM){
+	bool pass = false;
+	double upper = MM_zero_center + MM_zero_sigma;
+	double lower = MM_zero_center - MM_zero_sigma;
+	if(MM < upper && MM > lower){
+		pass = true;
+	}
 }
 
 /*
@@ -145,7 +176,7 @@ bool other_pim_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 	P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
 	if(P_0 && P_1 && P_2){
-		if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
+		/*if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
 			if(P_1 && !P_3){//Make sure proton doesn't also pass as a pi+
 				if(P_2 && !P_4){ //Make sure pi+ doesn't also pass as a proton
 					s++;
@@ -153,7 +184,7 @@ bool other_pim_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 			}
 		}
 	}
-	if(s == 1){//To make sure the event is unique
+	if(s == 1){//To make sure the event is unique*/ //Check to see if this cross check is taking out too many guys
 		pass = true;
 	}
 	return pass;
@@ -168,6 +199,15 @@ bool pim_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0,
 		}
 	}
 	return pass;
+}
+
+bool pim_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2, double mm){
+	bool pass = false;
+	if(other_pim_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+		if(MM_pi2(mm)){
+			pass = true;
+		}
+	}
 }
 
 
@@ -201,6 +241,14 @@ bool p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, d
 	return pass;
 }
 
+bool p_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2, double mm){
+	bool pass = false;
+	if(other_p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+		if(MM_p2(mm)){
+			pass = true;
+		}
+	}
+}
 
 
 bool other_pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2){
@@ -231,6 +279,15 @@ bool pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0,
 		}
 	}
 	return pass;
+}
+
+bool pip_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2, double mm){
+	bool pass = false;
+	if(other_pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+		if(MM_pi2(mm)){
+			pass = true;
+		}
+	}
 }
 
 bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, int idx_1, int idx_2, int idx_3){

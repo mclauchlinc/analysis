@@ -74,7 +74,7 @@ const double pim_sig = 0.0366;
 const double pip_center = 0.160;
 const double pip_sig = 0.0366;
 const double p_center = 0.782;
-const double p_sig = 0.0433;
+const double p_sig = 0.4;//0.0433;
 
 //My Own MM cut parameters
 const double MM_zero_center = 0.0;

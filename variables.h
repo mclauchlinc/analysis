@@ -25,6 +25,11 @@
     char pim_mm_plots;
     char proton_mm_plots;
 
+    //Missing mass
+    double MM_p_val;
+    double MM_pi_val;
+    double MM_full;
+
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle
     Float_t sc_t_b[100]; //The time taken for a particle to travel through as found by the sc

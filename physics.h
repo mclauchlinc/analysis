@@ -61,7 +61,7 @@ double MM_3(TLorentzVector k1_mu, TLorentzVector k2_mu, TLorentzVector k3_mu){
 //Missing Mass from four four vectors
 //Used to find missing mass of zero for all identified topology
 double MM_4(TLorentzVector k1_mu, TLorentzVector k2_mu, TLorentzVector k3_mu, TLorentzVector k4_mu){
-	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
+	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu - k4_mu).Mag2();
 }
 
 //Gives a Missing Mass value from momentum/mass data from three particles
