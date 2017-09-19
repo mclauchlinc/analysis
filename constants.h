@@ -2,6 +2,7 @@
 #define CONSTANTS_H
 
 #include "TMath.h"
+#include "four_vector.h"
 #include "headers.h"
 
 const double c_special = 29.9792458; //speed of light in cm/ns
@@ -18,9 +19,10 @@ const	double mp = 0.93828;	//Mass of proton in GeV
 const	double mpi = 0.1395;	//Mass of pion in GeV
 
 //Initial Four Vectors
-TLorentzVector k_mu_e16(0.0,0.0,energy_e16,energy_e16);
-TLorentzVector k_mu_e1f(0.0,0.0,energy_e1f,energy_e1f);
-TLorentzVector p_mu(0.0,0.0,0.0,mp);
+
+TLorentzVector k_mu_e16=Make_4Vector(energy_e16,0.0,0.0,1.0,me);
+TLorentzVector k_mu_e1f = Make_4Vector(energy_e1f,0.0,0.0,1.0,me);
+TLorentzVector p_mu = Make_4Vector(0.0,0.0,0.0,0.0,mp);
 
 //Particle ID Numbers
 //anti particles are negative

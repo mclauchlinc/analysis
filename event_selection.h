@@ -261,11 +261,6 @@ bool other_pip_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);	//hid.h
 	P_2 = is_pim( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);	//hid.h
 	if(P_0 && P_1 && P_2){
-		if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
-					s++;
-		}
-	}
-	if(s == 1){//To make sure the event is unique
 		pass = true;
 	}
 	return pass;

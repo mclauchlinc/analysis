@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 	}
 
 	//Set input and output files
-	char* input = argv[1];
+	std::string comp = argv[1];
 	char* output_name = argv[2];
 
 	TFile *output = Name_File(output_name); //read_in_data.h
@@ -21,17 +21,20 @@ int main(int argc, char** argv)
 	//Load in Files
     cout << "Loading Files: ";
     TChain data("h10"); //Create a TChain
-    //if(argv[1] == "o"){
-   	//    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1); //Located in read_in_data.h
-    
-    //}
-    //if(argv[1] == "t"){
-    loadChain(&data, "mac_set_1.txt",-1);
-    /*}
-    else{
+
+    int work = 0;
+    if(comp == "one"){
+   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", 6); //Located in read_in_data.h
+        work ++;
+    }
+    if(comp == "two"){
+        loadChain(&data, "mac_set_1.txt",6);
+        work ++;
+    }
+    if(work =0){
         cout<< "You did it wrong and loaded no data" <<endl;
     }
-    */
+    
     cout<< "Done" <<std::endl;  //Just to let me know
     cout<<"2" <<endl;
 

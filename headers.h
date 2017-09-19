@@ -5,6 +5,7 @@
 #include <iostream>     //Allow in and out standard functions
 #include "TDirectory.h"	//Allows for use of Directories 
 #include "main_phd.h"   //Standard functions for top down analysis
+#include "four_vector.h" //Singular function to make four vectors
 //#include "TStopwatch.h" //Function to show how long this takes
 #include "TLorentzVector.h"	//Allows use of Lorentz 4-Vectors 
 #include "read_in_data.h" //Functions to create TChains
