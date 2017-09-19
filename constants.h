@@ -20,7 +20,7 @@ const	double mpi = 0.1395;	//Mass of pion in GeV
 
 //Initial Four Vectors
 
-TLorentzVector k_mu_e16=Make_4Vector(energy_e16,0.0,0.0,1.0,me);
+TLorentzVector k_mu_e16 = Make_4Vector(energy_e16,0.0,0.0,1.0,me);
 TLorentzVector k_mu_e1f = Make_4Vector(energy_e1f,0.0,0.0,1.0,me);
 TLorentzVector p_mu = Make_4Vector(0.0,0.0,0.0,0.0,mp);
 
