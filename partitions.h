@@ -88,28 +88,31 @@ void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int s
 		Fill_fid(1,1,cx,cy,cz);
 		Fill_dt(0,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
 	}*/
-	//Delta T
-	if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
-	//	std::cout<<"delta_proton ";
-        duck ++;
-        Fill_dt(0,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-       //std::cout<<"Delta T is: " <<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
-	}
-    else{
-    //    std::cout<<"delta_proton_anti ";
-        Fill_dt(0,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-        
-    }
-	//Fiducial
-	if(fid_h(p, cx, cy, cz)){
-		//std::cout<<"fid_p ";
-        Fill_fid(1,1,cx,cy,cz);
-        duck ++;
-	}
-    else{
-       // std::cout<<"fid_p ";
-        Fill_fid(1,2,cx,cy,cz);
-        
+
+    if(q == 1){
+    	//Delta T
+    	if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
+    	//	std::cout<<"delta_proton ";
+            duck ++;
+            Fill_dt(0,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+           //std::cout<<"Delta T is: " <<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
+    	}
+        else{
+        //    std::cout<<"delta_proton_anti ";
+            Fill_dt(0,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+            
+        }
+    	//Fiducial
+    	if(fid_h(p, cx, cy, cz)){
+    		//std::cout<<"fid_p ";
+            Fill_fid(1,1,cx,cy,cz);
+            duck ++;
+    	}
+        else{
+           // std::cout<<"fid_p ";
+            Fill_fid(1,2,cx,cy,cz);
+            
+        }
     }
 	//Full ID
     if(is_proton(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
@@ -141,29 +144,32 @@ void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, 
         Fill_dt(1,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
     }*/
    // Fill_dt_vert(1,p,sc_r,sc_t);
-    //Delta T
-    if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)&& q == 1){
-        //std::cout<<"dt_pip ";
-        Fill_dt(1,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-        duck++;
-       // std::cout<<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
-    }
-    else{
-       // std::cout<<"dt_pip_anti ";
-        Fill_dt(1,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-        
-    }
-    //Fiducial
-    if(fid_h(p, cx, cy, cz)&& q == 1){
-       // std::cout<<"fid_pip ";
-        Fill_fid(2,1,cx,cy,cz);
-        duck++;
-        
-    }
-    else{
-       // std::cout<<"fid_pip_anti ";
-        Fill_fid(2,2,cx,cy,cz);
-        
+    //Charge
+    if(q == 1){
+        //Delta T
+        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t) && q == 1){
+            //std::cout<<"dt_pip ";
+            Fill_dt(1,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+            duck++;
+           // std::cout<<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
+        }
+        else{
+           // std::cout<<"dt_pip_anti ";
+            Fill_dt(1,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+            
+        }
+        //Fiducial
+        if(fid_h(p, cx, cy, cz)&& q == 1){
+           // std::cout<<"fid_pip ";
+            Fill_fid(2,1,cx,cy,cz);
+            duck++;
+            
+        }
+        else{
+           // std::cout<<"fid_pip_anti ";
+            Fill_fid(2,2,cx,cy,cz);
+            
+        }
     }
     //Full ID
     if(is_pip(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
@@ -193,27 +199,29 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
         Fill_fid(3,1,cx,cy,cz);
         Fill_dt(2,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
     }*/
-    //Delta T
-    if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t) && q == -1){
-    //    std::cout<<"dt_pi- ";
-        Fill_dt(2,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-        duck ++;
-    }
-    else{
-     //   std::cout<<"dt_pi-_anti ";
-        Fill_dt(2,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-        
-    }
-    //Fiducial
-    if(fid_h(p, cx, cy, cz)&& q == -1){
-     //   std::cout<<"fid_pi- ";
-        Fill_fid(3,1,cx,cy,cz);
-        duck++ ; 
-    }
-    else{
-     //   std::cout<<"fid_pi-_anti ";
-        Fill_fid(3,2,cx,cy,cz);
-        
+    if( q == -1){
+        //Delta T
+        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t) && q == -1){
+        //    std::cout<<"dt_pi- ";
+            Fill_dt(2,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+            duck ++;
+        }
+        else{
+         //   std::cout<<"dt_pi-_anti ";
+            Fill_dt(2,2,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+            
+        }
+        //Fiducial
+        if(fid_h(p, cx, cy, cz)&& q == -1){
+         //   std::cout<<"fid_pi- ";
+            Fill_fid(3,1,cx,cy,cz);
+            duck++ ; 
+        }
+        else{
+         //   std::cout<<"fid_pi-_anti ";
+            Fill_fid(3,2,cx,cy,cz);
+            
+        }
     }
     //Full ID
     if(is_pim(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){

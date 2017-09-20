@@ -130,9 +130,10 @@ bool MM_p2(double MM){
 	bool pass = false;
 	double upper = p_center + p_sig;
 	double lower = p_center - p_sig;
-	if(MM < upper){
+	if((MM < upper) && (MM > lower)){
 		pass = true;
 	}
+	return pass;
 }
 
 bool MM_pi2(double MM){
@@ -142,15 +143,17 @@ bool MM_pi2(double MM){
 	if((MM < upper) && (MM > lower)){
 		pass = true;
 	}
+	return pass;
 }
 
 bool MM_all2(double MM){
 	bool pass = false;
 	double upper = MM_zero_center + MM_zero_sigma;
 	double lower = MM_zero_center - MM_zero_sigma;
-	if(MM < upper && MM > lower){
+	if((MM < upper) && (MM > lower)){
 		pass = true;
 	}
+	return pass;
 }
 
 /*
@@ -208,6 +211,7 @@ bool pim_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx
 			pass = true;
 		}
 	}
+	return pass;
 }
 
 
@@ -248,6 +252,7 @@ bool p_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0,
 			pass = true;
 		}
 	}
+	return pass;
 }
 
 
@@ -283,6 +288,7 @@ bool pip_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx
 			pass = true;
 		}
 	}
+	return pass;
 }
 
 bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, int idx_1, int idx_2, int idx_3){

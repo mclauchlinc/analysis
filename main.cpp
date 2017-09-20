@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 
     int work = 0;
     if(comp == "one"){
-   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", 6); //Located in read_in_data.h
+   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1); //Located in read_in_data.h
         work ++;
     }
     if(comp == "two"){
@@ -128,49 +128,67 @@ int main(int argc, char** argv)
             
             for(int k = 0; k<gpart ; k++){
                 //Missing Mass pre
-                MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
+              
                 MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
 
-                Fill_MM(0,0,MM_p_val);
-                Fill_MM(1,0,MM_pi_val);
-                Fill_MM(2,0,MM_pi_val);
+                
+                
+               
 
-
+                //Proton missing mass topology
                 if(other_p_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
+                      MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
+                    Fill_MM(0,0,MM_p_val);
                     //Proton Missing Cut
-                    Fill_MM(0,1,MM_p_val);
+                    if(MM_p2(MM_p_val)){
+                        Fill_MM(0,1,MM_p_val);
+                    }
+                     //Proton Missing Anti
+                    else{
+                        Fill_MM(0,2,MM_p_val);
+                    }
                 }
-                else{
-                    //Proton Missing Anti
-                    Fill_MM(0,2,MM_p_val);
-                }
+
+                //Pi+ missing mass topology
                 if(other_pip_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
+                    Fill_MM(1,0,MM_pi_val);
                     //Pi+ Missing Cut
+                    if(MM_pi2(MM_pi_val)){
                     Fill_MM(1,1,MM_pi_val);
-                }
-                else{
+                    }                
                     //Pi+ Missing Anti
-                    Fill_MM(1,2,MM_pi_val);
+                    else{
+                        Fill_MM(1,2,MM_pi_val);
+                    }
                 }
+
+                //Pi- missing mass topology
                 if(other_pim_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
+                     Fill_MM(2,0,MM_pi_val);
                     //Pi- Missing Cut
-                    Fill_MM(2,1,MM_pi_val);
-                }
-                else{
+                    if(MM_pi2(MM_pi_val)){
+                        Fill_MM(2,1,MM_pi_val);
+                    }
                     //Pi- Missing Anti
-                    Fill_MM(2,2,MM_pi_val);
+                    else{
+                        Fill_MM(2,2,MM_pi_val);
+                    }
                 }
+
                 for(int l = 0; l < gpart; l++){
                     //Full Topology PRe
                     MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
-                    Fill_MM(3,0,MM_full);
-                    if(zero_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], j, k, l)){
-                        //Full Topology cut
-                        Fill_MM(3,1,MM_full);
-                    }
-                    else{
-                        //Full topology anti 
-                        Fill_MM(3,2,MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi));
+                    
+                    if(other_zero_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], j, k, l)){
+                        Fill_MM(3,0,MM_full);
+                        if(MM_all2(MM_full)){
+                            //Full Topology cut
+                            Fill_MM(3,1,MM_full);
+                        }
+                        else{
+                            //Full topology anti 
+                            Fill_MM(3,2,MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi));
+                        }
                     }
                 }
             }
