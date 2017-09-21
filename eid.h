@@ -28,7 +28,7 @@ bool eid_1 ( int dc, int cc, int ec, int sc){
 bool eid_2( int dc, int cc, int ec, int sc, int dc_stat, int q, int stat){
 	bool pass = kFALSE;
 	//pass Level 1 && Sanity Electron
-	if(eid_1(dc,cc,ec,sc) && (int)q == -1 && (int)dc_stat > 0 && (int)stat >0){
+	if(eid_1(dc,cc,ec,sc) && (int)q == 1 && (int)dc_stat > 0 && (int)stat >0){ //Changed q to +1 9/21/2017
 		pass = kTRUE;
 	}
 	return pass;

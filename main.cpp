@@ -126,7 +126,7 @@ int main(int argc, char** argv)
             //Missing Mass
                 //Missing Mass 1 missing
             
-            for(int k = 0; k<gpart ; k++){
+            for(int k = 1; k<gpart ; k++){
                 //Missing Mass pre
               
                 MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);

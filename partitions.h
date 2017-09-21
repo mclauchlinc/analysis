@@ -73,23 +73,35 @@ Fill_fid(species, cut)
 species for dt: {0,1,2} -> {p,pip,pim}
 */
 void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
-	//std::cout<<" proton id" << std::endl;
-    //Pre Cut
-	//std::cout<<std::endl <<"PROTON: ";
-    Fill_fid(1,0,cx,cy,cz);
-	Fill_dt(0,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-    Fill_dt_vert(0,p,-sc_r,0);
-    Fill_dt_vert(1,p,0,sc_t);
-    Fill_dt_vert(2,p,0,sc_t0);
-    int duck = 0;
-	/*
-    //Sanity
-	if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == 1){
-		Fill_fid(1,1,cx,cy,cz);
-		Fill_dt(0,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-	}*/
+	
+     if(q == 1){
+        //std::cout<<" proton id" << std::endl;
+        //Pre Cut
+    	//std::cout<<std::endl <<"PROTON: ";
+        /*Delta T Parameters
+        (s, cut, sc, p, p0, sc_r, sc_r0, sc_t, sc_t0)
+        s->{0,1,2}->{p,pip,pim}
+        cut->{0,1,2,3,4}->{Pre,cut,anti,pid,bank}
+        */
+        /*Fiducial Parameters
+        (s, cut, cx, cy, cz)
+        s -> {0,1,2,3} -> {e,p,pip,pim}
+        cut -> {0,1,2,3,4}->{pre, cut, anti, pid, bank}
+        */
+        Fill_fid(1,0,cx,cy,cz);
+    	Fill_dt(0,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        Fill_dt_vert(0,p,-sc_r,0);
+        Fill_dt_vert(1,p,0,sc_t);
+        Fill_dt_vert(2,p,0,sc_t0);
+        int duck = 0;
+    	/*
+        //Sanity
+    	if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == 1){
+    		Fill_fid(1,1,cx,cy,cz);
+    		Fill_dt(0,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+    	}*/
 
-    if(q == 1){
+   
     	//Delta T
     	if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
     	//	std::cout<<"delta_proton ";
@@ -113,41 +125,42 @@ void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int s
             Fill_fid(1,2,cx,cy,cz);
             
         }
-    }
-	//Full ID
-    if(is_proton(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
-    //if(duck == 2){
-        Fill_dt(0,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-        Fill_fid(1,3,cx,cy,cz);
-    }
-	//ID Bank
-   // std::cout<<" " << id <<std::endl;
-	if((int)id == PROTON){
-     //   std::cout<<"I got to this part" <<std::endl;
-        //std::cout<<"id_p ";
-        Fill_fid(1,4,cx,cy,cz);
-        Fill_dt(0,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-        
+    	//Full ID
+        if(is_proton(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
+        //if(duck == 2){
+            Fill_dt(0,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+            Fill_fid(1,3,cx,cy,cz);
+        }
+    	//ID Bank
+       // std::cout<<" " << id <<std::endl;
+    	if((int)id == PROTON){
+         //   std::cout<<"I got to this part" <<std::endl;
+            //std::cout<<"id_p ";
+            Fill_fid(1,4,cx,cy,cz);
+            Fill_dt(0,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+            
+        }
     }
 }
 
 void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
-    //Pre Cut
-    //std::cout<<std::endl <<"PIP: ";
-    Fill_fid(2,0,cx,cy,cz);
-    Fill_dt(1,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-    int duck = 0;
-   // std::cout<< "pi plus id" <<std::endl;
-    /*//Sanity
-    if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == 1){
-        Fill_fid(2,1,cx,cy,cz);
-        Fill_dt(1,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-    }*/
-   // Fill_dt_vert(1,p,sc_r,sc_t);
-    //Charge
     if(q == 1){
+        //Pre Cut
+        //std::cout<<std::endl <<"PIP: ";
+        Fill_fid(2,0,cx,cy,cz);
+        Fill_dt(1,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        int duck = 0;
+       // std::cout<< "pi plus id" <<std::endl;
+        /*//Sanity
+        if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == 1){
+            Fill_fid(2,1,cx,cy,cz);
+            Fill_dt(1,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        }*/
+       // Fill_dt_vert(1,p,sc_r,sc_t);
+        //Charge
+    
         //Delta T
-        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t) && q == 1){
+        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
             //std::cout<<"dt_pip ";
             Fill_dt(1,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
             duck++;
@@ -159,7 +172,7 @@ void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, 
             
         }
         //Fiducial
-        if(fid_h(p, cx, cy, cz)&& q == 1){
+        if(fid_h(p, cx, cy, cz)){
            // std::cout<<"fid_pip ";
             Fill_fid(2,1,cx,cy,cz);
             duck++;
@@ -170,38 +183,40 @@ void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, 
             Fill_fid(2,2,cx,cy,cz);
             
         }
-    }
-    //Full ID
-    if(is_pip(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
-    //if(duck == 2){
-        Fill_fid(2,3,cx,cy,cz);
-        Fill_dt(1,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-    }
-    //ID Bank
-    if((int)id == PION){
-       // std::cout<<"bank_pip ";
-        Fill_fid(2,4,cx,cy,cz);
-        Fill_dt(1,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
         
+        //Full ID
+        if(is_pip(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
+        //if(duck == 2){
+            Fill_fid(2,3,cx,cy,cz);
+            Fill_dt(1,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+        }
+        //ID Bank
+        if((int)id == PION){
+           // std::cout<<"bank_pip ";
+            Fill_fid(2,4,cx,cy,cz);
+            Fill_dt(1,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+            
+        }
     }
 }
 
 void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
-    //Pre Cut
-   // std::cout<<std::endl <<"PIM: ";
-   // std::cout<< "pi minus id" <<std::endl;
-    Fill_fid(3,0,cx,cy,cz);
-    Fill_dt(2,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-    int duck = 0;
-  //  Fill_dt_vert(2,p,sc_r,sc_t);
-   /* //Sanity
-    if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == -1){
-        Fill_fid(3,1,cx,cy,cz);
-        Fill_dt(2,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-    }*/
     if( q == -1){
+        //Pre Cut
+       // std::cout<<std::endl <<"PIM: ";
+       // std::cout<< "pi minus id" <<std::endl;
+        Fill_fid(3,0,cx,cy,cz);
+        Fill_dt(2,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        int duck = 0;
+      //  Fill_dt_vert(2,p,sc_r,sc_t);
+       /* //Sanity
+        if(sanity_hadron(dc,sc,stat,dc_stat) && (int) q == -1){
+            Fill_fid(3,1,cx,cy,cz);
+            Fill_dt(2,1,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        }*/
+    
         //Delta T
-        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t) && q == -1){
+        if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
         //    std::cout<<"dt_pi- ";
             Fill_dt(2,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
             duck ++;
@@ -212,7 +227,7 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
             
         }
         //Fiducial
-        if(fid_h(p, cx, cy, cz)&& q == -1){
+        if(fid_h(p, cx, cy, cz)){
          //   std::cout<<"fid_pi- ";
             Fill_fid(3,1,cx,cy,cz);
             duck++ ; 
@@ -222,7 +237,7 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
             Fill_fid(3,2,cx,cy,cz);
             
         }
-    }
+    
     //Full ID
     if(is_pim(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
     //if(duck == 2){
@@ -235,6 +250,7 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
         Fill_dt(2,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
 
     }
+}
 }
 //q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
 

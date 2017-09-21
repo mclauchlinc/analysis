@@ -286,7 +286,7 @@ void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, d
       mass = mp;
      // std::cout<< " Proton dt! " ;
     }
-    if(s == 1 || s == 2){
+    if((s == 1) || (s == 2)){
       mass = mpi;
      // std::cout<< "Pion dt! " ;
     }
