@@ -13,7 +13,8 @@ int main(int argc, char** argv)
 
 	//Set input and output files
 	std::string comp = argv[1];
-	char* output_name = argv[2];
+    int file_num = argv[2];
+	char* output_name = argv[3];
 
 	TFile *output = Name_File(output_name); //read_in_data.h
     cout<<"1" <<endl;
@@ -24,11 +25,15 @@ int main(int argc, char** argv)
 
     int work = 0;
     if(comp == "one"){
-   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", -1); //Located in read_in_data.h
+   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", file_num); //Located in read_in_data.h
         work ++;
     }
     if(comp == "two"){
-        loadChain(&data, "mac_set_1.txt",-1);
+        loadChain(&data, "mac_set_1.txt",file_num);
+        work ++;
+    }
+    if(comp == "three"){
+        loadChain(&data,"question_data.txt",file_num);
         work ++;
     }
     if(work =0){
