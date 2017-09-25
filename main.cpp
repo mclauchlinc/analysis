@@ -28,7 +28,7 @@ int main(int argc, char** argv)
         work ++;
     }
     if(comp == "two"){
-        loadChain(&data, "mac_set_1.txt",6);
+        loadChain(&data, "mac_set_1.txt",-1);
         work ++;
     }
     if(work =0){
