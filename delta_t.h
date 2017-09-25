@@ -23,7 +23,7 @@ double vert_e(double d, double t)
 
 double vert_p(double p, double d, double t, double m)
 {
-	return t-((d/c_special)*sqrt(1.0 + m*m/(p*p)));
+	return t-((d/c_special)*sqrt(1.0 + m*m/(p*p)));//is there supposed to be a + here? yeah 9/25
 }
 
 double delta_t( double p, double p0, double d, double d0, double t, double t0, double m )

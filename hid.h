@@ -22,7 +22,7 @@ bool is_proton( int q, double p, double cx, double cy, double cz, int dc, int sc
 	bool proton = false;
 	if(hid_sanity(dc, sc, stat, dc_stat))
 	{
-		if(q == -1){
+		if(q == 1){
 			if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 			{
 				if( fid_h( p, cx, cy, cz))
@@ -40,7 +40,7 @@ bool is_pip( int q, double p, double cx, double cy, double cz, int dc, int sc, i
 	bool pass = false;
 	if(hid_sanity(dc, sc, stat, dc_stat))
 	{
-		if( q == -1){ //Note that charge is strange right now 9/22
+		if( q == 1){ //Note that charge is strange right now 9/22
 			if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
 				if( fid_h( p, cx, cy, cz)){
 					pass = true;
@@ -55,7 +55,7 @@ bool is_pim( int q, double p, double cx, double cy, double cz, int dc, int sc, i
 	bool pass = false;
 	if(hid_sanity(dc, sc, stat, dc_stat) && q == -1)
 	{
-		if(q == 1){
+		if(q == -1){
 			if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 			{
 				if( fid_h( p, cx, cy, cz))

@@ -74,7 +74,7 @@ species for dt: {0,1,2} -> {p,pip,pim}
 */
 void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
 	
-     if(q == -1){
+     if(q == 1){
         //std::cout<<" proton id" << std::endl;
         //Pre Cut
     	//std::cout<<std::endl <<"PROTON: ";
@@ -144,7 +144,7 @@ void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int s
 }
 
 void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
-    if(q == -1){
+    if(q == 1){
         //Pre Cut
         //std::cout<<std::endl <<"PIP: ";
         Fill_fid(2,0,cx,cy,cz);
@@ -201,7 +201,7 @@ void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, 
 }
 
 void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
-    if( q == 1){
+    if( q == -1){
         //Pre Cut
        // std::cout<<std::endl <<"PIM: ";
        // std::cout<< "pi minus id" <<std::endl;
