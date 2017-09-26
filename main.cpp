@@ -13,8 +13,10 @@ int main(int argc, char** argv)
 
 	//Set input and output files
 	std::string comp = argv[1];
-    int file_num = argv[2];
-	char* output_name = argv[3];
+    //int file_num = argv[2];
+	char* output_name = argv[2];
+
+    int file_num = -1;
 
 	TFile *output = Name_File(output_name); //read_in_data.h
     cout<<"1" <<endl;
@@ -34,6 +36,10 @@ int main(int argc, char** argv)
     }
     if(comp == "three"){
         loadChain(&data,"question_data.txt",file_num);
+        work ++;
+    }
+    if(comp == "four"){
+        loadChain(&data,"old_e1f_data.txt",16);
         work ++;
     }
     if(work =0){
@@ -93,6 +99,7 @@ int main(int argc, char** argv)
     pim_id->cd();
     MakeHist_pim();
     */
+    int q_m[100];
 
     cout<< "made histograms?" <<endl;
 
@@ -105,7 +112,7 @@ int main(int argc, char** argv)
 
         //Get info for event i
         data.GetEntry(i);
-        Reasign();
+        Reasign(); //Converts to C++ data types variables.h
 
         /*Debug
         if(i == 100000){
@@ -127,7 +134,8 @@ int main(int argc, char** argv)
         Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
         //cout << "did electron things about to enter for loop" <<endl;
         for(int j = 1; j<gpart ; j++){
-            Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
+            q_m[j] = -q[j];//Easy changing the charge
+            Fill_Hadron(q_m[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
             //Missing Mass
                 //Missing Mass 1 missing
             
