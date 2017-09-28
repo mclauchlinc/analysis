@@ -10,10 +10,10 @@
 //Declare all title pointers and plots first
 char  htitle[100]; //The name on the graph itself (can have spaces)
 char  hname[100]; //The name shown in the TBrowser (should have no spaces)
-TH2D* fid_hist[6][4][5]; //Sector, species, cut
+TH2D* fid_hist[6][4][5]; //Sector, species, cut, pos/neg
 TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
 TH2D* SF_hist[5]; //cuts 
-TH2D* dt_hist[3][5]; //delta t, cuts
+TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut

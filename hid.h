@@ -10,7 +10,7 @@
 
 bool hid_sanity(int dc, int sc, int stat, int dc_stat){
 	bool pass = false;
-	if(dc > 0 && sc > 0 && stat > 0 && dc_stat >0){
+	if( (dc > 0) && (sc > 0)){ //&& (stat > 0) && (dc_stat >0)){
 		pass = true;
 	}
 	return pass;

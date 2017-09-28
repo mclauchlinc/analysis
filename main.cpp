@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 
     int work = 0;
     if(comp == "one"){
-   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", file_num); //Located in read_in_data.h
+   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", file_num); //Located in main_phd.h
         work ++;
     }
     if(comp == "two"){
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
         Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
         //cout << "did electron things about to enter for loop" <<endl;
         for(int j = 1; j<gpart ; j++){
-            q_m[j] = -q[j];//Easy changing the charge
+            q_m[j] = q[j];//Easy changing the charge
             Fill_Hadron(q_m[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
             //Missing Mass
                 //Missing Mass 1 missing

@@ -171,6 +171,8 @@ const double MMxmax = 2.0;
 const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
+const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
+const char * charge[] = {"pos","neg"};
 /*
 Types of Cuts
 	Electron ID
