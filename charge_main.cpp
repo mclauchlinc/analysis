@@ -233,7 +233,7 @@ int main(int argc, char** argv)
     //int file_num = argv[2];
 	char* output_name = argv[2];
 
-    int file_num = 6;
+    int file_num = -1;
 
 	TFile *output = Name_File(output_name); //read_in_data.h
     cout<<"1" <<endl;
@@ -244,7 +244,7 @@ int main(int argc, char** argv)
 
     int work = 0;
     if(comp == "one"){
-   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", file_num); //Located in main_phd.h
+   	    loadChain(&data, "nick_convert_e16.txt", file_num); //Located in main_phd.h
         work ++;
     }
     if(comp == "two"){
@@ -259,8 +259,12 @@ int main(int argc, char** argv)
         loadChain(&data,"old_e1f_data.txt",16);
         work ++;
     }
+    if(comp == "five"){
+        loadChain(&data, "e1d_files.txt",file_num);
+        work ++;
+    }
     if(work =0){
-        cout<< "You did it wrong and loaded no data" <<endl;
+        cout<< "You are not using your loadChain function" <<endl;
     }
     
     cout<< "Done" <<std::endl;  //Just to let me know
@@ -412,14 +416,18 @@ int main(int argc, char** argv)
            //if(hid_sanity(dc[j], sc[j], stat[j], dc_stat[j])){
                 //Pre
                 //Fill_fid_q(q[j],0,cx[j],cy[j],cz[j]);
+                cout<< "oen" <<endl;
                 Fill_dt_q(q[j],0,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                 
+                /*
                 //Delta T
                 if(delta_t_proton(p[0], p[j], sc_r[sc[0]-1], sc_r[sc[j]-1], sc_t[sc[0]-1], sc_t[sc[j]-1])){
                     duck ++;
+                    cout<< "tow" <<endl;
                     Fill_dt_q(q[j],1,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                 }
                 else{
+                    cout<< "there" <<endl;
                     Fill_dt_q(q[j],2,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                 }
                 /*
@@ -436,9 +444,10 @@ int main(int argc, char** argv)
                 if(duck == 2){
                     Fill_dt_q(q[j],3,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                     Fill_fid_q(q[j],3,cx[j],cy[j],cz[j]);
-                }*/
+                }
                
                 if(id[j] == PROTON){
+                    cout<< "fuor" <<endl;
                     Fill_dt_q(q[j],5,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                     //Fill_fid_q(q[j],5,cx[j],cy[j],cz[j]);
                 }

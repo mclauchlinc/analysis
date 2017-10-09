@@ -62,7 +62,7 @@ void MakeHist_WQ2(){
     - All = All cuts
   */
   int space_dims = 9;//The cuts in constants.h
-  std::cout<<space_dims <<" out of loop" <<std::endl;
+  //std::cout<<space_dims <<" out of loop" <<std::endl;
   for(int w = 0; (w < 9); w++){ 
     sprintf(hname,"W_Q2_%s",eid_cut[w]); //constants.h and otherwise writing the specific cut to the right plot
     WQ2_hist[w] = new TH2D( hname, hname, WQxres, WQxmin, WQxmax, WQyres, WQymin, WQymax); // constants.h
@@ -176,6 +176,7 @@ void Fill_fid(int type, int level, double cx, double cy, double cz)
 	double theta = get_theta(cz);  //fiducial.h
 	int sec = get_sector(cx, cy);  //fiducial.h
   int sidx = sec-1;
+  //std::cout<< std::endl <<"The Sector is: " <<sec <<std::endl;
 	//Level {0,1,2,3} -> {no cut, cut, anti-cut, all cuts}
   //Type {0,1,2,3} -> {e, p, pip, pim}
   if(type == 1){
@@ -280,8 +281,7 @@ void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, d
   cut: {pre, cut, anti, pid, bank} -> {0,1,2,3,4}
   */
   if(sc != 0){
-    double mass = 10000;
-    int q = 0;
+    double mass = 20;
     if(s == 0){
       mass = mp;
      // std::cout<< " Proton dt! " ;

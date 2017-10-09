@@ -173,6 +173,8 @@ const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf"
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
 const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
 const char * charge[] = {"pos","neg"};
+const char * arguments[] = {"program", "input file","number of files", "output file"};
+const char* local[] = {"the farm", "the desktop", "the mac"};
 /*
 Types of Cuts
 	Electron ID

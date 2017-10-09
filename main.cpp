@@ -2,106 +2,90 @@
 
 
 
-using namespace std;
-int main(int argc, char** argv)
-{
-	cout<< "You have " << argc << " arguments: " <<endl;
-	for( int i = 0; i < argc; i++)
-	{
-		cout << argv[i] <<endl;
-	}
-
-	//Set input and output files
-	std::string comp = argv[1];
-    //int file_num = argv[2];
-	char* output_name = argv[2];
-
-    int file_num = -1;
-
-	TFile *output = Name_File(output_name); //read_in_data.h
-    cout<<"1" <<endl;
-
-	//Load in Files
-    cout << "Loading Files: ";
-    TChain data("h10"); //Create a TChain
-
-    int work = 0;
-    if(comp == "one"){
-   	    loadChain(&data, "/home/mclauchlinc/Desktop/e16/nick.txt", file_num); //Located in main_phd.h
-        work ++;
-    }
-    if(comp == "two"){
-        loadChain(&data, "mac_set_1.txt",file_num);
-        work ++;
-    }
-    if(comp == "three"){
-        loadChain(&data,"question_data.txt",file_num);
-        work ++;
-    }
-    if(comp == "four"){
-        loadChain(&data,"old_e1f_data.txt",16);
-        work ++;
-    }
-    if(work =0){
-        cout<< "You did it wrong and loaded no data" <<endl;
-    }
+using namespace std; //A standard space to be in for a c++ program
+int main(int argc, char** argv){ //Main function that will return an integer. argc/v are for command line inputs
+    std::cout<< "You have " <<argc <<" arguments" <<std::endl;
     
-    cout<< "Done" <<std::endl;  //Just to let me know
-    cout<<"2" <<endl;
 
-    //Create Subdirectories
-    //char dirname[50];
+    //Set input and output files
+    //The argv[i] cannot be called directly, so their values need to be assigned to variables in the program
+    if(argc == 4){
+        for(int w = 0; w < argc ; w++){ //Loop over inputs to confirm intention 
+            std::cout<< arguments[w] <<": " <<argv[w] <<endl; //arguments array found in constants.h
+        }
+        std::cout<< "Start argv assignment: ";
+        comp = argv[1]; //variables.h
+        file_num = std::atoi(argv[2]); //variables.h
+        output_name = argv[3]; //variables.h
+        std::cout<<"Complete" <<std::endl;
+    }
+    else{
+        if( argc == 3){//No file number input
+            for(int w = 0; w < argc ; w++){ //Loop over inputs to confirm intention 
+                naming_var = w;
+                if(w == 2){//Skip over the number of files
+                    naming_var++;
+                }
+                    std::cout<< arguments[naming_var] <<": " <<argv[w] <<endl; //arguments array found in constants.h
+            }
+            std::cout<<"Start argv assignment: ";
+            comp = argv[1]; //variables.h
+            file_num = -1; //Just read in all files;
+            output_name = argv[2];
+            std::cout<<"Complete" <<std::endl;
+        }
+        else{
+            std::cout<< "You have not properly put in commandline inputs" <<std::endl;
+            std::cout<<"Remember you need ./analysis, input, number of files, output" <<std::endl;
+            std::cout<<"Rerun this program. None of this will work now" <<std::endl;
+        }
+    }
+
+    //Work with loading in files
+    std::cout<<"Create Output File: ";
+    TFile *output = Name_File(output_name); //read_in_files.h
+    std::cout<<"Complete" <<std::endl <<"Load root files: ";
+    TChain data("h10"); //Create TChain to be used. TTrees are h10
     /*
-    TDirectory *pid = output->mkdir("particle_id");
-    TDirectory *e_id = pid->mkdir("eid");
-    TDirectory *h_id = pid->mkdir("hid");
-    TDirectory *p_id = h_id->mkdir("proton_id");
-    TDirectory *pip_id = h_id->mkdir("pip_id");
-    TDirectory *pim_id = h_id->mkdir("pim_id");
-    TDirectory *W_Q2 = output->mkdir("W_Q2 Plots");
-    //for( y=0; y<3; y++){ //Hadronic article
-      //  sprintf(dirname,"%s_delta_t",species[i+1]);
-        //TDir
-    //}
-   //TDirectory *delta = 
+    if(comp == zero){//work on the farm
+        loadChain(&data,"",file_num);//read_in-data.h
+        work++;//variables.h
+        which = 0;//denote which set //variables.h
+    }
     */
+    if(comp == "one"){ //Desktop computer in office
+        loadChain(&data, "/home/mclauchlinc/Desktop/analysis/nick_convert_e16.txt", file_num);//read_in_data.h
+        work++; //variables.h
+        which = 1; //denote which data set //variables.h
+    }
+    if(comp == "two"){  //Mac Data set
+        loadChain(&data, "mac_set_1.txt",file_num);//read_in_files.h;
+        work++;//variables.h
+        which = 2; //denote which set //variables.h
+    }
+    if(work == 1){ //Did the function loadChain run without halting everything?
+        std::cout<<"Complete" <<std::endl;
+    }
+    else{
+        std::cout<<"Error" <<std::endl;
+    }
 
-    //Number of events check
-    int events;
-    events = data.GetEntries();
-    cout <<"There are "<< events <<" events loaded" <<endl;
+    //Outputs on what was input
+    events = data.GetEntries(); //TTree.h //variables.h
+    std::cout<<"You are reading data in from " <<local[which] <<std::endl;
+    std::cout<<"Events loaded: " <<events <<std::endl;
 
-    cout<<"3" <<endl;
-    SetBranches(&data); // Located in read_in_data.h
-    
-    //MakeHist();
-    MakeHist();
-    
-    cout<<"4" <<endl;
-    //Progress
-    int progress;
+    //Set Branches
+    std::cout<< "Setting Branches: ";
+    SetBranches(&data);//read_in_data.h
+    std::cout<< "Complete" <<std::endl;
 
-    /*
-    W_Q2->cd();
-    MakeHist_WQ2();
+    //Make Histograms
+    std::cout<< "Making Histograms: ";
+    MakeHist();//histograms.h
+    std::cout<<"Complete" <<std::endl;
 
-    pid->cd();
-
-    e_id->cd();
-    MakeHist_e();
-
-    p_id->cd();
-    MakeHist_p();
-
-    pip_id->cd();
-    MakeHist_pip();
-
-    pim_id->cd();
-    MakeHist_pim();
-    */
-    int q_m[100];
-
-    cout<< "made histograms?" <<endl;
+    double beep = 0;
 
     for(int i = 0; i< events ; i++)
     {
@@ -112,7 +96,7 @@ int main(int argc, char** argv)
 
         //Get info for event i
         data.GetEntry(i);
-        Reasign(); //Converts to C++ data types variables.h
+        Reassign(); //Converts to C++ data types variables.h
 
         /*Debug
         if(i == 100000){
@@ -131,11 +115,13 @@ int main(int argc, char** argv)
         //Fill histograms for eid 
         //e_id->cd();
         //cout<<"about to do electron things" <<endl;
+        //Fill_WQ2( 0, 0, p[0], cx[0], cy[0], cz[0]); // histograms.h
+        //Fill_fid(0, 0, cx[0], cy[0], cz[0]);//type, cut, cx, cy, cz //histograms.h
+
         Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
         //cout << "did electron things about to enter for loop" <<endl;
         for(int j = 1; j<gpart ; j++){
-            q_m[j] = q[j];//Easy changing the charge
-            Fill_Hadron(q_m[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
+            Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
             //Missing Mass
                 //Missing Mass 1 missing
             

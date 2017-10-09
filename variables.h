@@ -1,31 +1,19 @@
 #ifndef VARIABLES_H
 #define VARIABLES_H
 
+  //Input Variables from Commandline
+    std::string comp; 
+    char* output_name;
+    int file_num = -1;
+    int work = 0;
+    int which = 0; 
+    int naming_var = 0; 
 
-    int eid_level = 1;
-    char eid_plots;
-    char electron_fid_plots;
-    //Fiducial 
-    char fiducial_plots;
-    char proton_fid_plots;
-    char pip_fid_plots;
-    char pim_fid_plots;
-    //Delta T
-    char delta_t_plots;
-    char proton_delta_t_plots;
-    char pip_delta_t_plots;
-    char pim_delta_t_plots;
-    //Sample Fraction
-    char sf_plots;
-    //Energy Fraction
-    char ec_plots;
-    //Missing Mass
-    char mm_plots;
-    char pip_mm_plots;
-    char pim_mm_plots;
-    char proton_mm_plots;
-
-    //Missing mass
+    //Data parameters
+    int events;
+    int progress;
+    int scidx;
+    int sc0idx;
     double MM_p_val;
     double MM_pi_val;
     double MM_full;
@@ -34,8 +22,8 @@
     Char_t q_b[100]; //The charge of each given particle
     Float_t sc_t_b[100]; //The time taken for a particle to travel through as found by the sc
     Float_t sc_r_b[100]; //The distance taken by a particle through the detector as found by the sc
-    Int_t sc_b[100]; //The index used to navigate any sc banks
-    Float_t p_b[100]; //The momentum of given particles calculated from the curavture through the dc
+    UChar_t sc_b[100]; //The index used to navigate any sc banks
+    Float_t p_b[100]; //The momentum of given particles calculated from the curavture through the dc //AH HA!!! The old file had this as an int, but the good files have this as a UChar
     Float_t cx_b[100]; //The Cosine projection of the particle's intitial trajectory in x-axis the lab frame
     Float_t cy_b[100]; //The Cosine projection of the particle's intitial trajectory in y-axis the lab frame
     Float_t cz_b[100]; //The Cosine projection of the particle's intitial trajectory in z-axis the lab frame
@@ -72,7 +60,7 @@
 
     //Int_t gpart; //The number of particles registered in a given event
     //Need to reassign the individual pieces of the array rather than entire arrays at once 7/31/17
-    void Reasign(){
+    void Reassign(){
         for(int i = 0; i <100; i++){
             q[i] = (int) q_b[i];// = (int) q_b; //The charge of each given particle
             sc_t[i] = (double) sc_t_b[i];// = (double) sc_t_b; //The time taken for a particle to travel through as found by the sc

@@ -90,9 +90,6 @@ void Fill_proton(int q, double p, double cx, double cy, double cz, int dc, int s
         */
         Fill_fid(1,0,cx,cy,cz);
     	Fill_dt(0,0,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
-        Fill_dt_vert(0,p,-sc_r,0);
-        Fill_dt_vert(1,p,0,sc_t);
-        Fill_dt_vert(2,p,0,sc_t0);
         int duck = 0;
     	/*
         //Sanity

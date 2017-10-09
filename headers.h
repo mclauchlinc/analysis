@@ -3,6 +3,7 @@
 
 #include "TROOT.h"      //Allow access to all root libraries 
 #include <iostream>     //Allow in and out standard functions
+#include "particle_class.h" //Objects for electron and hadron passing
 #include "TDirectory.h"	//Allows for use of Directories 
 #include "main_phd.h"   //Standard functions for top down analysis
 //#include "four_vector.h" //Singular function to make four vectors //For some reason having this here fucks everything up. Keep it in constants I guess?

@@ -3,7 +3,6 @@
 
 #include "constants.h"
 
-//Please put TMath Before this
 
 
 //Takes in data and spits out a delta t
