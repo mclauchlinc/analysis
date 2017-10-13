@@ -78,6 +78,8 @@ bool clean_event (Int_t gpart, int real_id[24])
 
 
 //The Cuts
+//Without the 2 these take in raw values of p, and m of each particle and calculate MM and perform the cut
+//Lacks the charge parameter to distinguish between pi+ and Pi-
 bool MM_p(double p1, double p2, double p3, double cx1, double cx2, double cx3, double cy1, double cy2, double cy3, double cz1, double cz2, double cz3, double m1, double m2, double m3){
 	bool pass = false;
 	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cy1,m1);//phyiscs.h
@@ -93,7 +95,8 @@ bool MM_p(double p1, double p2, double p3, double cx1, double cx2, double cx3, d
 	return pass;
 }
 
-
+//Without the 2 these take in raw values of p, and m of each particle and calculate MM and perform the cut
+//Lacks the charge parameter to distinguish between pi+ and Pi-
 bool MM_pi(double p1, double p2, double p3, double cx1, double cx2, double cx3, double cy1, double cy2, double cy3, double cz1, double cz2, double cz3, double m1, double m2, double m3){
 	bool pass = false;
 	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cy1,m1);//physics.h
@@ -110,6 +113,8 @@ bool MM_pi(double p1, double p2, double p3, double cx1, double cx2, double cx3, 
 	return pass;
 }
 
+//Without the 2 these take in raw values of p, and m of each particle and calculate MM and perform the cut
+//Lacks the charge parameter to distinguish between pi+ and Pi-
 bool MM_zero(double p1, double p2, double p3, double p4, double cx1, double cx2, double cx3, double cx4, double cy1, double cy2, double cy3, double cy4, double cz1, double cz2, double cz3, double cz4, double m1, double m2, double m3, double m4){
 	bool pass = false;
 	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cy1,m1);//physics.h
@@ -126,6 +131,7 @@ bool MM_zero(double p1, double p2, double p3, double p4, double cx1, double cx2,
 	return pass;
 }
 
+//With the 2 these take in an already calculated MM and perform the cut
 bool MM_p2(double MM){
 	bool pass = false;
 	double upper = p_center + p_sig;
@@ -136,6 +142,7 @@ bool MM_p2(double MM){
 	return pass;
 }
 
+//With the 2 these take in an already calculated MM and perform the cut
 bool MM_pi2(double MM){
 	bool pass = false;
 	double upper = pip_center + pip_sig;
@@ -146,6 +153,7 @@ bool MM_pi2(double MM){
 	return pass;
 }
 
+//With the 2 these take in an already calculated MM and perform the cut
 bool MM_all2(double MM){
 	bool pass = false;
 	double upper = MM_zero_center + MM_zero_sigma;
@@ -179,7 +187,7 @@ bool other_pim_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 	P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
 	if(P_0 && P_1 && P_2){
-		/*if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
+		if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
 			if(P_1 && !P_3){//Make sure proton doesn't also pass as a pi+
 				if(P_2 && !P_4){ //Make sure pi+ doesn't also pass as a proton
 					s++;
@@ -324,11 +332,9 @@ bool zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0
 }
 
 //To see if an event satisfies any of the four topologies
-bool top_cross ( bool all_present, bool pi_mi_miss, bool pi_p_miss, bool proton_miss)
-{
+bool top_cross ( bool all_present, bool pi_mi_miss, bool pi_p_miss, bool proton_miss){
 	bool cross = false;
-	if( ((int)all_present + (int)pi_mi_miss +(int)pi_p_miss +(int)proton_miss)>=1)
-	{
+	if( all_present || pi_mi_miss || pi_p_miss || proton_miss){
 		cross = true;
 	}
 	return cross;

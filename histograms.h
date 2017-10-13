@@ -17,6 +17,7 @@ TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut
+TH2D* WQ2_hist_ES[5];//Topology
 
 
 /*
@@ -380,6 +381,28 @@ void Fill_MM(int species, int cut, double mm){
   MM_hist[species][cut] ->Fill(mm);
 }
 
+//Now let's move on to Event Selection things
+void MakeHist_WQ2_ES(){
+  //Create Pointer for Histograms
+
+  int space_dims = 5;//The cuts in constants.h;
+  for(int w = 0; (w < space_dims); w++){ 
+    sprintf(hname,"W_Q2_ES_%s",topologies[w]); //constants.h and otherwise writing the specific cut to the right plot
+    WQ2_hist_ES[w] = new TH2D( hname, hname, WQ2xres, WQxmin, WQxmax, WQ2yres, WQymin, WQymax); // constants.h
+  }
+}
+
+void Fill_WQ2_ES(int top, double p, double cx, double cy, double cz){
+  //top {0,1,2,3,4} -> {p,pip,pim,all,combined}
+  double W, Q2;
+  //Set refers to the data set, due to them having different beam energies: 0->e16 and 1->e1f
+  W = WP(0, p, cx, cy, cz); // physics.h  
+  Q2 = Qsquared(0, p, cx, cy, cz); // physics.h
+  // Cut: {0,1,2,3} -> {pre,cut,anti,all}
+  WQ2_hist_ES[top]->Fill(W,Q2);
+}
+
+
 
 void MakeHist(){
   MakeHist_fid();
@@ -389,6 +412,7 @@ void MakeHist(){
   MakeHist_dt_vert();
   MakeHist_sc();
   MakeHist_MM();
+  MakeHist_WQ2_ES();
 }
 
 void MakeHist_p(){

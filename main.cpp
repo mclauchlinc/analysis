@@ -59,7 +59,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         which = 1; //denote which data set //variables.h
     }
     if(comp == "two"){  //Mac Data set
-        loadChain(&data, "mac_set_1.txt",file_num);//read_in_files.h;
+        loadChain(&data, "e16_75.txt",file_num);//read_in_files.h;
         work++;//variables.h
         which = 2; //denote which set //variables.h
     }
@@ -85,8 +85,6 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     MakeHist();//histograms.h
     std::cout<<"Complete" <<std::endl;
 
-    double beep = 0;
-
     for(int i = 0; i< events ; i++)
     {
         //Update on the progress
@@ -94,29 +92,14 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
        cout <<"Progess Percent " <<progress <<"\r";
 
+       p_pass = false;
+       pip_pass = false;
+       pim_pass = false;
+       zero_pass = false;
+
         //Get info for event i
         data.GetEntry(i);
         Reassign(); //Converts to C++ data types variables.h
-
-        /*Debug
-        if(i == 100000){
-            for( int o = 0; o <gpart ; o++){
-                cout<<endl <<"for i = "<<o <<" Sc is : " <<sc[o] <<endl;
-            }
-        }
-        *///End Debug
-        
-        /*
-        //cout<< "Id: " <<id_b[0] << " " <<id[0] <<endl;
-        for(int h = 0; h<gpart; h++){
-            Fill_sc((int)sc[h]);
-        }
-        */
-        //Fill histograms for eid 
-        //e_id->cd();
-        //cout<<"about to do electron things" <<endl;
-        //Fill_WQ2( 0, 0, p[0], cx[0], cy[0], cz[0]); // histograms.h
-        //Fill_fid(0, 0, cx[0], cy[0], cz[0]);//type, cut, cx, cy, cz //histograms.h
 
         Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
         //cout << "did electron things about to enter for loop" <<endl;
@@ -124,16 +107,9 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
             //Missing Mass
                 //Missing Mass 1 missing
-            
             for(int k = 1; k<gpart ; k++){
                 //Missing Mass pre
-              
                 MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
-
-                
-                
-               
-
                 //Proton missing mass topology
                 if(other_p_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
                       MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
@@ -141,6 +117,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //Proton Missing Cut
                     if(MM_p2(MM_p_val)){
                         Fill_MM(0,1,MM_p_val);
+                        p_pass = true;
+                       // Fill_WQ2_ES(0,p[0],cx[0],cy[0],cz[0]);
                     }
                      //Proton Missing Anti
                     else{
@@ -154,6 +132,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //Pi+ Missing Cut
                     if(MM_pi2(MM_pi_val)){
                     Fill_MM(1,1,MM_pi_val);
+                    pip_pass = true;
+                    //Fill_WQ2_ES(1,p[0],cx[0],cy[0],cz[0]);
                     }                
                     //Pi+ Missing Anti
                     else{
@@ -167,6 +147,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //Pi- Missing Cut
                     if(MM_pi2(MM_pi_val)){
                         Fill_MM(2,1,MM_pi_val);
+                        pim_pass = true;
+                        //Fill_WQ2_ES(2,p[0],cx[0],cy[0],cz[0]);
                     }
                     //Pi- Missing Anti
                     else{
@@ -175,14 +157,16 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 }
 
                 for(int l = 0; l < gpart; l++){
-                    //Full Topology PRe
+                    //Full Topology Pre
                     MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
-                    
+        
                     if(other_zero_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], j, k, l)){
                         Fill_MM(3,0,MM_full);
                         if(MM_all2(MM_full)){
                             //Full Topology cut
                             Fill_MM(3,1,MM_full);
+                            zero_pass = true;
+                            //Fill_WQ2_ES(3,p[0],cx[0],cy[0],cz[0]);
                         }
                         else{
                             //Full topology anti 
@@ -191,16 +175,18 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     }
                 }
             }
+            if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
+               // Fill_WQ2_ES(4,p[0],cx[0],cy[0],cz[0]);
+            }
         }
         //cout<<endl;
     }
 
-    //Fid_Write(); //Located in make_files.h
-
+    std::cout<<"\nWrite: ";
     output->Write();
-    std::cout<<"\n \n \nwrite" <<std::endl;
+    std::cout<<"Complete \nClose: " <<std::endl;
     output->Close();
-    std::cout<<"close" <<std::endl;
+    std::cout<<"Complete" <<std::endl;
 
 	return 0;
 }

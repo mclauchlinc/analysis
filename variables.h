@@ -2,21 +2,23 @@
 #define VARIABLES_H
 
   //Input Variables from Commandline
-    std::string comp; 
-    char* output_name;
-    int file_num = -1;
-    int work = 0;
-    int which = 0; 
-    int naming_var = 0; 
+    std::string comp; //Variable for choosing which data set will be used
+    char* output_name;//Variable for the output file name. This is reassigned through input parameters
+    int file_num = -1;//The initial assignment for the number of files in the program. -1 equates to all of them
+    int work = 0;//Variable notified to let the program know that a proper file was attempted to be loaded
+    int which = 0;//Variable which is assigned based on which file set is loaded so the user can be notified
+    int naming_var = 0; //Variable used in switiching the index for outputs in the beginning. Used when inputing 3 inputs rather than 4
 
     //Data parameters
-    int events;
-    int progress;
-    int scidx;
-    int sc0idx;
-    double MM_p_val;
-    double MM_pi_val;
-    double MM_full;
+    int events;//The variable for the total number of events
+    int progress;//The Variable for the percentage of events looped through
+    double MM_p_val; //The variable for the value of the Missing Mass Squared for proton missing topology
+    double MM_pi_val;//The variable for the value of the Missing Mass Squared for pion missing topology
+    double MM_full;//The variable for the value of the Missing Mass Squared for the full topology
+    bool p_pass; 
+    bool pip_pass;
+    bool pim_pass;
+    bool zero_pass;
 
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle
@@ -36,7 +38,7 @@
     UChar_t cc_b[100]; // The index used to navigate any sc banks
     UChar_t ec_b[100]; //The index used to navigate any ec banks
     Float_t etot_b[100]; //The total final energy of the particle deposited in the detector
-    Int_t id_b[100];
+    Short_t id_b[100];
 
     //Put the various variables into straight C++ data types
     int q[100] ;// = (int) q_b; //The charge of each given particle
@@ -56,7 +58,7 @@
     int cc[100] ; // The index used to navigate any sc banks
     int ec[100]; //The index used to navigate any ec banks
     double etot[100]; //The total final energy of the particle deposited in the detector
-    int id[100];
+    int id[100];//The id assigned to it automatically through the standard parameters
 
     //Int_t gpart; //The number of particles registered in a given event
     //Need to reassign the individual pieces of the array rather than entire arrays at once 7/31/17
@@ -79,7 +81,7 @@
             cc[i] = (int) cc_b[i]; // The index used to navigate any sc banks
             ec[i] = (int) ec_b[i]; //The index used to navigate any ec banks
             etot[i] = (double) etot_b[i]; //The total final energy of the particle deposited in the detector
-            id[i] = (int) id_b[i];
+            id[i] = (int) id_b[i];//The id assigned to it automatically through the standard parameters
         }
     }
 
@@ -87,23 +89,6 @@
     //TDirectory 
     
 
-   //The distance taken by a particle through the detector as found by the sc
-    /*int sc[100] = (int) sc_b; //The index used to navigate any sc banks
-    double p[100] = (double) p_b; //The momentum of given particles calculated from the curavture through the dc
-    double cx[100] = (double) cx_b; //The Cosine projection of the particle's intitial trajectory in x-axis the lab frame
-    double cy[100] = (double) cy_b; //The Cosine projection of the particle's intitial trajectory in y-axis the lab frame
-    double cz[100] = (double) cz_b; //The Cosine projection of the particle's intitial trajectory in z-axis the lab frame
-    int stat[100] = (int) stat_b; //Shows how statistically sound the particular particle is 
-    int dc_stat[100] = (int) dc_stat_b; //Shows how statistically sound the particular event is using data from the dc
-    double vx[100] = (double) vx_b; //Vertex of interaction measured in cm in x-axis in lab frame
-    double vy[100] = (double) vy_b; //Vertex of interaction measured in cm in y-axis in lab frame
-    double vz[100] = (double) vz_b; //Vertex of interaction measured in cm in z-axis in lab frame
-    int dc[100] = (int) dc_b; // The index used to navigate any dc banks
-    int cc[100] = (int) cc_b; // The index used to navigate any sc banks
-    int ec[100] = (int) ec_b; //The index used to navigate any ec banks
-    double etot[100] = (double) etot_b; //The total final energy of the particle deposited in the detector
-    int id[100] = (int) id_b;
-    */
 
 
 #endif

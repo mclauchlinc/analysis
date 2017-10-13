@@ -134,6 +134,10 @@ const double WQxmin = -0.01;
 const double WQymin = -0.01;
 const double WQxmax = 3.99;
 const double WQymax = 8.99;
+//For Topology Selection
+const int WQ2xres = 20;
+const int WQ2yres = 20;
+
 //Electron Sampling Fraction
 const int SFxres = 100;
 const int SFyres = 100;
@@ -173,8 +177,9 @@ const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf"
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
 const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
 const char * charge[] = {"pos","neg"};
-const char * arguments[] = {"program", "input file","number of files", "output file"};
-const char* local[] = {"the farm", "the desktop", "the mac"};
+const char * arguments[] = {"program", "input file","number of files", "output file"};//4
+const char* local[] = {"the farm", "the desktop", "the mac"};//3
+const char* topologies[] = {"proton_miss", "Pip_miss", "Pim_miss","All","Combined"};//5 //Used for differentiation between the various topolgies
 /*
 Types of Cuts
 	Electron ID
