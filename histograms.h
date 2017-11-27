@@ -409,8 +409,8 @@ void MakeHist(){
   MakeHist_WQ2();
   MakeHist_SF();
   MakeHist_dt();
-  MakeHist_dt_vert();
-  MakeHist_sc();
+  //MakeHist_dt_vert();
+  //MakeHist_sc();
   MakeHist_MM();
   MakeHist_WQ2_ES();
 }

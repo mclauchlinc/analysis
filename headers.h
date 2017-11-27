@@ -6,6 +6,7 @@
 #include "particle_class.h" //Objects for electron and hadron passing
 #include "TDirectory.h"	//Allows for use of Directories 
 #include "main_phd.h"   //Standard functions for top down analysis
+#include "fitting.h"
 //#include "four_vector.h" //Singular function to make four vectors //For some reason having this here fucks everything up. Keep it in constants I guess?
 //#include "TStopwatch.h" //Function to show how long this takes
 #include "TLorentzVector.h"	//Allows use of Lorentz 4-Vectors 

@@ -71,16 +71,16 @@ const double p_sig = 0.02;
 //proton min: 0.652  max: 0.912
 //pion min: 0.050  max: 0.270
 //Convert to the formalism I'll use, but will adjust later
-const double pim_center = 0.160;
-const double pim_sig = 0.0366;
-const double pip_center = 0.160;
-const double pip_sig = 0.0366;
-const double p_center = 0.782;
-const double p_sig = 0.4;//0.0433;
+const double pim_center = 0.022;//0.160; //I'm doing MM^2 as opposed to MM
+const double pim_sig = 0.022;//0.0366;
+const double pip_center = 0.022;//0.160;
+const double pip_sig = 0.022;//0.0366;
+const double p_center = 0.89;//0.782;
+const double p_sig = 0.07;//0.4;//0.0433;
 
 //My Own MM cut parameters
 const double MM_zero_center = 0.0;
-const double MM_zero_sigma = 0.04;
+const double MM_zero_sigma = 0.004;
 
 //Delta T cut parameters
 /*
@@ -167,9 +167,9 @@ const double DTymin = -4.0;
 const double DTxmax = 7.0;
 const double DTymax = 4.0;
 //Missing Mass
-const int MMxres = 300;
-const double MMxmin = -1.0;
-const double MMxmax = 2.0;
+const int MMxres = 500;
+const double MMxmin = -0.2;
+const double MMxmax = 1.0;
 
 
 const char * species[] = {"e","p","pip","pim","all"};

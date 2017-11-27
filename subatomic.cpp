@@ -46,13 +46,6 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     TFile *output = Name_File(output_name); //read_in_files.h
     std::cout<<"Complete" <<std::endl <<"Load root files: ";
     TChain data("h10"); //Create TChain to be used. TTrees are h10
-    /*
-    if(comp == zero){//work on the farm
-        loadChain(&data,"",file_num);//read_in-data.h
-        work++;//variables.h
-        which = 0;//denote which set //variables.h
-    }
-    */
     if(comp == "one"){ //Desktop computer in office
         loadChain(&data, "/home/mclauchlinc/Desktop/analysis/nick_convert_e16.txt", file_num);//read_in_data.h
         work++; //variables.h
@@ -180,15 +173,6 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         }
         //cout<<endl;
     }
-
-    
-    fit_gaus(MM_hist[0][0],0.8,1.0,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Mass: " <<parameters[0] <<" error: " <<parameters[3];
-
-    cout<<endl <<"Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-    
-
-    //MM_hist[1][0].Fit("gaus");
 
     std::cout<<"\nWrite: ";
     output->Write();

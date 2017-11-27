@@ -20,6 +20,9 @@
     bool pim_pass;
     bool zero_pass;
 
+    //Fitting parameters
+    double parameters[4];
+
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle
     Float_t sc_t_b[100]; //The time taken for a particle to travel through as found by the sc
