@@ -21,7 +21,7 @@
     bool zero_pass;
 
     //Fitting parameters
-    double parameters[4];
+    double parameters[6];//First three are parameters with the latter three as their errors
 
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle

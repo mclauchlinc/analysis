@@ -182,17 +182,24 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     }
 
     
-    fit_gaus(MM_hist[0][0],0.8,1.0,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Mass: " <<parameters[0] <<" error: " <<parameters[3];
-
-    cout<<endl <<"Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-    
+    fit_b_wig(MM_hist[0][0],0.8,0.95,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<"Proton Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"Proton Gamma: " <<parameters[1] <<" error: " <<parameters[4];
+    fit_b_wig(MM_hist[1][0],-0.02,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<"Pi+ Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"Pi+ Gamma: " <<parameters[1] <<" error: " <<parameters[4];
+    fit_b_wig(MM_hist[2][0],-0.02,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<"Pi- Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"Pi- Gamma: " <<parameters[1] <<" error: " <<parameters[4];
+    fit_b_wig(MM_hist[3][0],-0.01,0.005,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<"Zero Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"Zero Gamma: " <<parameters[1] <<" error: " <<parameters[4];
 
     //MM_hist[1][0].Fit("gaus");
 
     std::cout<<"\nWrite: ";
     output->Write();
-    std::cout<<"Complete \nClose: " <<std::endl;
+    std::cout<<"Complete \nClose: ";
     output->Close();
     std::cout<<"Complete" <<std::endl;
 

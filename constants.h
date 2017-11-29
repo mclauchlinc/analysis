@@ -78,6 +78,14 @@ const double pip_sig = 0.022;//0.0366;
 const double p_center = 0.89;//0.782;
 const double p_sig = 0.07;//0.4;//0.0433;
 
+//For Project
+const double MM_n_center = 0.89;
+const double MM_n_sigma = 0.07;
+const double MM_piz_center = 0.020;
+const double MM_piz_sigma = 0.018;
+const double MM_D_center = 1.44;
+const double MM_D_sigma = 0.08;
+
 //My Own MM cut parameters
 const double MM_zero_center = 0.0;
 const double MM_zero_sigma = 0.004;
@@ -171,6 +179,11 @@ const int MMxres = 500;
 const double MMxmin = -0.2;
 const double MMxmax = 1.0;
 
+//Project
+const int p_MMxres = 400;
+const double p_MMxmin = -0.2;
+const double p_MMxmax = 8.0;
+
 
 const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
@@ -180,6 +193,11 @@ const char * charge[] = {"pos","neg"};
 const char * arguments[] = {"program", "input file","number of files", "output file"};//4
 const char* local[] = {"the farm", "the desktop", "the mac"};//3
 const char* topologies[] = {"proton_miss", "Pip_miss", "Pim_miss","All","Combined"};//5 //Used for differentiation between the various topolgies
+
+//project
+const char* p_deltas[] = {"Dpp","Dp","D0"};
+const char* p_top[] = {"pim_meas","pim_miss","p_meas","pip_meas","pip_meas","pim_miss"};
+const char* p_cuts[] = {"PRE","par_pre","par_cut","par_anti","D_pre","D_cut","D_anti"};
 /*
 Types of Cuts
 	Electron ID

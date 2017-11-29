@@ -1,4 +1,6 @@
 #include "headers.h" //Contains all the header files I need
+#include "event_pro.h"
+#include "hist_project.h"
 
 
 
@@ -76,14 +78,26 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     //Make Histograms
     std::cout<< "Making Histograms: ";
     MakeHist();//histograms.h
+    MakeHist_MM_p();
+    MakeHist_WQ2_p();
     std::cout<<"Complete" <<std::endl;
+
+    int y_Dp_p = 0;
+    int y_Dp_pip = 0;
+
+    double MM0_p;
+    double MM1_p;
+    double MM1_pi;
+
+    double W_p;
+    double Q2_p;
 
     for(int i = 0; i< events ; i++)
     {
         //Update on the progress
        // cout<<"got into the loop?" <<endl;
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
-       cout <<"Progess Percent " <<progress <<"\r";
+        cout <<"Progess Percent " <<progress <<"\r";
 
        p_pass = false;
        pip_pass = false;
@@ -96,83 +110,112 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
         Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
         //cout << "did electron things about to enter for loop" <<endl;
-        for(int j = 1; j<gpart ; j++){
-            Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
-            //Missing Mass
-                //Missing Mass 1 missing
-            for(int k = 1; k<gpart ; k++){
-                //Missing Mass for pion calculation
-                MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
-                //Proton missing mass topology
-                if(other_p_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
-                      MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
-                    Fill_MM(0,0,MM_p_val);
-                    //Proton Missing Cut
-                    if(MM_p2(MM_p_val)){
-                        Fill_MM(0,1,MM_p_val);
-                        p_pass = true;
-                        Fill_WQ2_ES(0,p[0],cx[0],cy[0],cz[0]);
-                    }
-                     //Proton Missing Anti
-                    else{
-                        Fill_MM(0,2,MM_p_val);
-                    }
-                }
-                //Pi+ missing mass topology
-                if(other_pip_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
-                    Fill_MM(1,0,MM_pi_val);
-                    //Pi+ Missing Cut
-                    if(MM_pi2(MM_pi_val)){
-                    Fill_MM(1,1,MM_pi_val);
-                    pip_pass = true;
-                    Fill_WQ2_ES(1,p[0],cx[0],cy[0],cz[0]);
-                    }                
-                    //Pi+ Missing Anti
-                    else{
-                        Fill_MM(1,2,MM_pi_val);
-                    }
-                }
+        //Missing mass when no particles are observed
+        if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], 4)){
+            MM0_p = MM1_b(p[0],cx[0],cy[0],cz[0],me);
+            
 
-                //Pi- missing mass topology
-                if(other_pim_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
-                     Fill_MM(2,0,MM_pi_val);
-                    //Pi- Missing Cut
-                    if(MM_pi2(MM_pi_val)){
-                        Fill_MM(2,1,MM_pi_val);
-                        pim_pass = true;
-                        Fill_WQ2_ES(2,p[0],cx[0],cy[0],cz[0]);
-                    }
-                    //Pi- Missing Anti
-                    else{
-                        Fill_MM(2,2,MM_pi_val);
-                    }
-                }
+            W_p = WP(0,p[0],cx[0],cy[0],cz[0]);
+            Q2_p = Qsquared(0,p[0],cx[0],cy[0],cz[0]);
 
-                for(int l = 0; l < gpart; l++){
-                    //Full Topology Pre
-                    MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
+            std::cout<< endl<<"Difference "<<(W_p - MM0_p) <<endl <<endl;
+
+            Fill_MM_p(1,0,0,W_p);//Dp p pre
+            Fill_MM_p(1,1,0,W_p);//Dp pip pre
+            
+            //PRE for WQ2
+            for(int o = 0; o <3 ; o++){
+                for(int u = 0; u<2; u++){
+                    Fill_WQ2_p(o,u,0,W_p,Q2_p);
+                }
+            }
         
-                    if(other_zero_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], j, k, l)){
-                        Fill_MM(3,0,MM_full);
-                        if(MM_all2(MM_full)){
-                            //Full Topology cut
-                            Fill_MM(3,1,MM_full);
-                            zero_pass = true;
-                            Fill_WQ2_ES(3,p[0],cx[0],cy[0],cz[0]);
+            
+            for(int j = 1; j<gpart ; j++){
+                Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
+                //Missing Mass
+                    //Missing Mass one measured
+                MM1_pi = MM2_b(p[0],cx[0],cy[0],cz[0],me, p[j], cx[j], cy[j], cz[j],mpi);//Both 1 observed things are pions
+                MM1_p = MM2_b(p[0],cx[0],cy[0],cz[0],me, p[j], cx[j], cy[j], cz[j],mp);//For observed proton
+                if(is_pim( q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_r[sc[0]-1], sc_t[sc[0]-1])){
+                    Fill_MM_p(0,0,0,MM1_p);//D++ pim observed pre
+                }
+                if(is_pim( q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_r[sc[0]-1], sc_t[sc[0]-1])){
+                    Fill_MM_p(2,0,0,MM1_p);//D0 pip observed pre
+                }
+
+
+                //D++ pim
+                if(isDpp_pim_other(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1])){
+                    Fill_MM_p(0,0,1,MM0_p);//Dp p cut
+                }
+
+                //D+ p
+                if(isDp_p_other(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1])){
+                    //y_Dp_p++;
+                    Fill_MM_p(1,0,1,MM1_p);//The precut for pi0 ID
+                    Fill_WQ2_p(1,0,1,W_p,Q2_p);
+                    //Cut for pi0
+                    if(MM_piz_direct(MM1_p)){
+                        Fill_MM_p(1,0,2,MM1_p);//Filling the cut on the pi0
+                        Fill_WQ2_p(1,0,2,W_p,Q2_p);
+                        Fill_MM_p(1,0,4,MM0_p);//Pre for Delta ID
+                        Fill_WQ2_p(1,0,4,W_p,Q2_p);
+                        if(MM_D_direct(MM0_p)){
+                            y_Dp_p++;
+                            Fill_MM_p(1,0,5,MM0_p); //Cut for Delta ID
+                            Fill_WQ2_p(1,0,5,W_p,Q2_p);
                         }
                         else{
-                            //Full topology anti 
-                            Fill_MM(3,2,MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi));
+                            Fill_MM_p(1,0,6,MM0_p);//Anti cut for Delta id
+                            Fill_WQ2_p(1,0,6,W_p,Q2_p);
                         }
                     }
+                    else{
+                        Fill_MM_p(1,0,3,MM1_p);//Anti cut for Pi0 id
+                        Fill_WQ2_p(1,0,3,W_p,Q2_p);
+                    }
                 }
+
+                //D+ pip
+                if(isDp_pip_other(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1])){
+                    //y_Dp_p++;
+                    Fill_MM_p(1,1,1,MM1_pi);//The precut for n ID
+                    Fill_WQ2_p(1,1,1,W_p,Q2_p);
+                    //Cut for neutron
+                    if(MM_n_direct(MM1_pi)){
+                        Fill_MM_p(1,1,2,MM1_pi);//Filling the cut on the n
+                        Fill_WQ2_p(1,1,2,W_p,Q2_p);
+                        Fill_MM_p(1,1,4,MM0_p);//Pre for Delta ID
+                        Fill_WQ2_p(1,1,4,W_p,Q2_p);
+                        if(MM_D_direct(MM0_p)){
+                            y_Dp_pip++;
+                            Fill_MM_p(1,1,5,MM0_p); //Cut for Delta ID
+                            Fill_WQ2_p(1,1,5,W_p,Q2_p);
+                        }
+                        else{
+                            Fill_MM_p(1,1,6,MM0_p);//Anti cut for Delta id
+                            Fill_WQ2_p(1,1,6,W_p,Q2_p);
+                        }
+                    }
+                    else{
+                        Fill_MM_p(1,1,3,MM1_pi);//Anti cut for n id
+                        Fill_WQ2_p(1,1,3,W_p,Q2_p);
+                    }
+                }
+
+                //D0 pip
+                if(isDz_pip_other(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1])){
+                    Fill_MM_p(2,0,1,MM0_p);//Dp p cut
+                }
+                
             }
-            if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
-                Fill_WQ2_ES(4,p[0],cx[0],cy[0],cz[0]);
-            }
+            
         }
-        //cout<<endl;
+
     }
+
+    cout<<endl << "proton: " <<y_Dp_pip <<endl <<"pip: " <<y_Dp_p <<endl;
 
     std::cout<<"\nWrite: ";
     output->Write();
