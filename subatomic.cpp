@@ -40,6 +40,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             std::cout<< "You have not properly put in commandline inputs" <<std::endl;
             std::cout<<"Remember you need ./analysis, input, number of files, output" <<std::endl;
             std::cout<<"Rerun this program. None of this will work now" <<std::endl;
+            std::exit(1);
         }
     }
 
@@ -63,6 +64,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     }
     else{
         std::cout<<"Error" <<std::endl;
+	std::exit(1);
     }
 
     //Outputs on what was input
@@ -97,7 +99,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         //Update on the progress
        // cout<<"got into the loop?" <<endl;
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
-        cout <<"Progess Percent " <<progress <<"\r";
+        cout <<"Progess Percent " <<progress <<"\r" << std::flush;
 
        p_pass = false;
        pip_pass = false;
