@@ -14,7 +14,11 @@
     int progress;//The Variable for the percentage of events looped through
     double MM_p_val; //The variable for the value of the Missing Mass Squared for proton missing topology
     double MM_pi_val;//The variable for the value of the Missing Mass Squared for pion missing topology
+    double MM_pip_pass;
+    double MM_pim_pass;
+    double MM_p_pass;
     double MM_full;//The variable for the value of the Missing Mass Squared for the full topology
+    double MM_full_pass;
     bool p_pass; 
     bool pip_pass;
     bool pim_pass;

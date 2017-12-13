@@ -7,6 +7,7 @@
 #include "delta_t_id.h" 
 #include "delta_t.h"
 #include "fiducial.h"
+#include "eid.h"
 
 bool hid_sanity(int dc, int sc, int stat, int dc_stat){
 	bool pass = false;

@@ -42,10 +42,17 @@ double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz)
 		k_mu = k_mu_e1f;
 		break;
 	}
+	//std::cout<< "Position 0:" << k_mu[0] <<std::endl;
+	//std::cout<< "Position 1:" << k_mu[1] <<std::endl;
+	//std::cout<< "Position 2:" << k_mu[2] <<std::endl;
+	//std::cout<< "Position 3:" << k_mu[3] <<std::endl <<std::endl;
+
 	TVector3 k_mu_3(p*cx,p*cy,p*cz);
 	TLorentzVector k_mu_prime;
 	k_mu_prime.SetVectM(k_mu_3,me);
 	TLorentzVector q_mu;
+	//Write out
+	//std::cout<< "deflected electron four-vector W: {"<<k_mu_prime[0] <<", " <<k_mu_prime[1] <<", " <<k_mu_prime[2] <<", " <<k_mu_prime[3] <<"}" <<std::endl;
 	q_mu = (k_mu - k_mu_prime);
 	return (p_mu + q_mu).Mag();
 }
@@ -53,13 +60,13 @@ double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz)
 //Missing mass from three four vectors
 //Used to find missing mass of missing particle
 double MM_3(TLorentzVector k1_mu, TLorentzVector k2_mu, TLorentzVector k3_mu){
-	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
+	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag();
 }
 
 //Missing Mass from four four vectors
 //Used to find missing mass of zero for all identified topology
 double MM_4(TLorentzVector k1_mu, TLorentzVector k2_mu, TLorentzVector k3_mu, TLorentzVector k4_mu){
-	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu - k4_mu).Mag2();
+	return (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu - k4_mu).Mag();
 }
 
 //Gives a Missing Mass value from momentum/mass data from three particles

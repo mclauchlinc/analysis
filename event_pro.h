@@ -17,24 +17,36 @@ double MM_2(TLorentzVector k1_mu, TLorentzVector k2_mu){
 }
 
 double MM_1(TLorentzVector k1_mu){
+	//std::cout<< "Other Position 0:" << k_mu_e16[0] <<std::endl;
+	//std::cout<< "Other Position 1:" << k_mu_e16[1] <<std::endl;
+	//std::cout<< "Other Position 2:" << k_mu_e16[2] <<std::endl;
+	//std::cout<< "Other Position 3:" << k_mu_e16[3] <<std::endl <<std::endl;
+	//Write out the four vector
+	//std::cout<< "This is the MM four-vector: {" <<k1_mu[0] <<", " <<k1_mu[1] <<", " <<k1_mu[2] <<", " <<k1_mu[3] <<"}" <<std::endl;
 	return (p_mu + k_mu_e16 - k1_mu).Mag();
 }
 
 double MM2_b(double p1, double cx1,   double cy1,   double cz1,   double m1, double p2=0, double cx2=0, double cy2=0, double cz2=0, double m2 = 0){
-	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cy1,m1);//physics.h
+	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cz1,m1);//physics.h
 	TLorentzVector k2_mu = Make_4Vector(p2,cx2,cy2,cz2,m2);//physics.h
+	//Let's do this out
+
 	//double MM = (k_mu_e16 + p_mu - k1_mu - k2_mu - k3_mu).Mag2();
 	double MM = MM_2(k1_mu,k2_mu);
 	return MM;
 }
 
 double MM1_b(double p1, double cx1,   double cy1,   double cz1,   double m1){
-	//TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cy1,m1);
-	double MM;// = MM_1(k1_mu);
-	TVector3 k_mu_3(p1*cx1,p1*cy1,p1*cz1);
+	TLorentzVector k1_mu = Make_4Vector(p1,cx1,cy1,cz1,m1);
+	double MM = MM_1(k1_mu);
+	//std::cout<< "Other Other Position 0:" << k_mu_e16[0] <<std::endl;
+	//std::cout<< "Other Other Position 1:" << k_mu_e16[1] <<std::endl;
+	//std::cout<< "Other Other Position 2:" << k_mu_e16[2] <<std::endl;
+	//std::cout<< "Other Other Position 3:" << k_mu_e16[3] <<std::endl <<std::endl;
+	/*TVector3 k_mu_3(p1*cx1,p1*cy1,p1*cz1);
 	TLorentzVector k1_mu;
 	k1_mu.SetVectM(k_mu_3,me);
-	MM = (p_mu + k_mu_e16 - k1_mu).Mag();
+	MM = (p_mu + k_mu_e16 - k1_mu).Mag();*/
 	return MM;
 }
 

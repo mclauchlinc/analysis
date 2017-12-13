@@ -71,19 +71,19 @@ const double p_sig = 0.02;
 //proton min: 0.652  max: 0.912
 //pion min: 0.050  max: 0.270
 //Convert to the formalism I'll use, but will adjust later
-const double pim_center = 0.022;//0.160; //I'm doing MM^2 as opposed to MM
-const double pim_sig = 0.022;//0.0366;
-const double pip_center = 0.022;//0.160;
-const double pip_sig = 0.022;//0.0366;
-const double p_center = 0.89;//0.782;
-const double p_sig = 0.07;//0.4;//0.0433;
+const double pim_center = 0.14;//squared values 0.022;//0.160; //I'm doing MM^2 as opposed to MM
+const double pim_sig = 0.05;//0.022;//0.0366;
+const double pip_center = 0.14;//0.022;//0.160;
+const double pip_sig = 0.05;//0.022;//0.0366;
+const double p_center = 0.94;//0.89;//0.782;
+const double p_sig = 0.05;//0.4;//0.0433;
 
 //For Project
-const double MM_n_center = 0.89;
+const double MM_n_center = 0.944;
 const double MM_n_sigma = 0.07;
-const double MM_piz_center = 0.020;
-const double MM_piz_sigma = 0.018;
-const double MM_D_center = 1.44;
+const double MM_piz_center = 0.140;
+const double MM_piz_sigma = 0.1;
+const double MM_D_center = 1.232;
 const double MM_D_sigma = 0.08;
 
 //My Own MM cut parameters
@@ -136,8 +136,8 @@ const Float_t ec_min_e1f_sim[6] = {0.063,0.063,0.063,0.063,0.063,0.063};
 
 //Plot Formation Constants
 //W Q2
-const int WQxres = 500;
-const int WQyres = 500;
+const int WQxres = 300;
+const int WQyres = 300;
 const double WQxmin = -0.01;
 const double WQymin = -0.01;
 const double WQxmax = 3.99;
@@ -175,9 +175,9 @@ const double DTymin = -4.0;
 const double DTxmax = 7.0;
 const double DTymax = 4.0;
 //Missing Mass
-const int MMxres = 500;
+const int MMxres = 1500;
 const double MMxmin = -0.2;
-const double MMxmax = 1.0;
+const double MMxmax = 3.0;
 
 //Project
 const int p_MMxres = 400;
@@ -193,6 +193,7 @@ const char * charge[] = {"pos","neg"};
 const char * arguments[] = {"program", "input file","number of files", "output file"};//4
 const char* local[] = {"the farm", "the desktop", "the mac"};//3
 const char* topologies[] = {"proton_miss", "Pip_miss", "Pim_miss","All","Combined"};//5 //Used for differentiation between the various topolgies
+const char* cross_top[] = {"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"};//For the cross plots of missing mass
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

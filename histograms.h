@@ -18,6 +18,7 @@ TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle
 TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut
 TH2D* WQ2_hist_ES[5];//Topology
+TH2D* MM_Cross[6];//Topology Crosses
 
 
 /*
@@ -402,6 +403,19 @@ void Fill_WQ2_ES(int top, double p, double cx, double cy, double cz){
   WQ2_hist_ES[top]->Fill(W,Q2);
 }
 
+void MakeHist_MM_Cross(){
+   //Create Pointer for Histograms
+
+  int space_dims = 6;//The cuts in constants.h;
+  for(int w = 0; (w < space_dims); w++){ 
+    sprintf(hname,"MM_%s",cross_top[w]); //constants.h and otherwise writing the specific cut to the right plot
+    MM_Cross[w] = new TH2D( hname, hname, MMxres, MMxmin, MMxmax, MMxres, MMxmin, MMxmax); // constants.h
+  }
+}
+
+void Fill_MM_Cross(int top, double MM1, double MM2){
+  MM_Cross[top]->Fill(MM1,MM2);
+}
 
 
 void MakeHist(){
@@ -413,6 +427,7 @@ void MakeHist(){
   //MakeHist_sc();
   MakeHist_MM();
   MakeHist_WQ2_ES();
+  MakeHist_MM_Cross();
 }
 
 void MakeHist_p(){

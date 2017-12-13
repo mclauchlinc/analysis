@@ -113,6 +113,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //Proton missing mass topology
                 if(other_p_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
                       MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
+                      MM_p_pass = MM_p_val;
                     Fill_MM(0,0,MM_p_val);
                     //Proton Missing Cut
                     if(MM_p2(MM_p_val)){
@@ -128,6 +129,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //Pi+ missing mass topology
                 if(other_pip_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
                     Fill_MM(1,0,MM_pi_val);
+                    MM_pip_pass = MM_pi_val;
                     //Pi+ Missing Cut
                     if(MM_pi2(MM_pi_val)){
                     Fill_MM(1,1,MM_pi_val);
@@ -143,6 +145,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //Pi- missing mass topology
                 if(other_pim_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
                      Fill_MM(2,0,MM_pi_val);
+                     MM_pim_pass = MM_pi_val;
                     //Pi- Missing Cut
                     if(MM_pi2(MM_pi_val)){
                         Fill_MM(2,1,MM_pi_val);
@@ -158,9 +161,9 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 for(int l = 0; l < gpart; l++){
                     //Full Topology Pre
                     MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
-        
                     if(other_zero_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], j, k, l)){
                         Fill_MM(3,0,MM_full);
+                        MM_full_pass = MM_full;
                         if(MM_all2(MM_full)){
                             //Full Topology cut
                             Fill_MM(3,1,MM_full);
@@ -174,25 +177,51 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     }
                 }
             }
+
             if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
                 Fill_WQ2_ES(4,p[0],cx[0],cy[0],cz[0]);
             }
+            if(zero_pass && pim_pass){
+               // cout<< endl <<"boop1" <<endl;
+                Fill_MM_Cross(5, MM_pim_pass,MM_full_pass);
+            }
+            if(zero_pass && pip_pass){
+               // cout<< endl <<"boop2" <<endl;
+                Fill_MM_Cross(4, MM_pip_pass,MM_full_pass);
+            }
+            if(zero_pass && p_pass){
+                //cout<< endl <<"boop3" <<endl;
+                Fill_MM_Cross(2, MM_p_pass,MM_full_pass);
+            }
+            if(p_pass && pim_pass){
+               // cout<< endl <<"boop4" <<endl;
+                Fill_MM_Cross(1, MM_p_pass,MM_pim_pass);
+            }
+            if(p_pass && pip_pass){
+                //cout<< endl <<"boop5" <<endl;
+                Fill_MM_Cross(0, MM_p_pass,MM_pip_pass);
+            }
+            if(pip_pass && pim_pass){
+                //cout<< endl <<"boop6" <<endl;
+                Fill_MM_Cross(3, MM_pip_pass,MM_pim_pass);//
+            }
+
         }
         //cout<<endl;
     }
 
     
-    fit_b_wig(MM_hist[0][0],0.8,0.95,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Proton Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
-    cout<<endl <<"Proton Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-    fit_b_wig(MM_hist[1][0],-0.02,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Pi+ Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    fit_b_wig_mult(MM_hist[0][0], 5, 0.9,0.98,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<endl <<"Proton Mass: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"| Proton Gamma: " <<parameters[1] <<" error: " <<parameters[4];
+    fit_b_wig_mult(MM_hist[1][0], 5, 0.109,0.187,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<endl <<"Pi+ Mass: " <<parameters[0] <<" error: " <<parameters[3];
     cout<<endl <<"Pi+ Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-    fit_b_wig(MM_hist[2][0],-0.02,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Pi- Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
-    cout<<endl <<"Pi- Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-    fit_b_wig(MM_hist[3][0],-0.01,0.005,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
-    cout<<"Zero Mass^2: " <<parameters[0] <<" error: " <<parameters[3];
+    fit_b_wig_mult(MM_hist[2][0], 5, 0.093,0.190,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<endl <<"Pi- Mass: " <<parameters[0] <<" error: " <<parameters[3];
+    cout<<endl <<"| Pi- Gamma: " <<parameters[1] <<" error: " <<parameters[4];
+    fit_b_wig_mult(MM_hist[3][0], 5, -0.05,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
+    cout<<endl <<"Zero Mass: " <<parameters[0] <<" error: " <<parameters[3];
     cout<<endl <<"Zero Gamma: " <<parameters[1] <<" error: " <<parameters[4];
 
     //MM_hist[1][0].Fit("gaus");
