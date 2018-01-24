@@ -23,6 +23,26 @@
     bool pip_pass;
     bool pim_pass;
     bool zero_pass;
+    bool p_pre;
+    bool pip_pre;
+    bool pim_pre;
+    bool zero_pre;
+    double alph;
+    double event_W;
+    double event_Q2;
+    double theta_event;
+    double theta_p_pip;
+    double theta_p_pim;
+    double theta_pip_pim;
+    double MM_p_pip;
+    double MM_p_pim;
+    double MM_pip_pim;
+    double MM_event;
+
+    TLorentzVector ele_mu;
+    TLorentzVector pro_mu;
+    TLorentzVector pip_mu;
+    TLorentzVector pim_mu;
 
     //Fitting parameters
     double parameters[6];//First three are parameters with the latter three as their errors

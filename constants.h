@@ -6,6 +6,7 @@
 #include "headers.h"
 
 const double c_special = 29.9792458; //speed of light in cm/ns
+const double c_convert = 10000000; //Convert c_special to m/s
 
 //Beam energies in GeV
 const double energy_e16 = 5.759;
@@ -71,12 +72,19 @@ const double p_sig = 0.02;
 //proton min: 0.652  max: 0.912
 //pion min: 0.050  max: 0.270
 //Convert to the formalism I'll use, but will adjust later
-const double pim_center = 0.14;//squared values 0.022;//0.160; //I'm doing MM^2 as opposed to MM
-const double pim_sig = 0.05;//0.022;//0.0366;
-const double pip_center = 0.14;//0.022;//0.160;
-const double pip_sig = 0.05;//0.022;//0.0366;
-const double p_center = 0.94;//0.89;//0.782;
-const double p_sig = 0.05;//0.4;//0.0433;
+const double pim_center = 0.164369;//These are all determined through fitting of b_wig fitting.h
+const double pim_sig = 0.0862474;
+const double pip_center = 0.157301;
+const double pip_sig = 0.0752388;
+const double p_center = 0.946847;
+const double p_sig = 0.0420984;
+const double pim_center2 = 0.022;
+const double pim_sig2 = 0.022;
+const double pip_center2 = 0.022;
+const double pip_sig2 = 0.022;
+const double p_center2 = 0.89;
+const double p_sig2 = 0.05;
+
 
 //For Project
 const double MM_n_center = 0.944;
@@ -88,7 +96,9 @@ const double MM_D_sigma = 0.08;
 
 //My Own MM cut parameters
 const double MM_zero_center = 0.0;
-const double MM_zero_sigma = 0.004;
+const double MM_zero_sigma = 0.02;
+const double MM_zero_center2 = 0.0;
+const double MM_zero_sigma2 = 0.004;
 
 //Delta T cut parameters
 /*
@@ -101,6 +111,12 @@ const double DT_PI_H = 0.6;
 //Arjun's cut parameters: 3rd order polynomial
 const double DTL[4] = {-0.778903, 0.027350, 0.047947, -0.009641};
 const double DTH[4] = {0.758057, -0.147383, 0.034343, -0.002367};
+
+//attempt to remove slice of electrons from Pi- delta t
+const double dt_e_sig = 0.05;
+const double dt_e_A = 20.0;
+const double dt_e_a = 8.55;
+const double dt_e_b = 0.31;
 
 
 //Kinematic Cuts
@@ -178,6 +194,17 @@ const double DTymax = 4.0;
 const int MMxres = 1500;
 const double MMxmin = -0.2;
 const double MMxmax = 3.0;
+//Alpha
+const int alphaxres = 100;
+const double alphaxmin = 0.0;
+const double alphaxmax = 3.2;
+//Binning
+const double Wmin = 1;
+const double Wres = 0.5;
+const double Wmax = 3;
+const double Q2min = 1.5;
+const double Q2max = 5.0;
+const double Q2res = 0.5;
 
 //Project
 const int p_MMxres = 400;
@@ -194,6 +221,7 @@ const char * arguments[] = {"program", "input file","number of files", "output f
 const char* local[] = {"the farm", "the desktop", "the mac"};//3
 const char* topologies[] = {"proton_miss", "Pip_miss", "Pim_miss","All","Combined"};//5 //Used for differentiation between the various topolgies
 const char* cross_top[] = {"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"};//For the cross plots of missing mass
+const char* alpha_stuff[] = {"p_pip","p_pim", "pip_pim"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

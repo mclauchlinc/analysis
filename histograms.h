@@ -19,6 +19,12 @@ TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut
 TH2D* WQ2_hist_ES[5];//Topology
 TH2D* MM_Cross[6];//Topology Crosses
+TH1D* alpha_hist[3];//Topology
+TH1D* MM_hist_par[3];//toplolgy
+TH1D* theta_hist_par[3];//topology
+TH1D* alpha_hist_bin[3][6][7];//topology, W binning, Q2 binnng
+TH1D* theta_hist_bin[3][6][7];//topology, W binning, Q2 binnng
+TH1D* MM_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 
 
 /*
@@ -408,13 +414,139 @@ void MakeHist_MM_Cross(){
 
   int space_dims = 6;//The cuts in constants.h;
   for(int w = 0; (w < space_dims); w++){ 
-    sprintf(hname,"MM_%s",cross_top[w]); //constants.h and otherwise writing the specific cut to the right plot
+    sprintf(hname,"MM_cross_%s",cross_top[w]); //constants.h and otherwise writing the specific cut to the right plot
     MM_Cross[w] = new TH2D( hname, hname, MMxres, MMxmin, MMxmax, MMxres, MMxmin, MMxmax); // constants.h
   }
 }
 
 void Fill_MM_Cross(int top, double MM1, double MM2){
   MM_Cross[top]->Fill(MM1,MM2);
+}
+
+void MakeHist_Alpha(){
+  for(int w = 0; (w < 3); w++){ 
+    sprintf(hname,"Alpha_%s",alpha_stuff[w]); //constants.h and otherwise writing the specific cut to the right plot
+    alpha_hist[w] = new TH1D( hname, hname, alphaxres, alphaxmin, alphaxmax); // constants.h
+  }
+}
+
+void Fill_Alpha(int set, double a){
+  alpha_hist[set]->Fill(a);
+}
+
+void MakeHist_MM_par(){
+  for(int w = 0; (w < 3); w++){ 
+    sprintf(hname,"MM_hist_%s",alpha_stuff[w]); //constants.h and otherwise writing the specific cut to the right plot
+    MM_hist_par[w] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax); // constants.h
+  }
+}
+
+void Fill_MM_par(int set, double a){
+  MM_hist_par[set]->Fill(a);
+}
+
+void MakeHist_theta_par(){
+  for(int w = 0; (w < 3); w++){ 
+    sprintf(hname,"theta_%s",alpha_stuff[w]); //constants.h and otherwise writing the specific cut to the right plot
+    theta_hist_par[w] = new TH1D( hname, hname, FIDyres, FIDymin, FIDymax); // constants.h
+  }
+}
+
+void Fill_theta_par(int set, double theta){
+  theta_hist_par[set]->Fill(theta);
+}
+
+void MakeHist_Alpha_bin(){
+  std::vector<long> space_dims(3);
+    space_dims[0] = 16; //Q2 binning
+    space_dims[1] = 8; //W binning
+    space_dims[2] = 3;//topology
+
+  CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+  double berp = Wmin;
+  double merp = Q2min;
+  double upW; 
+  double downW;
+  double upQ;
+  double downQ;
+  //in the loop
+  while(cart.GetNextCombination()) {//CartesianGenerator.hh
+     berp = Wmin + cart[1]*Wres;
+    merp = Q2min + cart[0]*Q2res;
+    downW = berp - (Wres/2);
+    upW = berp + (Wres/2);
+    upQ = merp + (Q2res/2);
+    downQ = merp - (Q2res/2);
+    sprintf(hname, "Alpha_%s_W:%f-%f_Q2:%f-%f",alpha_stuff[cart[2]],downW,upW,downQ,upQ);  
+    alpha_hist_bin[cart[2]][cart[1]][cart[0]] = new TH1D( hname, hname, alphaxres, alphaxmin, alphaxmax);
+  }   
+}
+
+void Fill_Alpha_bin(int top, int Wbin, int Q2bin, double alpha){
+  alpha_hist_bin[top][Wbin][Q2bin] -> Fill(alpha);
+}
+
+void MakeHist_MM_bin(){
+  std::vector<long> space_dims(3);
+    space_dims[0] = 16; //Q2 binning
+    space_dims[1] = 8; //W binning
+    space_dims[2] = 3;//topology
+
+  CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+  double berp = Wmin;
+  double merp = Q2min;
+  double upW; 
+  double downW;
+  double upQ;
+  double downQ;
+  //in the loop
+  while(cart.GetNextCombination()) {//CartesianGenerator.hh
+    berp = Wmin + cart[1]*Wres;
+    merp = Q2min + cart[0]*Q2res;
+    downW = berp - (Wres/2);
+    upW = berp + (Wres/2);
+    upQ = merp + (Q2res/2);
+    downQ = merp - (Q2res/2);
+    sprintf(hname, "MM_%s_W:%f-%f_Q2:%f-%f",alpha_stuff[cart[2]],downW,upW,downQ,upQ);  
+    MM_hist_bin[cart[2]][cart[1]][cart[0]] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }   
+}
+
+void Fill_MM_bin(int top, int Wbin, int Q2bin, double MM){
+  MM_hist_bin[top][Wbin][Q2bin] -> Fill(MM);
+}
+
+void MakeHist_theta_bin(){
+  std::vector<long> space_dims(3);
+    space_dims[0] = 16; //Q2 binning
+    space_dims[1] = 8; //W binning
+    space_dims[2] = 3;//topology
+
+  CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+  double berp = Wmin;
+  double merp = Q2min;
+  double upW; 
+  double downW;
+  double upQ;
+  double downQ;
+  //in the loop
+  while(cart.GetNextCombination()) {//CartesianGenerator.hh
+    berp = Wmin + cart[1]*Wres;
+    merp = Q2min + cart[0]*Q2res;
+    downW = berp - (Wres/2);
+    upW = berp + (Wres/2);
+    upQ = merp + (Q2res/2);
+    downQ = merp - (Q2res/2);
+    sprintf(hname, "theta_%s_W:%f-%f_Q2:%f-%f",alpha_stuff[cart[2]],downW,upW,downQ,upQ);  
+    theta_hist_bin[cart[2]][cart[1]][cart[0]] = new TH1D( hname, hname, FIDyres, FIDymin, FIDymax);
+    
+    //std::cout<< std::endl <<downW <<" " <<upW <<std::endl;
+    //std::cout<< std::endl <<downQ <<" " <<upQ <<std::endl;
+  }   
+}
+
+void Fill_theta_bin(int top, int Wbin, int Q2bin, double theta){
+  theta_hist_bin[top][Wbin][Q2bin] -> Fill(theta);
 }
 
 
@@ -428,6 +560,12 @@ void MakeHist(){
   MakeHist_MM();
   MakeHist_WQ2_ES();
   MakeHist_MM_Cross();
+  MakeHist_Alpha();
+  MakeHist_MM_par();
+  MakeHist_theta_par();
+  MakeHist_Alpha_bin();
+  MakeHist_MM_bin();
+  MakeHist_theta_bin();
 }
 
 void MakeHist_p(){

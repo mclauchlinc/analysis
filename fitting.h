@@ -15,7 +15,7 @@ void fit_b_wig2(TH1D* hist, double lowb, double upb, double m0, double gamma0, d
 	b_wig->SetParameter(0,m0);
 	b_wig->SetParameter(1,gamma0);
 	b_wig->SetParameter(2,max);
-	hist->Fit(b_wig,"MQ+","",lowb,upb);
+	hist->Fit(b_wig,"Q+","",lowb,upb);//MQ+
 	par1 = b_wig->GetParameter(0);
 	par2 = b_wig->GetParameter(1);
 	par3 = b_wig->GetParameter(2);
@@ -45,7 +45,7 @@ void fit_b_wig(TH1D* hist, double lowb, double upb, double m0, double gamma0, do
 	b_wig->SetParameter(0,m0);
 	b_wig->SetParameter(1,gamma0);
 	b_wig->SetParameter(2,max);
-	hist->Fit(b_wig,"MQ+","",lowb,upb);
+	hist->Fit(b_wig,"Q+","",lowb,upb);
 	par1 = b_wig->GetParameter(0);
 	par2 = b_wig->GetParameter(1);
 	par3 = b_wig->GetParameter(2);
@@ -75,7 +75,7 @@ void fit_gaus(TH1D* hist, double lowb, double upb, double m0, double gamma0, dou
 	b_wig->SetParameter(0,m0);
 	b_wig->SetParameter(1,gamma0);
 	b_wig->SetParameter(2,max);
-	hist->Fit(b_wig,"MQ+","",lowb,upb);
+	hist->Fit(b_wig,"Q+","",lowb,upb);
 	par1 = b_wig->GetParameter(0);
 	par2 = b_wig->GetParameter(1);
 	par3 = b_wig->GetParameter(2);

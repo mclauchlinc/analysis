@@ -197,7 +197,7 @@ void Fill_pip(int q, double p, double cx, double cy, double cz, int dc, int sc, 
     }
 }
 
-void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
+void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, double cc, double ec, double etot, double vx, double vy, double vz, int id){
     if( q == -1){
         //Pre Cut
        // std::cout<<std::endl <<"PIM: ";
@@ -236,7 +236,8 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
         }
     
     //Full ID
-    if(is_pim(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0)){
+    //if(is_pim_plus(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
+        if(is_pim_plus(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
     //if(duck == 2){
         Fill_fid(3,3,cx,cy,cz);
         Fill_dt(2,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
@@ -251,10 +252,10 @@ void Fill_pim(int q, double p, double cx, double cy, double cz, int dc, int sc, 
 }
 //q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
 
-void Fill_Hadron(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, int id){
+void Fill_Hadron(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, double cc, double ec, double etot, double vx, double vy, double vz, int id){
     Fill_proton(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, id);
     Fill_pip(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, id);
-    Fill_pim(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, id);
+    Fill_pim(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, cc, ec, etot, vx, vy, vz, id);
 }
 
 

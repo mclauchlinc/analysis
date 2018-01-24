@@ -126,7 +126,7 @@ bool MM_zero(double p1, double p2, double p3, double p4, double cx1, double cx2,
 	double upper = MM_zero_center + MM_zero_sigma;
 	double lower = MM_zero_center - MM_zero_sigma;
 	if(MM > lower && MM < upper){
-		if( MM != 0.0){
+		if( MM != 0.000000000000000000000000000000000000){
 			pass = true;
 		}	
 	}
@@ -186,10 +186,10 @@ bool other_pim_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, 4);
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pip( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
-	P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
-	P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
+	//P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
+	//P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
 	if(P_0 && P_1 && P_2){
-		if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
+		/*if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
 			if(P_1 && !P_3){//Make sure proton doesn't also pass as a pi+
 				if(P_2 && !P_4){ //Make sure pi+ doesn't also pass as a proton
 					s++;
@@ -225,15 +225,16 @@ bool pim_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx
 }
 
 
-bool other_p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2){
+bool other_p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2){
 	bool pass = false;
 	int s = 0;
 	bool P_0 = false;
 	bool P_1 = false;
 	bool P_2 = false;
+	bool P_3 = false;
 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, 4);
 	P_1 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
-	P_2 = is_pim( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
+	P_2 = is_pim_plus( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0, cc2, ec2, etot2, vx2, vy2, vz2);
 	if(P_0 && P_1 && P_2){
 		if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
 					s++;
@@ -245,9 +246,9 @@ bool other_p_miss(double p0, int q0, double cx0, double cy0, double cz0, double 
 	return pass;
 }
 
-bool p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2){
+bool p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2){
 	bool pass = false;
-	if(other_p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+	if(other_p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, cc2, ec2, etot2, vx2, vy2, vz2, idx_1, idx_2)){
 		if(MM_p(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mpi,mpi)){
 			pass = true;
 		}
@@ -255,9 +256,9 @@ bool p_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, d
 	return pass;
 }
 
-bool p_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2, double mm){
+bool p_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2, double mm){
 	bool pass = false;
-	if(other_p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+	if(other_p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, cc2, ec2, etot2, vx2, vy2, vz2, idx_1, idx_2)){
 		if(MM_p2(mm)){
 			pass = true;
 		}
@@ -266,7 +267,7 @@ bool p_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0,
 }
 
 
-bool other_pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2){
+bool other_pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2){
 	bool pass = false;
 	int s = 0;
 	bool P_0 = false;
@@ -274,16 +275,16 @@ bool other_pip_miss(double p0, int q0, double cx0, double cy0, double cz0, doubl
 	bool P_2 = false;
 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, 4); //eid.h
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);	//hid.h
-	P_2 = is_pim( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);	//hid.h
+	P_2 = is_pim_plus( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0, cc2, ec2, etot2, vx2, vy2, vz2);	//hid.h
 	if(P_0 && P_1 && P_2){
 		pass = true;
 	}
 	return pass;
 }
 
-bool pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2){
+bool pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2){
 	bool pass = false;
-	if(other_pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+	if(other_pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, cc2, ec2, etot2, vx2, vy2, vz2, idx_1, idx_2)){
 		if(MM_pi(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mp,mpi)){
 			pass = true;
 		}
@@ -291,9 +292,9 @@ bool pip_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0,
 	return pass;
 }
 
-bool pip_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int idx_1, int idx_2, double mm){
+bool pip_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, double cc2, double ec2, double etot2, double vx2, double vy2, double vz2, int idx_1, int idx_2, double mm){
 	bool pass = false;
-	if(other_pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2)){
+	if(other_pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, cc2, ec2, etot2, vx2, vy2, vz2, idx_1, idx_2)){
 		if(MM_pi2(mm)){
 			pass = true;
 		}
@@ -301,7 +302,7 @@ bool pip_miss_2(double p0, int q0, double cx0, double cy0, double cz0, double vx
 	return pass;
 }
 
-bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, int idx_1, int idx_2, int idx_3){
+bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, double cc3, double ec3, double etot3, double vx3, double vy3, double vz3, int idx_1, int idx_2, int idx_3){
 	bool pass = false;
 	int s = 0;
 	bool P_0 = false;
@@ -311,7 +312,7 @@ bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, doub
  	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, 4);
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pip( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
-	P_3 = is_pim( q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, p0, sc_r0, sc_t0);
+	P_3 = is_pim_plus( q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, p0, sc_r0, sc_t0, cc3, ec3, etot3, vx3, vy3, vz3);
 	if(P_0 && P_1 && P_2){
 		if(idx_1 != idx_2 && idx_1 != idx_3 && idx_3 != idx_2){ //Makes sure we aren't looking at the same particle
 					s++;
@@ -323,9 +324,9 @@ bool other_zero_miss(double p0, int q0, double cx0, double cy0, double cz0, doub
 	return pass;
 }
 
-bool zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3 ,int idx_1, int idx_2, int idx_3){
+bool zero_miss(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2, int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3 , double cc3, double ec3, double etot3, double vx3, double vy3, double vz3, int idx_1, int idx_2, int idx_3){
 	bool pass = false;
-	if(other_zero_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, idx_1, idx_2, idx_3)){
+	if(other_zero_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, cc3, ec3, etot3, vx3, vy3, vz3, idx_1, idx_2, idx_3)){
 		if(MM_zero(p0,p1,p2,p3,cx0,cx1,cx2,cx3,cy0,cy1,cy2,cy3,cz0,cz1,cz2,cz3,me,mp,mpi,mpi)){
 			pass = true;
 		}
@@ -350,16 +351,16 @@ Particle 2 -> Pip
 Particle 3 -> Pim
 The indexes on the subsequent missing mass ids need to match that
 */
-bool total_event(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, int idx_1, int idx_2, int idx_3){
+bool total_event(double p0, int q0, double cx0, double cy0, double cz0, double vx0, double vy0, double vz0, int dc0, int cc0, int ec0, int sc0, int dc_stat0, double etot0, int stat0, double sc_r0, double sc_t0,  int q1, double p1, double cx1, double cy1, double cz1, int dc1, int sc1, int stat1, int dc_stat1, double sc_t1, double sc_r1,  int q2, double p2, double cx2, double cy2, double cz2, int dc2, int sc2, int stat2, int dc_stat2, double sc_t2, double sc_r2,  int q3, double p3, double cx3, double cy3, double cz3, int dc3, int sc3, int stat3, int dc_stat3, double sc_t3, double sc_r3, double cc3, double ec3, double etot3, double vx3, double vy3, double vz3, int idx_1, int idx_2, int idx_3){
 	bool zero = false;
 	bool proton = false;
 	bool pip =false;
 	bool pim = false;
-	zero = zero_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, idx_1, idx_2, idx_3);
+	zero = zero_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, cc3, ec3, etot3, vx3, vy3, vz3, idx_1, idx_2, idx_3);
 					
 					//p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0, q1, p1, cx1, cy1, cz1, dc1,  sc1,  stat1,  dc_stat1,  sc_t1,  sc_r1,  q2,  p2,  cx2,  cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2,sc_r2, idx_1, idx_2
-	proton = p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, idx_2, idx_3);
-	pip = pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, idx_1, idx_3);
+	proton = p_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, cc3, ec3, etot3, vx3, vy3, vz3, idx_2, idx_3);
+	pip = pip_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, cc3, ec3, etot3, vx3, vy3, vz3, idx_1, idx_3);
 	pim = pim_miss(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, sc_r0, sc_t0,  q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1,  q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, idx_1, idx_2);
 	return top_cross( zero, pip, pim, proton);
 }
