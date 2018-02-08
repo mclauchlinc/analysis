@@ -211,6 +211,11 @@ const int p_MMxres = 400;
 const double p_MMxmin = -0.2;
 const double p_MMxmax = 8.0;
 
+//binning
+const Wbin_res = 0.2;//The width of a W bin
+const Wbin_start = 1.0;//The starting of W bins
+
+
 
 const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
@@ -222,6 +227,7 @@ const char* local[] = {"the farm", "the desktop", "the mac"};//3
 const char* topologies[] = {"proton_miss", "Pip_miss", "Pim_miss","All","Combined"};//5 //Used for differentiation between the various topolgies
 const char* cross_top[] = {"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"};//For the cross plots of missing mass
 const char* alpha_stuff[] = {"p_pip","p_pim", "pip_pim"};
+const char* mvar[] = {"switch","2pi"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

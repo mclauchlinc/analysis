@@ -14,6 +14,8 @@
     int progress;//The Variable for the percentage of events looped through
     double MM_p_val; //The variable for the value of the Missing Mass Squared for proton missing topology
     double MM_pi_val;//The variable for the value of the Missing Mass Squared for pion missing topology
+    double MM_pi2_val;//For testing proper particle ID
+    double MM_pi3_val;//For testing proper particle ID
     double MM_pip_pass;
     double MM_pim_pass;
     double MM_p_pass;
@@ -43,6 +45,8 @@
     TLorentzVector pro_mu;
     TLorentzVector pip_mu;
     TLorentzVector pim_mu;
+    //TLorentzVector pro2_mu;//Misidentified as a proton switch to pi+
+    //TLorentzVector pip2_mu;//Misidentified as a pi+ switch to proton
 
     //Fitting parameters
     double parameters[6];//First three are parameters with the latter three as their errors
@@ -112,9 +116,15 @@
         }
     }
 
+    //Histogram naming variables
+    char  htitle[100]; //The name on the graph itself (can have spaces)
+    char  hname[100]; //The name shown in the TBrowser (should have no spaces)
+
+
     //Form Directories
     //TDirectory 
     
+
 
 
 

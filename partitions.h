@@ -7,8 +7,9 @@ void Fill_eid(double p, int q, double cx, double cy, double cz, int dc, int cc, 
 	 //Electron ID
             //std::cout <<"electron id" <<std::endl;
             //EID Precut
+            double W_eid = WP(0,p,cx,cy,cz);//physics.h
             Fill_WQ2( 0, 0, p, cx, cy, cz); // histograms.h
-            Fill_fid(0,0,cx,cy,cz);//type, cut, cx, cy, cz //histograms.h
+            Fill_fid(0,0,W_eid,cx,cy,cz);//type, cut, cx, cy, cz //histograms.h
             Fill_sf(0,etot,p);
             //std::cout <<1;
     	    //EID 1
@@ -30,7 +31,7 @@ void Fill_eid(double p, int q, double cx, double cy, double cz, int dc, int cc, 
             if(eid_4( p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot)){//eid.h
               //  std::cout <<5;
                 Fill_WQ2( 0, 4, p, cx, cy, cz); // histograms.h
-                Fill_fid(0,3,cx,cy,cz);//histograms.h
+                Fill_fid(0,3,W_eid,cx,cy,cz);//histograms.h
                 Fill_sf(3,etot,p); //histograms.h
             }
             //Sanity
@@ -42,11 +43,11 @@ void Fill_eid(double p, int q, double cx, double cy, double cz, int dc, int cc, 
             if(fid_e(p,cx,cy,cz)){
                // std::cout <<7;
                 Fill_WQ2( 0, 6, p, cx, cy, cz); // histograms.h
-                Fill_fid(0,1,cx,cy,cz);//histograms.h
+                Fill_fid(0,1,W_eid,cx,cy,cz);//histograms.h
             }
             else{
               //  std::cout <<8;
-            	Fill_fid(0,2,cx,cy,cz);//histograms.h
+            	Fill_fid(0,2,W_eid,cx,cy,cz);//histograms.h
             }
             //Sampling Fraction
             if(sf_e(p,etot,cx,cy)){
@@ -62,7 +63,7 @@ void Fill_eid(double p, int q, double cx, double cy, double cz, int dc, int cc, 
             if((int)id==ELECTRON){
                // std::cout <<11;
                 Fill_WQ2( 0, 8, p, cx, cy, cz); // histograms.h
-                Fill_fid(0,4,cx,cy,cz);
+                Fill_fid(0,4,W_eid,cx,cy,cz);
                 Fill_sf(4,etot,p);
             }
 }

@@ -6,18 +6,28 @@
 #include "headers.h"
 #include "CartesianGenerator.hh"
 #include "debugger.h"
+//various histogram types
+#include "fiducial histograms.h"
+#include "W Q2 histograms.h"
+#include "delta_t histograms.h"
+#include "sf histograms.h"
+#include "MM histograms.h"
+#include "COM histograms.h"
+#include "cross section histograms.h"
+
+
 
 //Declare all title pointers and plots first
-char  htitle[100]; //The name on the graph itself (can have spaces)
-char  hname[100]; //The name shown in the TBrowser (should have no spaces)
-TH2D* fid_hist[6][4][5]; //Sector, species, cut, pos/neg
-TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
+//char  htitle[100]; //The name on the graph itself (can have spaces)
+//char  hname[100]; //The name shown in the TBrowser (should have no spaces)
+//TH2D* fid_hist[6][4][5]; //Sector, species, cut, pos/neg
+//TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
 TH2D* SF_hist[5]; //cuts 
 TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut
-TH2D* WQ2_hist_ES[5];//Topology
+//TH2D* WQ2_hist_ES[5];//Topology
 TH2D* MM_Cross[6];//Topology Crosses
 TH1D* alpha_hist[3];//Topology
 TH1D* MM_hist_par[3];//toplolgy
@@ -26,6 +36,13 @@ TH1D* alpha_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 TH1D* theta_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 TH1D* MM_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 
+TH1D* MM_pim_M[2][10];// MM for the pi minus missing with changes in mass ID for proton and pi+ {W var, M var}
+TH1D* MM_hist_pim_m[2];//Total MM with variation in mass for proton/pi+
+//W Variance
+TH1D* MM_W[3][10];//Discovering the W dependence of the strange peak in the Pim MM //2/7 changed order of index. See if fixes filling issue
+//TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
+TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
+TH2D* SF_hist_W[5][10]; //cuts 
 
 /*
 //Conversion from string to char *
@@ -98,7 +115,8 @@ TH2D * pim_fid_hist[24];
 
 
 
-
+//Fiducial
+/*
 
 void MakeHist_fid(){
 	//Create Pointer for Histograms
@@ -109,15 +127,26 @@ void MakeHist_fid(){
   	space_dims[0] = 6; //Six sectors
   	space_dims[1] = 4; //electron, proton, pi+, pi-
   	space_dims[2] = 5; //No cut, cut, anti-cut, all cuts, bank
+    space_dims[3] = 11; //W binnings with 0 being no discrimination 
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
-  	
+  	float bot, top; 
+
   	//in the loop
   	while(cart.GetNextCombination()) {//CartesianGenerator.hh
-		  sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,norm_cut[cart[2]]); 
+      //Establish W range
+      if(cart[3] == 0 ){
+        bot = 0.0; 
+        top = 5.0;
+      }
+      else{
+        top = Wbin_start + (cart[3]*Wbin_res);//constant.h
+        bot = top - Wbin_res; //constants.h
+      }
+		  sprintf(hname, "%s_fid_sec%d_%s_WRange:%f-%f",species[cart[1]],cart[0]+1,norm_cut[cart[2]],bot,top); 
      //hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
       //histitle = hisname; //For Fiducial I can make them both the same thing. 
-      fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+      fid_hist[cart[0]][cart[1]][cart[2]][cart[3]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
     }
 }
 
@@ -178,8 +207,9 @@ void MakeHist_fidpim(){
   }
 }
 
-void Fill_fid(int type, int level, double cx, double cy, double cz)
+void Fill_fid(int type, int level, double Wval, double cx, double cy, double cz)
 {
+  float bot, top; 
 	double phi = phi_center(cx, cy); //fiducial.h
 	double theta = get_theta(cz);  //fiducial.h
 	int sec = get_sector(cx, cy);  //fiducial.h
@@ -187,14 +217,16 @@ void Fill_fid(int type, int level, double cx, double cy, double cz)
   //std::cout<< std::endl <<"The Sector is: " <<sec <<std::endl;
 	//Level {0,1,2,3} -> {no cut, cut, anti-cut, all cuts}
   //Type {0,1,2,3} -> {e, p, pip, pim}
-  if(type == 1){
-   // std::cout<<"PROTON FID" ;
+ for(int i = 1; i < 11 ; i++){
+    top = Wbin_start + (i * Wbin_res);
+    bot = top - Wbin_res;
+    if(W > bot && W < top){
+      fid_hist[sidx][type][level][i]->Fill(phi, theta);
+    }
   }
-  if(type == 2 || type == 3){
-  //  std::cout<<"PION FID" ;
-  }
-	fid_hist[sidx][type][level]->Fill(phi, theta);
+	fid_hist[sidx][type][level][0]->Fill(phi, theta);//Filling for all the W 
 }
+*/
 
 
 /*
@@ -214,6 +246,7 @@ void Fid_Write()
 	}
 }
 */
+
 
 void MakeHist_SF(){
   //Create Pointer for Histograms
@@ -388,6 +421,8 @@ void Fill_MM(int species, int cut, double mm){
   MM_hist[species][cut] ->Fill(mm);
 }
 
+
+/*
 //Now let's move on to Event Selection things
 void MakeHist_WQ2_ES(){
   //Create Pointer for Histograms
@@ -407,7 +442,7 @@ void Fill_WQ2_ES(int top, double p, double cx, double cy, double cz){
   Q2 = Qsquared(0, p, cx, cy, cz); // physics.h
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
   WQ2_hist_ES[top]->Fill(W,Q2);
-}
+}*/
 
 void MakeHist_MM_Cross(){
    //Create Pointer for Histograms
@@ -549,9 +584,189 @@ void Fill_theta_bin(int top, int Wbin, int Q2bin, double theta){
   theta_hist_bin[top][Wbin][Q2bin] -> Fill(theta);
 }
 
+void MakeHist_MM_Wvar(){
+  double number = 1.0; 
+  int t = 0; 
+  for(int w = 0; (w < 3); w++){ 
+    number = 1.0;
+    for(int r = 0; r<10 ; r++){
+      t = w +1; 
+      sprintf(hname,"MM_%s_Wvar_%f-%f",species[t],number,(number+0.2)); //constants.h and otherwise writing the specific cut to the right plot
+      MM_W[w][r] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax); // constants.h
+      number = number + 0.2; 
+    }
+  }
+}
+
+//p -> {0,1,2} -> {proton, pip, pim}
+void Fill_MM_Wvar(int set, int p, double MM){
+  MM_W[p][set]->Fill(MM);
+}
+
+void Fill_MM_Wall(int p, double W, double MM){
+  double bot, top, res, start;
+  bot = 1.0;
+  res = 0.2;
+  for(int i = 0; i < 10 ; i++){
+    top = bot + res;
+    if(W > bot && W < top){
+      Fill_MM_Wvar(i,p,MM);
+    }
+    bot = bot + res; ; 
+  }
+
+
+
+
+  /*if(W > 1.0 && W < 1.2){
+      Fill_MM_Wvar(0, p, MM);
+   }
+   if(W > 1.2 && W < 1.4){
+      Fill_MM_Wvar(1, p, MM);
+   }
+   if(W > 1.4 && W < 1.6){
+      Fill_MM_Wvar(2, p, MM);
+   }
+   if(W > 1.6 && W < 1.8){
+      Fill_MM_Wvar(3, p, MM); 
+   }
+   if(W > 1.8 && W < 2.0){
+      Fill_MM_Wvar(4, p, MM);
+   }
+   if(W > 2.0 && W < 2.2){
+      Fill_MM_Wvar(5, p, MM);
+   }
+   if(W > 2.2 && W < 2.4){
+      Fill_MM_Wvar(6, p, MM);
+   }
+   if(W > 2.4 && W < 2.6){
+      Fill_MM_Wvar(7, p, MM);
+   }
+   if(W > 2.6 && W < 2.8){
+      Fill_MM_Wvar(8, p, MM);
+   }
+   if(W > 2.8 && W < 3.0){
+      Fill_MM_Wvar(9, p, MM);
+   }*/
+}
+
+void WriteHist_MM_Wvar(){
+  TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
+  MM_W_var_stuff->cd();
+  double number = 1.0; 
+  int t = 0; 
+  for(int w = 0; (w < 3); w++){ 
+    number = 1.0;
+    for(int r = 0; r<10 ; r++){
+      MM_W[w][r]->SetXTitle("MM (GeV)");
+      MM_W[w][r]->SetYTitle("Counts");
+      MM_W[w][r]->Write();
+    }
+  }
+}
+
+//Let's look at different replacements for four vectors
+void MakeHist_MMpim_Mvar(){
+  double number = 1.0; 
+  for(int w = 0; (w < 10); w++){ 
+    for( int e = 0; e < 2; e++){
+      sprintf(hname,"MM_PIM_Mvar_%s_%f-%f",mvar[e],number,(number+0.2)); //constants.h and otherwise writing the specific cut to the right plot
+      MM_pim_M[e][w] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax); // constants.h
+    }
+    number = number + 0.2;
+  }
+}
+
+void Fill_MMpim_Mvar(int set, int m, double MM){
+  //m-> {switch, 2pi}
+  MM_pim_M[m][set]->Fill(MM);
+}
+
+void Fill_MMpim_Mall(int m, double W, double MM){
+  if(W > 1.0 && W < 1.2){
+      Fill_MMpim_Mvar(0, m, MM);
+   }
+   if(W > 1.2 && W < 1.4){
+      Fill_MMpim_Mvar(1, m, MM);
+   }
+   if(W > 1.4 && W < 1.6){
+      Fill_MMpim_Mvar(2, m, MM);
+   }
+   if(W > 1.6 && W < 1.8){
+      Fill_MMpim_Mvar(3, m, MM); 
+   }
+   if(W > 1.8 && W < 2.0){
+      Fill_MMpim_Mvar(4, m, MM);
+   }
+   if(W > 2.0 && W < 2.2){
+      Fill_MMpim_Mvar(5, m, MM);
+   }
+   if(W > 2.2 && W < 2.4){
+      Fill_MMpim_Mvar(6, m, MM);
+   }
+   if(W > 2.4 && W < 2.6){
+      Fill_MMpim_Mvar(7, m, MM);
+   }
+   if(W > 2.6 && W < 2.8){
+      Fill_MMpim_Mvar(8, m, MM);
+   }
+   if(W > 2.8 && W < 3.0){
+      Fill_MMpim_Mvar(9, m, MM);
+   }
+}
+
+
+//MM_hist_pim_m
+//Makes Missing Mass Plot for just Pi- Missing
+void MakeHist_MMpimM(){
+  for(int i=0;i<2;i++){
+    sprintf(hname,"pim_MM_%s_pre",mvar[i]);
+    MM_hist_pim_m[i] = new TH1D( hname, hname, MMxres, MMxmin, MMxmax);
+  }
+}
+
+/*
+species missing {0,1,2,3} -> {proton, pip, pim, zero}
+cut {0,1,2} -> {pre, cut, anti} 
+*/
+void Fill_MMpimM( int cut, double mm){
+  MM_hist_pim_m[cut] ->Fill(mm);
+}
+
+
+TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
+TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
+TH2D* SF_hist_W[5][10]; //cuts 
+//W variance of Fiducial
+Void MakeHist_fid_W(){
+  //Create Pointer for Histograms
+  //Indexed: Sector, Species, Cut_Status
+
+    std::vector<long> space_dims(3);
+    space_dims[0] = 6; //Six sectors
+    space_dims[1] = 4; //electron, proton, pi+, pi-
+    space_dims[2] = 5; //No cut, cut, anti-cut, all cuts, bank
+    space_dims[3] = 10; //W binning
+
+    CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
+    
+    //in the loop
+    while(cart.GetNextCombination()) {//CartesianGenerator.hh
+      sprintf(hname, "%s_fid_sec%d_%s",species[cart[1]],cart[0]+1,norm_cut[cart[2]]); 
+     //hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
+      //histitle = hisname; //For Fiducial I can make them both the same thing. 
+      fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
+    }
+}
+
+
+
+
+
+//Combined Functions
 
 void MakeHist(){
-  MakeHist_fid();
+  //MakeHist_fid();
   MakeHist_WQ2();
   MakeHist_SF();
   MakeHist_dt();
@@ -563,9 +778,12 @@ void MakeHist(){
   MakeHist_Alpha();
   MakeHist_MM_par();
   MakeHist_theta_par();
-  MakeHist_Alpha_bin();
-  MakeHist_MM_bin();
-  MakeHist_theta_bin();
+  //MakeHist_Alpha_bin();
+  //MakeHist_MM_bin();
+ // MakeHist_theta_bin();
+  MakeHist_MM_Wvar();
+  //MakeHist_MMpim_Mvar();
+  //MakeHist_MMpimM();
 }
 
 void MakeHist_p(){

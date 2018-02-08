@@ -126,7 +126,7 @@ bool MM_zero(double p1, double p2, double p3, double p4, double cx1, double cx2,
 	double upper = MM_zero_center + MM_zero_sigma;
 	double lower = MM_zero_center - MM_zero_sigma;
 	if(MM > lower && MM < upper){
-		if( MM != 0.000000000000000000000000000000000000){
+		if( MM > 0.000000000000000000000000000000000000 || MM < 0.000000000000000000000000000000000000){
 			pass = true;
 		}	
 	}

@@ -37,7 +37,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         else{
             std::cout<< "You have not properly put in commandline inputs" <<std::endl;
             std::cout<<"Remember you need ./analysis, input, number of files, output" <<std::endl;
-            std::cout<<"Rerun this program. None of this will work now" <<std::endl;
+            std::cout<<"Rerun this program. None of this will work now" <<std::endl;//\\\][[9\]]
         }
     }
 
@@ -85,6 +85,9 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     MakeHist();//histograms.h
     std::cout<<"Complete" <<std::endl;
 
+    //For W variance in plots
+    double W_var; 
+
     for(int i = 0; i< events ; i++)
     {
         //Update on the progress
@@ -96,7 +99,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
        pip_pass = false;
        pim_pass = false;
        zero_pass = false;
-        p_pre = false;
+       p_pre = false;
        pip_pre = false;
        pim_pre = false;
        zero_pre = false;       
@@ -112,18 +115,23 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         for(int j = 1; j<gpart ; j++){
             // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
             if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], 4)){//added 12/19
+                W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
                 Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);
                 //Missing Mass
                     //Missing Mass 1 missing
                 for(int k = 1; k<gpart ; k++){
                     //Missing Mass for pion calculation
                     MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
+                    MM_pi2_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mp);
+                    MM_pi3_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
                     //Proton missing mass topology
                     if(other_p_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
                           MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
                           MM_p_pass = MM_p_val;
                           p_pre = true;
                         Fill_MM(0,0,MM_p_val);
+                        Fill_MM_Wall(0,W_var,MM_p_val);//*******
+                        
                         //Proton Missing Cut
                         if(MM_p2(MM_p_val)){
                            // cout<< endl <<"p_pass";
@@ -143,6 +151,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //Pi+ missing mass topology
                     if(other_pip_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
                         Fill_MM(1,0,MM_pi_val);
+                        Fill_MM_Wall(1,W_var,MM_pi_val);//*********
                         pip_pre = true;
                         MM_pip_pass = MM_pi_val;
                         //Pi+ Missing Cut
@@ -171,6 +180,14 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //Pi- missing mass topology
                     if(other_pim_miss(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
                          Fill_MM(2,0,MM_pi_val);
+                         
+                         //W variance of the PIM MM plots
+                         Fill_MM_Wall(2,W_var,MM_pi_val);//********
+                         //Fill_MMpim_Mall(0,W_var,MM_pi2_val);
+                         //Fill_MMpim_Mall(1,W_var,MM_pi3_val);
+                         //Fill_MMpimM(0,MM_pi2_val);
+                         //Fill_MMpimM(1,MM_pi3_val);
+
                          pim_pre = true;
                          MM_pim_pass = MM_pi_val;
                         //Pi- Missing Cut
@@ -302,7 +319,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 Fill_MM_par(r,MM_event);
                 Fill_theta_par(r,theta_event);
                 //Q2 Bins
-                for(int u = 0; u< 16 ; u++ ){
+                /*for(int u = 0; u< 16 ; u++ ){
                     if(event_Q2 < (Q2min+(u*(Q2res/2))) && event_Q2 > (Q2min-(u*(Q2res/2)))){
                         //W bins
                         for(int e = 0; e < 8 ; e++){
@@ -314,7 +331,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                             }
                         }
                     }
-                }
+                }*/
             }
         }
     }
@@ -336,6 +353,10 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     //MM_hist[1][0].Fit("gaus");
 
     std::cout<<"\nWrite: ";
+    /*TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
+    MM_W_var_stuff->cd();*/
+    WriteHist_MM_Wvar();
+
     output->Write();
     std::cout<<"Complete \nClose: ";
     output->Close();
