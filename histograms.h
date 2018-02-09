@@ -6,14 +6,15 @@
 #include "headers.h"
 #include "CartesianGenerator.hh"
 #include "debugger.h"
+#include "directories.h"
 //various histogram types
 #include "fiducial histograms.h"
 #include "W Q2 histograms.h"
 #include "delta_t histograms.h"
 #include "sf histograms.h"
-#include "MM histograms.h"
-#include "COM histograms.h"
-#include "cross section histograms.h"
+//#include "MM histograms.h"
+//#include "COM histograms.h"
+//#include "cross section histograms.h"
 
 
 
@@ -22,8 +23,8 @@
 //char  hname[100]; //The name shown in the TBrowser (should have no spaces)
 //TH2D* fid_hist[6][4][5]; //Sector, species, cut, pos/neg
 //TH2D* WQ2_hist[9]; //look in constants.h for the 9 different parameters
-TH2D* SF_hist[5]; //cuts 
-TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
+//TH2D* SF_hist[5]; //cuts 
+//TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
 TH1D* MM_hist[4][3];//Particle, cut
@@ -41,8 +42,8 @@ TH1D* MM_hist_pim_m[2];//Total MM with variation in mass for proton/pi+
 //W Variance
 TH1D* MM_W[3][10];//Discovering the W dependence of the strange peak in the Pim MM //2/7 changed order of index. See if fixes filling issue
 //TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
-TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
-TH2D* SF_hist_W[5][10]; //cuts 
+//TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
+//TH2D* SF_hist_W[5][10]; //cuts 
 
 /*
 //Conversion from string to char *
@@ -73,12 +74,14 @@ char* Str2CharS( std::string str){
   }
 */
 
-//W vs. Q^2
-/*
-Cut Types: 
-*/
 
-void MakeHist_WQ2(){
+
+//W vs. Q^2
+
+//Cut Types: 
+
+
+//void MakeHist_WQ2(){
   //Create Pointer for Histograms
   /*Indexed: Cut_Status
     - Pre = no cut
@@ -86,6 +89,7 @@ void MakeHist_WQ2(){
     - Anti-Cut = !EID
     - All = All cuts
   */
+  /*
   int space_dims = 9;//The cuts in constants.h
   //std::cout<<space_dims <<" out of loop" <<std::endl;
   for(int w = 0; (w < 9); w++){ 
@@ -101,7 +105,7 @@ void Fill_WQ2(int set, int cut, double p, double cx, double cy, double cz){
   Q2 = Qsquared(set , p, cx, cy, cz); // physics.h
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
   WQ2_hist[cut]->Fill(W,Q2);
-}
+}*/
 
 //Fiducial
 /*int fid_num = 6;
@@ -247,7 +251,7 @@ void Fid_Write()
 }
 */
 
-
+/*
 void MakeHist_SF(){
   //Create Pointer for Histograms
   /*Indexed: Cut_Status
@@ -255,7 +259,7 @@ void MakeHist_SF(){
     - Cut = EID Cut
     - Anti-Cut = !EID
     - All = All cuts
-  */
+  
 
   int space_dims = 5;//pre, cut, anti, pid, bank
 
@@ -269,14 +273,14 @@ void Fill_sf(int level, double etot, double p){
   double sf_thing = sf(etot,p);
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
   SF_hist[level]->Fill(p,sf_thing);
-}
+}*/
 
 //Delta t
 /*
 species: {p, pip, pim}  3
 cut: {pre, cut, anti, pid, bank}  5
 */
-
+/*
 void MakeHist_dt(){
   std::vector<long> space_dims(2);
     space_dims[0] = 3; //species
@@ -321,6 +325,7 @@ void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, d
   for species: {p,pip,pim} -> {0,1,2}
   cut: {pre, cut, anti, pid, bank} -> {0,1,2,3,4}
   */
+/*
   if(sc != 0){
     double mass = 20;
     if(s == 0){
@@ -337,7 +342,7 @@ void Fill_dt(int s, int cut, int sc, double p, double p0, double d, double d0, d
     double dt = delta_t(p, p0, d, d0, t, t0, mass );
     dt_hist[s][cut] -> Fill(p,dt);
   }
-}
+}*/
 
 void MakeHist_dt_vert(){
   for(int w = 0; w<3; w++){
@@ -650,9 +655,9 @@ void Fill_MM_Wall(int p, double W, double MM){
    }*/
 }
 
-void WriteHist_MM_Wvar(){
-  TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
-  MM_W_var_stuff->cd();
+void WriteHist_MM_Wvar(TDirectory *dir){//use directory MM_plots
+  //TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
+  dir->cd();
   double number = 1.0; 
   int t = 0; 
   for(int w = 0; (w < 3); w++){ 
@@ -733,7 +738,7 @@ void Fill_MMpimM( int cut, double mm){
   MM_hist_pim_m[cut] ->Fill(mm);
 }
 
-
+/*
 TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
 TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
 TH2D* SF_hist_W[5][10]; //cuts 
@@ -757,7 +762,7 @@ Void MakeHist_fid_W(){
       //histitle = hisname; //For Fiducial I can make them both the same thing. 
       fid_hist[cart[0]][cart[1]][cart[2]] = new TH2D( hname, hname, FIDxres, FIDxmin, FIDxmax, FIDyres, FIDymin, FIDymax);
     }
-}
+}*/
 
 
 
@@ -766,14 +771,14 @@ Void MakeHist_fid_W(){
 //Combined Functions
 
 void MakeHist(){
-  //MakeHist_fid();
+  MakeHist_fid();
   MakeHist_WQ2();
   MakeHist_SF();
   MakeHist_dt();
   //MakeHist_dt_vert();
   //MakeHist_sc();
   MakeHist_MM();
-  MakeHist_WQ2_ES();
+  //MakeHist_WQ2_ES();
   MakeHist_MM_Cross();
   MakeHist_Alpha();
   MakeHist_MM_par();
@@ -786,6 +791,7 @@ void MakeHist(){
   //MakeHist_MMpimM();
 }
 
+/*
 void MakeHist_p(){
   MakeHist_dtp();
   MakeHist_fidp();
@@ -806,7 +812,7 @@ void MakeHist_pim(){
   MakeHist_dtpim();
   MakeHist_fidpim();
   MakeHist_MMpim();
-}
+}*/
 
 
 #endif

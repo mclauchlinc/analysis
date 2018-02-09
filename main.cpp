@@ -1,7 +1,6 @@
 #include "headers.h" //Contains all the header files I need
 
 
-
 using namespace std; //A standard space to be in for a c++ program
 int main(int argc, char** argv){ //Main function that will return an integer. argc/v are for command line inputs
     std::cout<< "You have " <<argc <<" arguments" <<std::endl;
@@ -44,6 +43,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     //Work with loading in files
     std::cout<<"Create Output File: ";
     TFile *output = Name_File(output_name); //read_in_files.h
+    //output = Name_File(output_name);
     std::cout<<"Complete" <<std::endl <<"Load root files: ";
     TChain data("h10"); //Create TChain to be used. TTrees are h10
     /*
@@ -80,14 +80,18 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     SetBranches(&data);//read_in_data.h
     std::cout<< "Complete" <<std::endl;
 
+    //MakeDirectories(output);
+
     //Make Histograms
     std::cout<< "Making Histograms: ";
     MakeHist();//histograms.h
+    //MakeHist_fid();//fiducial histograms.h
     std::cout<<"Complete" <<std::endl;
 
     //For W variance in plots
     double W_var; 
-
+    
+    
     for(int i = 0; i< events ; i++)
     {
         //Update on the progress
@@ -108,17 +112,18 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         data.GetEntry(i);
         Reassign(); //Converts to C++ data types variables.h
 
-
-
-        Fill_eid(p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);
+        
+        W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
+        Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0]);//partitions.h
+        
         //cout << "did electron things about to enter for loop" <<endl;
         for(int j = 1; j<gpart ; j++){
             // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
             if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], 4)){//added 12/19
-                W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
-                Fill_Hadron(q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);
+                
+                Fill_Hadron(q[j], W_var, p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);//partitions.h
                 //Missing Mass
-                    //Missing Mass 1 missing
+                /*    //Missing Mass 1 missing
                 for(int k = 1; k<gpart ; k++){
                     //Missing Mass for pion calculation
                     MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
@@ -279,10 +284,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 if(pip_pre && pim_pre){
                     //cout<< endl <<"boop6" <<endl;
                     Fill_MM_Cross(3, MM_pip_pass,MM_pim_pass);//
-                }
+                }*/
             }
         }
         //cout<<endl;
+        /*
         //This is the complete event selection. Now do things with the four vectors 
         if(p_pass || pip_pass || pim_pass || zero_pass){
             event_W = WP(0,p[0],cx[0],cy[0],cz[0]);
@@ -331,12 +337,13 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                             }
                         }
                     }
-                }*/
+                }//****
             }
-        }
+        }*/
     }
 
-    
+    /*
+    //Fitting
     fit_b_wig_mult(MM_hist[0][0], 5, 0.9,0.97,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
     cout<<endl <<"Proton Mass: " <<parameters[0] <<" error: " <<parameters[3];
     cout<<endl <<"Proton Gamma: " <<parameters[1] <<" error: " <<parameters[4];
@@ -349,15 +356,20 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     fit_b_wig_mult(MM_hist[3][0], 5, -0.05,0.05,pip_center,pip_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
     cout<<endl <<"Zero Mass: " <<parameters[0] <<" error: " <<parameters[3];
     cout<<endl <<"Zero Gamma: " <<parameters[1] <<" error: " <<parameters[4];
-
+    */
     //MM_hist[1][0].Fit("gaus");
-
+    
     std::cout<<"\nWrite: ";
     /*TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
     MM_W_var_stuff->cd();*/
-    WriteHist_MM_Wvar();
+    //WriteHist_MM_Wvar();
 
-    output->Write();
+    //output->Write();
+    Write_fid(output);
+    Write_WQ2(output);
+    Write_sf(output);
+    Write_dt(output);
+
     std::cout<<"Complete \nClose: ";
     output->Close();
     std::cout<<"Complete" <<std::endl;

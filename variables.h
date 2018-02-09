@@ -9,6 +9,8 @@
     int which = 0;//Variable which is assigned based on which file set is loaded so the user can be notified
     int naming_var = 0; //Variable used in switiching the index for outputs in the beginning. Used when inputing 3 inputs rather than 4
 
+  
+
     //Data parameters
     int events;//The variable for the total number of events
     int progress;//The Variable for the percentage of events looped through

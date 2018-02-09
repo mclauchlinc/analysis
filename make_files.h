@@ -4,6 +4,7 @@
 #include "histograms.h"
 #include "headers.h"
 
+/*
 void Fid_Write(){
   	std::vector<long> space_dims(3);
   	space_dims[0] = 6; //Six sectors
@@ -19,5 +20,6 @@ void Fid_Write(){
     	fid_hist[cart[0]][cart[1]][cart[2]]->Write();
     }
 }
+*/
 
 #endif
