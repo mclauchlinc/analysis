@@ -12,7 +12,8 @@
 #include "W Q2 histograms.h"
 #include "delta_t histograms.h"
 #include "sf histograms.h"
-//#include "MM histograms.h"
+#include "MM histograms.h"
+#include "cc_hist.h"
 //#include "COM histograms.h"
 //#include "cross section histograms.h"
 
@@ -27,7 +28,7 @@
 //TH2D* dt_hist[3][5]; //delta t, cuts, pos/neg
 TH1D* dt_vertex[3]; //The hadron vertex distribution for each different particle 
 TH1I* sc_plot;
-TH1D* MM_hist[4][3];//Particle, cut
+//TH1D* MM_hist[4][3];//Particle, cut
 //TH2D* WQ2_hist_ES[5];//Topology
 TH2D* MM_Cross[6];//Topology Crosses
 TH1D* alpha_hist[3];//Topology
@@ -35,12 +36,12 @@ TH1D* MM_hist_par[3];//toplolgy
 TH1D* theta_hist_par[3];//topology
 TH1D* alpha_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 TH1D* theta_hist_bin[3][6][7];//topology, W binning, Q2 binnng
-TH1D* MM_hist_bin[3][6][7];//topology, W binning, Q2 binnng
+//TH1D* MM_hist_bin[3][6][7];//topology, W binning, Q2 binnng
 
-TH1D* MM_pim_M[2][10];// MM for the pi minus missing with changes in mass ID for proton and pi+ {W var, M var}
-TH1D* MM_hist_pim_m[2];//Total MM with variation in mass for proton/pi+
+//TH1D* MM_pim_M[2][10];// MM for the pi minus missing with changes in mass ID for proton and pi+ {W var, M var}
+//TH1D* MM_hist_pim_m[2];//Total MM with variation in mass for proton/pi+
 //W Variance
-TH1D* MM_W[3][10];//Discovering the W dependence of the strange peak in the Pim MM //2/7 changed order of index. See if fixes filling issue
+//TH1D* MM_W[3][10];//Discovering the W dependence of the strange peak in the Pim MM //2/7 changed order of index. See if fixes filling issue
 //TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
 //TH2D* dt_hist_W[3][5][10]; //delta t, cuts, pos/neg, W binning
 //TH2D* SF_hist_W[5][10]; //cuts 
@@ -379,7 +380,10 @@ void Fill_sc(int sc){
   sc_plot -> Fill(sc);
 }
 
+
+
 //Makes all Missing mass plots
+/*
 void MakeHist_MM(){
   std::vector<long> space_dims(2);
     space_dims[0] = 4; //species
@@ -422,10 +426,11 @@ void MakeHist_MMpim(){
 species missing {0,1,2,3} -> {proton, pip, pim, zero}
 cut {0,1,2} -> {pre, cut, anti} 
 */
+/*
 void Fill_MM(int species, int cut, double mm){
   MM_hist[species][cut] ->Fill(mm);
 }
-
+*/
 
 /*
 //Now let's move on to Event Selection things
@@ -449,6 +454,8 @@ void Fill_WQ2_ES(int top, double p, double cx, double cy, double cz){
   WQ2_hist_ES[top]->Fill(W,Q2);
 }*/
 
+//Cross MM
+/*
 void MakeHist_MM_Cross(){
    //Create Pointer for Histograms
 
@@ -461,7 +468,7 @@ void MakeHist_MM_Cross(){
 
 void Fill_MM_Cross(int top, double MM1, double MM2){
   MM_Cross[top]->Fill(MM1,MM2);
-}
+}*/
 
 void MakeHist_Alpha(){
   for(int w = 0; (w < 3); w++){ 
@@ -526,6 +533,9 @@ void Fill_Alpha_bin(int top, int Wbin, int Q2bin, double alpha){
   alpha_hist_bin[top][Wbin][Q2bin] -> Fill(alpha);
 }
 
+
+//MM binning
+/*
 void MakeHist_MM_bin(){
   std::vector<long> space_dims(3);
     space_dims[0] = 16; //Q2 binning
@@ -555,7 +565,7 @@ void MakeHist_MM_bin(){
 void Fill_MM_bin(int top, int Wbin, int Q2bin, double MM){
   MM_hist_bin[top][Wbin][Q2bin] -> Fill(MM);
 }
-
+*/
 void MakeHist_theta_bin(){
   std::vector<long> space_dims(3);
     space_dims[0] = 16; //Q2 binning
@@ -589,6 +599,8 @@ void Fill_theta_bin(int top, int Wbin, int Q2bin, double theta){
   theta_hist_bin[top][Wbin][Q2bin] -> Fill(theta);
 }
 
+
+/*
 void MakeHist_MM_Wvar(){
   double number = 1.0; 
   int t = 0; 
@@ -653,8 +665,10 @@ void Fill_MM_Wall(int p, double W, double MM){
    if(W > 2.8 && W < 3.0){
       Fill_MM_Wvar(9, p, MM);
    }*/
-}
+//}
 
+
+/*
 void WriteHist_MM_Wvar(TDirectory *dir){//use directory MM_plots
   //TDirectory * MM_W_var_stuff = output -> mkdir("MM_W_var_stuff");
   dir->cd();
@@ -734,9 +748,9 @@ void MakeHist_MMpimM(){
 species missing {0,1,2,3} -> {proton, pip, pim, zero}
 cut {0,1,2} -> {pre, cut, anti} 
 */
-void Fill_MMpimM( int cut, double mm){
-  MM_hist_pim_m[cut] ->Fill(mm);
-}
+//void Fill_MMpimM( int cut, double mm){
+  //MM_hist_pim_m[cut] ->Fill(mm);
+//}
 
 /*
 TH2D* fid_hist_W[6][4][5][10]; //Sector, species, cut, pos/neg, W binning
@@ -775,6 +789,8 @@ void MakeHist(){
   MakeHist_WQ2();
   MakeHist_SF();
   MakeHist_dt();
+  MakeHist_dt_MM();
+  MakeHist_dt_pe();
   //MakeHist_dt_vert();
   //MakeHist_sc();
   MakeHist_MM();
@@ -786,9 +802,19 @@ void MakeHist(){
   //MakeHist_Alpha_bin();
   //MakeHist_MM_bin();
  // MakeHist_theta_bin();
-  MakeHist_MM_Wvar();
+  //MakeHist_MM_Wvar();
   //MakeHist_MMpim_Mvar();
   //MakeHist_MMpimM();
+  MakeHist_MinCC();
+}
+
+void WriteHist(TFile *file){
+  Write_WQ2(file);
+  Write_fid(file);
+  Write_sf(file);
+  Write_dt(file);
+  Write_MM(file);
+  Write_MinCC(file);
 }
 
 /*

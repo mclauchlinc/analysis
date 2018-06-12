@@ -1,5 +1,5 @@
-#ifndef W_Q2_HISTOGRAMS_H
-#define W_Q2_HISTOGRAMS_H
+#ifndef COM_HISTOGRAMS_H
+#define COM_HISTOGRAMS_H
 
 #include "variables.h"
 #include "constants.h"

@@ -73,10 +73,12 @@ bool is_pim( int q, double p, double cx, double cy, double cz, int dc, int sc, i
 	return pass;
 }
 
+
 double e_dt_cut(double p){
 	return (dt_e_A*TMath::Exp(-dt_e_a*p)+dt_e_b);
 }
 
+//A cut along the delta t of the electron, but when trying to identify a pi- 
 bool dt_electron(double p, double sc_r0, double sc_r, double sc_t0, double sc_t, double m){
 	bool pass = false;
 	double delt_d = sc_r*(sqrt((m*m+p*p)/(me*me+p*p))-1);
@@ -96,16 +98,49 @@ bool dt_electron(double p, double sc_r0, double sc_r, double sc_t0, double sc_t,
 	return pass;
 }
 
+bool pim_eid(int eid_par, double p, double sc_r0, double sc_r, double sc_t0, double sc_t, double cc, double etot, double ec, double cx, double cy){
+	bool pass = false;
+	switch(eid_par){
+				//no eid cut
+				case 0:
+					pass = true;
+					break;
+				//the cut along the delta t electron band
+				case 1:
+					if(dt_electron(p,sc_r0,sc_r,sc_t0,sc_t,mpi)){
+					pass = true;
+					}
+					break;
+				//If it passes the CC then it doesn't pass 
+				case 2:
+					if(cc == 0){
+						pass = true; 
+					}
+					break;
+				//If it passes the EC then it doesn't pass
+				case 3:
+					if(ec == 0){
+						pass = true;
+					}
+				//If it passes the SF then it doesn't pass
+				case 4:
+					if(!sf_e(p,etot,cx,cy)){
+						pass = true;
+					}
+					break;
+			}
+	return pass; 
+}
 
-bool is_pim_plus(int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0, double cc, double ec, double etot, double vx, double vy, double vz){
+
+bool is_pim_plus(int eid_par, int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0, double cc, double ec, double etot, double vx, double vy, double vz){
 	bool pass = false;
 	if(is_pim(q,p,cx,cy,cz,dc,sc,stat,dc_stat,sc_t,sc_r,p0,sc_r0, sc_t0)){
-		if(!eid(p,q,cx,cy,cz,vx,vy,vz,dc,cc,ec,sc,dc_stat,stat,etot,4)){
+		//if(!eid(p,q,cx,cy,cz,vx,vy,vz,dc,cc,ec,sc,dc_stat,stat,etot,4)){
 		//if(true){
-			if(dt_electron(p,sc_r0,sc_r,sc_t0,sc_t,mpi)){
-				pass = true;
-			}
-		}
+			//Cutting out various parts of electron ID
+			pass = pim_eid(eid_par, p, sc_r0, sc_r, sc_t0, sc_t, cc, etot, ec, cx, cy);
+		//}
 	}
 	return pass;
 }

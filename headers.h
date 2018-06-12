@@ -35,6 +35,7 @@
 #include "partitions.h" //Functions that fill the plots relevant to specific things: eid, hid, etc. 
 #include "debugger.h"
 #include "event_selection.h"//slecting events 
+#include "cc_cut.h"
 
 #include "directories.h"
 

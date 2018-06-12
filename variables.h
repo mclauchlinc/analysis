@@ -18,15 +18,15 @@
     double MM_pi_val;//The variable for the value of the Missing Mass Squared for pion missing topology
     double MM_pi2_val;//For testing proper particle ID
     double MM_pi3_val;//For testing proper particle ID
-    double MM_pip_pass;
-    double MM_pim_pass;
+    double MM_pip_pass;//passed pip MM ID for event selection
+    double MM_pim_pass; //passed pim MM ID for event selection
     double MM_p_pass;
     double MM_full;//The variable for the value of the Missing Mass Squared for the full topology
-    double MM_full_pass;
-    bool p_pass; 
-    bool pip_pass;
-    bool pim_pass;
-    bool zero_pass;
+    double MM_full_pass;//Passed all observed event
+    bool p_pass; //proton ID passed
+    bool pip_pass;//pip ID passed
+    bool pim_pass;//pim ID passed
+    bool zero_pass;//
     bool p_pre;
     bool pip_pre;
     bool pim_pre;
@@ -43,15 +43,16 @@
     double MM_pip_pim;
     double MM_event;
 
-    TLorentzVector ele_mu;
-    TLorentzVector pro_mu;
-    TLorentzVector pip_mu;
-    TLorentzVector pim_mu;
+    TLorentzVector ele_mu;//Four vector for scattered election
+    TLorentzVector pro_mu;//Four vector for scattered proton
+    TLorentzVector pip_mu;//Four Vector for scattered pi+
+    TLorentzVector pim_mu;//Four Vector for scattered pi-
     //TLorentzVector pro2_mu;//Misidentified as a proton switch to pi+
     //TLorentzVector pip2_mu;//Misidentified as a pi+ switch to proton
 
     //Fitting parameters
     double parameters[6];//First three are parameters with the latter three as their errors
+    double parameters2[6];//Parameters for a second layer of fits if multiple gaussians are being fit simultaneously
 
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle
@@ -72,6 +73,11 @@
     UChar_t ec_b[100]; //The index used to navigate any ec banks
     Float_t etot_b[100]; //The total final energy of the particle deposited in the detector
     Short_t id_b[100];
+    UChar_t cc_hit_b[100];
+    Int_t cc_part_b;
+    UChar_t cc_sect_b[100];
+    Int_t cc_segm_b[100];
+    UShort_t nphe_b[100];
 
     //Put the various variables into straight C++ data types
     int q[100] ;// = (int) q_b; //The charge of each given particle
@@ -92,6 +98,11 @@
     int ec[100]; //The index used to navigate any ec banks
     double etot[100]; //The total final energy of the particle deposited in the detector
     int id[100];//The id assigned to it automatically through the standard parameters
+    int cc_hit[100];//*CHECK* the number of registred photo electrons created?
+    int cc_part;//*CHECK* the number of particles registred in the CC for a particular event
+    int cc_sect[100]; //The sector a particle was registered in
+    int cc_segm[100];//The segment the CC hit was registered in 
+    int nphe[100];//number of photo-electrons
 
     //Int_t gpart; //The number of particles registered in a given event
     //Need to reassign the individual pieces of the array rather than entire arrays at once 7/31/17
@@ -115,6 +126,11 @@
             ec[i] = (int) ec_b[i]; //The index used to navigate any ec banks
             etot[i] = (double) etot_b[i]; //The total final energy of the particle deposited in the detector
             id[i] = (int) id_b[i];//The id assigned to it automatically through the standard parameters
+            cc_hit[i] = (int) cc_hit_b[i];
+            cc_part = (int) cc_part_b;
+            cc_segm[i] = (int) cc_segm_b[i];
+            cc_sect[i] = (int) cc_sect_b[i];
+            nphe[i] = (int) nphe_b[i];
         }
     }
 

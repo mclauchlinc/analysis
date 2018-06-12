@@ -85,6 +85,10 @@ const double pip_sig2 = 0.022;
 const double p_center2 = 0.89;
 const double p_sig2 = 0.05;
 
+//W changing pim MM parameters
+const double pim_bot_MM[11] = {0.0781216,0.0781216,0.0781216,0.0781216,0.0781216,0.0781216,0.0781216,0.0781216,0.083,0.109,0.109};
+const double pim_top_MM[11] = {0.2506164,0.2506164,0.2506164,0.2506164,0.2506164,0.2506164,0.2506164,0.2506164,0.34,0.415,0.415};
+
 
 //For Project
 const double MM_n_center = 0.944;
@@ -205,6 +209,10 @@ const double Wmax = 3;
 const double Q2min = 1.5;
 const double Q2max = 5.0;
 const double Q2res = 0.5;
+//CC Min
+const double MinCCmin = -0.5;
+const double MinCCmax = 501.5;
+const int MinCCres = 502;
 
 //Project
 const int p_MMxres = 400;
@@ -215,10 +223,11 @@ const double p_MMxmax = 8.0;
 const float Wbin_res = 0.2;//The width of a W bin
 const float Wbin_start = 1.0;//The starting of W bins
 
+const int MinCC_Cut[6][18] = {{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35}};
 
 
 const char * species[] = {"e","p","pip","pim","all"};
-const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank"};
+const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank","eid5"};
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
 const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
 const char * charge[] = {"pos","neg"};
@@ -228,6 +237,10 @@ const char* topologies[] = {"none","proton_miss", "Pip_miss", "Pim_miss","All","
 const char* cross_top[] = {"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"};//For the cross plots of missing mass
 const char* alpha_stuff[] = {"p_pip","p_pim", "pip_pim"};
 const char* mvar[] = {"switch","2pi"};
+const char* pe_cut[] = {"none", "e_dt", "cc", "ec", "sf"};
+const char* dxc_pro[] = {"pro1, pro2,pro3,pro4,pro5,pro6,pro7,pro8"};
+const char* cc_cuts[] = {"none","sf","fid","sf_fid","eid"};
+const char* cc_pos[] ={"left","coinc","right","all"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

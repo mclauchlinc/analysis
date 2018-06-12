@@ -6,6 +6,9 @@
 #include "vertex.h"
 #include "fiducial.h"
 #include "electron_ec.h"
+#include "cc_cut.h"
+#include "cc_hist.h"
+#include "headers.h"
 
 /*
 Identifies electrons
@@ -54,11 +57,18 @@ bool eid_4(double p, int q, double cx, double cy, double cz, int dc, int cc, int
 	return pass;
 }
 
+bool eid_5(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int cc_sect, int cc_segm, int nphe){
+	bool pass = false;
+	if(eid_4(p, q, cx, cy, cz, dc, cc, ec, sc,dc_stat, stat, etot) && min_cc(cc_segm,cc_sect,nphe)){
+		pass = true;
+	}
+}
+
 //Level 5 adds vertex corrections and cuts
 //bool eid_5
 //Not done yet
 
-bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level)
+bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int cc_sect, int cc_segm, int nphe, int level)
 {
 	bool is_electron = kFALSE;
 	
@@ -68,19 +78,27 @@ bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy
 				if(eid_1(dc,cc,ec,sc)){
 					is_electron = kTRUE;
 				}
+			break;
 			case 2:
 				if(eid_2(dc,cc,ec,sc,dc_stat,q,stat)){
 					is_electron = kTRUE;
 				}
+			break;
 			case 3:
 				if(eid_3(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat)){
 					is_electron = kTRUE;
 				}
+			break;
 			case 4:
 				if(eid_4(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat,etot)){
 					is_electron = kTRUE;
 				}
-		}
+			break;
+			case 5:
+				if(eid_5(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat,etot,cc_segm,cc_sect,nphe)){
+					is_electron = true;
+				}
+			break;
 	}
 
 	return is_electron;

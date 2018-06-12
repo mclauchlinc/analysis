@@ -20,7 +20,7 @@ void MakeHist_SF(){
   */
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 5; //cuts
+  space_dims[0] = 6; //cuts
   space_dims[1] = 11; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
@@ -66,22 +66,13 @@ void Write_sf(TFile *file){
   */
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 5; //cuts
+  space_dims[0] = 6; //cuts
   space_dims[1] = 11; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
   float bot, top;
 
   while(cart.GetNextCombination()){
-  	//Establish W range
-      if(cart[1] == 0 ){
-        bot = 0.0; 
-        top = 5.0;
-      }
-      else{
-        top = Wbin_start + (cart[1]*Wbin_res);//constant.h
-        bot = top - Wbin_res; //constants.h
-      }
     SF_hist[cart[0]][cart[1]]->SetXTitle("Momentum (GeV/c)"); // constants.h
     SF_hist[cart[0]][cart[1]]->SetYTitle("Sampling Fraction");
     SF_hist[cart[0]][cart[1]]->Write();

@@ -3,7 +3,7 @@
 
 #include "headers.h"
 
-void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int id){
+void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int id, int cc_segm, int nphe, int cc_sect){
 	 //Electron ID
             //std::cout <<"electron id" <<std::endl;
             //EID Precut
@@ -13,6 +13,10 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             Fill_sf(0,W_val,etot,p);
             //std::cout <<1;
     	    //EID 1
+            bool sf_p,fid_p;
+            sf_p = false;
+            fid_p = false;
+
             
             if(eid_1(dc,cc,ec,sc)){//eid.h
               //  std::cout <<2;
@@ -32,8 +36,14 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             if(eid_4( p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot)){//eid.h
               //  std::cout <<5;
                 Fill_WQ2( 0, 4, 0, p, cx, cy, cz); // histograms.h
+               // Fill_fid(0,3,W_val,cx,cy,cz);//histograms.h
+               // Fill_sf(3,W_val,etot,p); //histograms.h
+            }
+            if(eid_5(p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot, cc_sect, cc_segm, nphe)){
+                Fill_WQ2( 0, 9, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,3,W_val,cx,cy,cz);//histograms.h
                 Fill_sf(3,W_val,etot,p); //histograms.h
+                Fill_MinCC(cc_sect, nphe,cc_segm, 4);
             }
             //Sanity
             if((int)q == -1 && (int)dc_stat > 0 && (int)stat >0){
@@ -45,6 +55,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                // std::cout <<7;
                 Fill_WQ2( 0, 6, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,1,W_val,cx,cy,cz);//histograms.h
+                fid_p=true;
             }
             else{
               //  std::cout <<8;
@@ -55,6 +66,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
               //  std::cout <<9;
                 Fill_WQ2( 0, 7, 0, p, cx, cy, cz); // histograms.h
                 Fill_sf(1,W_val,etot,p);
+                sf_p=true;
             }
             else{
                // std::cout <<10;
@@ -66,6 +78,16 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                 Fill_WQ2( 0, 8, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,4,W_val,cx,cy,cz);
                 Fill_sf(4,W_val,etot,p);
+            }
+            //Min CC
+            if(sf_p){
+                Fill_MinCC(cc_sect, nphe,cc_segm, 1);
+            }
+            if(fid_p){
+                Fill_MinCC(cc_sect, nphe,cc_segm, 2);
+            }
+            if(sf_p && fid_p){
+                Fill_MinCC(cc_sect, nphe,cc_segm, 3);
             }
             
 }
@@ -241,7 +263,7 @@ void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, in
     
     //Full ID
     //if(is_pim_plus(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
-        if(is_pim_plus(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
+        if(is_pim_plus(0,q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
     //if(duck == 2){
         Fill_fid(3,3,W_val,cx,cy,cz);
         Fill_dt(W_val,2,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);

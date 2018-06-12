@@ -74,7 +74,7 @@ void Write_fid(TFile *file ){
 	TDirectory * p_fid_plots = fid_plots->mkdir("p_fid_plots");
 	TDirectory * pip_fid_plots = fid_plots->mkdir("pip_fid_plots");
 	TDirectory * pim_fid_plots = fid_plots->mkdir("pim_fid_plots");
-  	std::vector<long> space_dims(3);
+  	std::vector<long> space_dims(4);
   	space_dims[0] = 6; //Six sectors
   	space_dims[1] = 4; //electron, proton, pi+, pi-
   	space_dims[2] = 5; //No cut, cut, anti-cut, all cuts, bank
@@ -86,6 +86,7 @@ void Write_fid(TFile *file ){
   	//in the loop
   	while(cart.GetNextCombination()) {//CartesianGenerator.hh
       //Establish W range
+      /*
       if(cart[3] == 0 ){
         bot = 0.0; 
         top = 5.0;
@@ -93,7 +94,7 @@ void Write_fid(TFile *file ){
       else{
         top = Wbin_start + (cart[3]*Wbin_res);//constant.h
         bot = top - Wbin_res; //constants.h
-      }
+      }*/
       //Establish directory to place in
       switch(cart[1]){
       	case 0: e_fid_plots->cd();
