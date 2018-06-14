@@ -13,8 +13,7 @@
 
 
 
-double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz)
-{
+double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 	TVector3 k_mu_3(p*cx,p*cy,p*cz);
 	TLorentzVector k_mu;
 	switch (set){
@@ -32,8 +31,7 @@ double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz)
 }
 
 //This will be the W for a proton target given that this is what I am dealing with in my analysis
-double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz)
-{
+double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 	TLorentzVector k_mu;
 	switch (set){
 		case 0: 

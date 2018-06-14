@@ -11,7 +11,7 @@ cc_hit
 cc_segm
 */
 
-TH1D* cc_min_hist[6][18][4][4];//Sector //Segment //Cuts {none,sf,e fiducial,both} //left,coincident,right,all
+TH1D* cc_min_hist[6][18][5][4];//Sector //Segment //Cuts {none,sf,e fiducial,both} //left,coincident,right,all
 
 void MakeHist_MinCC(){
 	//Create Pointer for Histograms

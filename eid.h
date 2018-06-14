@@ -53,15 +53,19 @@ bool eid_4(double p, int q, double cx, double cy, double cz, int dc, int cc, int
 	bool pass = kFALSE;
 	if(eid_3(p,q,cx,cy,cz,dc,cc,ec,sc,dc_stat,stat) && min_ec(etot) && sf_e(p,etot,cx,cy)){
 		pass = kTRUE;
+		//std::cout<<std::endl <<"eid 4 pass" <<std::endl;
 	}
 	return pass;
 }
 
 bool eid_5(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int cc_sect, int cc_segm, int nphe){
 	bool pass = false;
+	std::cout<<std::endl <<"inside eid 5" <<std::endl;
 	if(eid_4(p, q, cx, cy, cz, dc, cc, ec, sc,dc_stat, stat, etot) && min_cc(cc_segm,cc_sect,nphe)){
 		pass = true;
+		std::cout <<" and Passed" <<std::endl;
 	}
+	return pass;
 }
 
 //Level 5 adds vertex corrections and cuts
@@ -99,6 +103,7 @@ bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy
 					is_electron = true;
 				}
 			break;
+		}
 	}
 
 	return is_electron;

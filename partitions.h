@@ -11,6 +11,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             Fill_WQ2( 0, 0, 0, p, cx, cy, cz); //{set,cut,top,p,cx,cy,cz} histograms.h
             Fill_fid(0,0,W_val,cx,cy,cz);//type, cut, cx, cy, cz //fiducial histograms.h
             Fill_sf(0,W_val,etot,p);
+            Fill_MinCC(cc_sect,nphe,cc_segm,0);
             //std::cout <<1;
     	    //EID 1
             bool sf_p,fid_p;
@@ -38,12 +39,15 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                 Fill_WQ2( 0, 4, 0, p, cx, cy, cz); // histograms.h
                // Fill_fid(0,3,W_val,cx,cy,cz);//histograms.h
                // Fill_sf(3,W_val,etot,p); //histograms.h
+                //Fill_MinCC(cc_sect, nphe,cc_segm, 4);
             }
-            if(eid_5(p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot, cc_sect, cc_segm, nphe)){
+            std::cout<<std::endl <<"Entering eid5 from partitions" <<std::endl;
+            if(eid_5( p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot, cc_sect, cc_segm, nphe)){
                 Fill_WQ2( 0, 9, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,3,W_val,cx,cy,cz);//histograms.h
                 Fill_sf(3,W_val,etot,p); //histograms.h
                 Fill_MinCC(cc_sect, nphe,cc_segm, 4);
+                std::cout<<" Wrote after eid 5" <<std::endl;
             }
             //Sanity
             if((int)q == -1 && (int)dc_stat > 0 && (int)stat >0){
@@ -55,6 +59,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                // std::cout <<7;
                 Fill_WQ2( 0, 6, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,1,W_val,cx,cy,cz);//histograms.h
+                Fill_MinCC(cc_sect, nphe,cc_segm, 2);
                 fid_p=true;
             }
             else{
@@ -66,6 +71,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
               //  std::cout <<9;
                 Fill_WQ2( 0, 7, 0, p, cx, cy, cz); // histograms.h
                 Fill_sf(1,W_val,etot,p);
+                Fill_MinCC(cc_sect, nphe,cc_segm, 1);
                 sf_p=true;
             }
             else{
@@ -80,12 +86,6 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                 Fill_sf(4,W_val,etot,p);
             }
             //Min CC
-            if(sf_p){
-                Fill_MinCC(cc_sect, nphe,cc_segm, 1);
-            }
-            if(fid_p){
-                Fill_MinCC(cc_sect, nphe,cc_segm, 2);
-            }
             if(sf_p && fid_p){
                 Fill_MinCC(cc_sect, nphe,cc_segm, 3);
             }

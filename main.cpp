@@ -127,27 +127,20 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         
         W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
         Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
-        Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
+        //Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
         if(cc_segm[cc[0]-1] < 1000){
             //cout<<endl <<"cc_segm: " <<cc_segm[cc[0]-1] <<endl;
         }
         //cout << "did electron things about to enter for loop" <<endl;
         for(int j = 1; j<gpart ; j++){
             //cout<<endl <<"cc: "<< cc[j] <<"  Segment: " <<cc_segm[cc[j]-1] <<" nphoe:" <<nphe[cc[j]-1]<<endl;
-            //1
-            if(nphe[cc[j]-1]<s1l){
-                s1l = nphe[cc[j]-1];
-            }
-            //high
-            if(nphe[cc[j]-1]>s1h){
-                s1h = nphe[cc[j]-1];
-            }
+            
             //cout<<"is this the cc_sect " <<cc_sect[cc[j]-1] <<"  from the bank: " <<cc_sect_b[cc[j]-1] <<endl;       
             //Fill_MinCC(cc_sect[cc[j]-1],nphe[cc[j]-1],cc_segm[cc[j]-1],0);
             //cout<<"problem" <<endl;
 
             // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
-            if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//added 12/19
+            if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
                 
                 Fill_Hadron(q[j], W_var, p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);//partitions.h
                 //Pim electron ID work
@@ -408,7 +401,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
     //Fitting Min CC Plots
     //TH1D* hist,int t, double lowb, double upb, double m0, double gamma0, double max, double &par1, double &par2, double &par3, double &err1, double &err2, double &err3, double m02, double gamma02, double max2, double &par12, double &par22, double &par32, double &err12, double &err22, double &err32
-    for(int seggie = 0; seggie <18; seggie++){
+   /* for(int seggie = 0; seggie <18; seggie++){
         for(int se = 0; se <6; se++){
         //Sector //Segment //Cuts {none,sf,e fiducial,both} //left,coincident,right,all
         fit_gaus_mult(cc_min_hist[se][seggie][3][3],1,80.0,200.0,100.0,100.0,2000.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);
@@ -418,11 +411,12 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //cout<<"Parp" <<par <<": " <<parameters2[0] <<" Errorp" <<par <<": " <<parameters2[par+3] <<endl;
             }
         }
-    }
+    }*/
     
     std::cout<<"\nWrite: ";
 
     //output->Write();
+    
     Write_fid(output);
     Write_WQ2(output);
     Write_sf(output);
@@ -432,13 +426,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     Write_dt_MM(output);
     Write_dt_pe(output);
     Write_MinCC(output);
-
-    cout<<"s1l: " <<s1l <<endl;
-    cout<<"s1h: " <<s1h <<endl;
-    cout<<"s2l: " <<s2l <<endl;
-    cout<<"s2h: " <<s2h <<endl;
-    cout<<"s3l: " <<s3l <<endl;
-    cout<<"s3h: " <<s3h <<endl;
+    
 
     std::cout<<"Complete \nClose: ";
     output->Close();
