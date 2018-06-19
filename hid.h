@@ -40,12 +40,18 @@ bool is_proton( int q, double p, double cx, double cy, double cz, int dc, int sc
 bool is_pip( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0)
 {
 	bool pass = false;
+	//std::cout<<std::endl<<"in is_pip" <<std::endl;
 	if(hid_sanity(dc, sc, stat, dc_stat))
 	{
+			//std::cout<<std::endl<<"in is_pip p1" <<std::endl;
 		if( q == 1){ //Note that charge is strange right now 9/22
+			//std::cout<<std::endl<<"in is_pip p2" <<std::endl;
 			if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
+				//std::cout<<std::endl<<"in is_pip p3" <<std::endl;
 				if(!delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
+					//std::cout<<std::endl<<"in is_pip p4" <<std::endl;
 					if( fid_h( p, cx, cy, cz)){
+						//std::cout<<std::endl<<"in is_pip p5" <<std::endl;
 						pass = true;
 					}
 				}
@@ -58,13 +64,18 @@ bool is_pip( int q, double p, double cx, double cy, double cz, int dc, int sc, i
 bool is_pim( int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0)
 {
 	bool pass = false;
+	//std::cout<<std::endl<<"in is_pim" <<std::endl;
 	if(hid_sanity(dc, sc, stat, dc_stat) && q == -1)
 	{
+			//std::cout<<std::endl<<"in is_pim p1" <<std::endl;
 		if(q == -1){
+			//std::cout<<std::endl<<"in is_pim p2" <<std::endl;
 			if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t))
 			{
+					//std::cout<<std::endl<<"in is_pim p3" <<std::endl;
 				if( fid_h( p, cx, cy, cz))
 				{
+					//std::cout<<std::endl<<"in is_pim p4" <<std::endl;
 					pass = true;
 				}
 			}
@@ -89,8 +100,8 @@ bool dt_electron(double p, double sc_r0, double sc_r, double sc_t0, double sc_t,
 	double delt_up2 = delt_d + dt_e_sig;
 	double delt_do2 = delt_d - dt_e_sig;
 
-	//std::cout<<std::endl <<"Momentum: " <<p <<std::endl;
-	//std::cout<<"delta_t: " <<delt_tp <<"| electron: " <<delt_d <<std::endl;
+	//std::cout<<std::std::endl <<"Momentum: " <<p <<std::std::endl;
+	//std::cout<<"delta_t: " <<delt_tp <<"| electron: " <<delt_d <<std::std::endl;
 
 	if(delt_te > dt_e_sig || delt_te < -dt_e_sig){
 		pass = true;
@@ -139,7 +150,8 @@ bool is_pim_plus(int eid_par, int q, double p, double cx, double cy, double cz, 
 		//if(!eid(p,q,cx,cy,cz,vx,vy,vz,dc,cc,ec,sc,dc_stat,stat,etot,4)){
 		//if(true){
 			//Cutting out various parts of electron ID
-			pass = pim_eid(eid_par, p, sc_r0, sc_r, sc_t0, sc_t, cc, etot, ec, cx, cy);
+			//pass = pim_eid(eid_par, p, sc_r0, sc_r, sc_t0, sc_t, cc, etot, ec, cx, cy); //Need to adjust 6/19/18
+		pass = true;
 		//}
 	}
 	return pass;

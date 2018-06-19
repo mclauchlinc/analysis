@@ -183,7 +183,7 @@ bool other_pim_miss(int cc_segm, int cc_sect, int nphe, double p0, int q0, doubl
 	bool P_2 = false;
 	bool P_3 = false;
 	bool P_4 = false;
-	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, cc_segm, cc_sect, nphe, 5 );
+	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, cc_sect, cc_segm, nphe, 5 );
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pip( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
 	//P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
@@ -232,7 +232,7 @@ bool other_p_miss(int cc_segm, int cc_sect, int nphe,double p0, int q0, double c
 	bool P_1 = false;
 	bool P_2 = false;
 	bool P_3 = false;
-	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_segm, cc_sect, nphe, 5 );
+	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_sect, cc_segm, nphe, 4 );
 	P_1 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pim_plus(0, q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0, cc2, ec2, etot2, vx2, vy2, vz2);
 	if(P_0 && P_1 && P_2){
@@ -273,7 +273,7 @@ bool other_pip_miss(int cc_segm, int cc_sect, int nphe,double p0, int q0, double
 	bool P_0 = false;
 	bool P_1 = false;
 	bool P_2 = false;
-	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_segm, cc_sect, nphe, 5 ); //eid.h
+	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_sect, cc_segm, nphe, 4 ); //eid.h
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);	//hid.h
 	P_2 = is_pim_plus(0, q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0, cc2, ec2, etot2, vx2, vy2, vz2);	//hid.h
 	if(P_0 && P_1 && P_2){
@@ -309,7 +309,7 @@ bool other_zero_miss(int cc_segm, int cc_sect, int nphe,double p0, int q0, doubl
 	bool P_1 = false;
 	bool P_2 = false;
 	bool P_3 = false;
- 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_segm, cc_sect, nphe, 5 );
+ 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0,  cc_sect, cc_segm, nphe, 4 );
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pip( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
 	P_3 = is_pim_plus( 0, q3, p3, cx3, cy3, cz3, dc3, sc3, stat3, dc_stat3, sc_t3, sc_r3, p0, sc_r0, sc_t0, cc3, ec3, etot3, vx3, vy3, vz3);

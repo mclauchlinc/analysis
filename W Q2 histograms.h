@@ -7,7 +7,7 @@
 #include "CartesianGenerator.hh"
 #include "debugger.h"
 
-TH2D* WQ2_hist[9][6]; //electron cuts, topologies 
+TH2D* WQ2_hist[10][6]; //electron cuts, topologies 
 //TH2D* WQ2_hist_ES[5];//Topology
 
 int W_binning(double W){

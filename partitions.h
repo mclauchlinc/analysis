@@ -41,13 +41,13 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                // Fill_sf(3,W_val,etot,p); //histograms.h
                 //Fill_MinCC(cc_sect, nphe,cc_segm, 4);
             }
-            std::cout<<std::endl <<"Entering eid5 from partitions" <<std::endl;
+            //std::cout<<std::endl <<"Entering eid5 from partitions" <<std::endl;
             if(eid_5( p, q, cx, cy, cz, dc, cc, ec, sc, dc_stat, stat, etot, cc_sect, cc_segm, nphe)){
                 Fill_WQ2( 0, 9, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,3,W_val,cx,cy,cz);//histograms.h
                 Fill_sf(3,W_val,etot,p); //histograms.h
                 Fill_MinCC(cc_sect, nphe,cc_segm, 4);
-                std::cout<<" Wrote after eid 5" <<std::endl;
+                //std::cout<<" Wrote after eid 5" <<std::endl;
             }
             //Sanity
             if((int)q == -1 && (int)dc_stat > 0 && (int)stat >0){

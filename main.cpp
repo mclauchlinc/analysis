@@ -126,13 +126,15 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
         
         W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
-        Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
+        //***Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
         //Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
         if(cc_segm[cc[0]-1] < 1000){
             //cout<<endl <<"cc_segm: " <<cc_segm[cc[0]-1] <<endl;
         }
         //cout << "did electron things about to enter for loop" <<endl;
-        for(int j = 1; j<gpart ; j++){
+        //cout<<endl <<"enter event eid" <<endl;
+        if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
+            for(int j = 1; j<gpart ; j++){//332 is matching
             //cout<<endl <<"cc: "<< cc[j] <<"  Segment: " <<cc_segm[cc[j]-1] <<" nphoe:" <<nphe[cc[j]-1]<<endl;
             
             //cout<<"is this the cc_sect " <<cc_sect[cc[j]-1] <<"  from the bank: " <<cc_sect_b[cc[j]-1] <<endl;       
@@ -140,12 +142,12 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             //cout<<"problem" <<endl;
 
             // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
-            if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
-                
+
+                //Brackets work
                 Fill_Hadron(q[j], W_var, p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);//partitions.h
                 //Pim electron ID work
                 for(int o = 0; o<5; o++){
-                    if(pim_eid(o, p[j], sc_r[sc[0]-1], sc_r[sc[j]-1], sc_t[sc[0]-1], sc_t[sc[j]-1], cc[j], etot[j], ec[j], cx[j], cy[j])){
+                    if(pim_eid(o, p[j], sc_r[sc[0]-1], sc_r[sc[j]-1], sc_t[sc[0]-1], sc_t[sc[j]-1], cc[j], etot[j], ec[j], cx[j], cy[j])){//hid.h
                         if(q[j]==-1){
                             Fill_dt_pe(W_var, o, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1],  sc_t[sc[j]-1], sc_t[sc[0]-1]);
                         }
@@ -154,13 +156,14 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
                 //Missing Mass
                    //Missing Mass 1 missing
-                for(int k = 1; k<gpart ; k++){
+                for(int k = 1; k<gpart ; k++){//302 
                     //Missing Mass for pion calculation
                     MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
                     MM_pi2_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mp);
                     MM_pi3_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
-                    //Proton missing mass topology
+                    //Proton missing mass topology Brackets work
                     if(other_p_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
+                          //cout<<endl <<"other p miss pass" <<endl;
                           MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
                           MM_p_pass = MM_p_val;
                           p_pre = true;
@@ -185,8 +188,9 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                         }
                     }
 
-                    //Pi+ missing mass topology
+                    //Pi+ missing mass topology bracket work
                     if(other_pip_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
+                       // cout<<endl <<"other pip miss pass" <<endl;
                         Fill_MM(1,0,W_var,MM_pi_val);
                         //Fill_MM_Wall(1,W_var,MM_pi_val);//*********
                         pip_pre = true;
@@ -214,8 +218,9 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                         }
                     }
 
-                    //Pi- missing mass topology
+                    //Pi- missing mass topology bracket work
                     if(other_pim_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
+                        // cout<<endl <<"other pim miss pass" <<endl;
                          Fill_MM(2,0,W_var,MM_pi_val);
                          //proton
                          Fill_dt_MM( MM_pi_val, W_var, 0, 1, 2, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
@@ -294,7 +299,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                             }*/
                         }
                     }
-                }
+                }//k loop ends
                 //Cross MM plots
                 
                 if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
@@ -324,7 +329,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     //cout<< endl <<"boop6" <<endl;
                     Fill_MM_Cross(3, W_var,MM_pip_pass,MM_pim_pass);//
                 }
-            }
+            }//j loop ends
         }
         //cout<<endl;
         

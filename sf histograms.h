@@ -20,7 +20,7 @@ void MakeHist_SF(){
   */
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 6; //cuts
+  space_dims[0] = 5; //cuts
   space_dims[1] = 11; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
@@ -66,7 +66,7 @@ void Write_sf(TFile *file){
   */
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 6; //cuts
+  space_dims[0] = 5; //cuts
   space_dims[1] = 11; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
