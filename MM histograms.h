@@ -6,9 +6,20 @@
 #include "headers.h"
 #include "CartesianGenerator.hh"
 #include "debugger.h"
+#include "TCanvas.h"
 
 TH1D* MM_hist[4][3][11];//Topology, Cut, W Binning
 TH2D* MM_Cross_hist[6][11];//Topology crosses, W Binning 
+
+//TCanvas
+TCanvas* c_MM1;//proton Missing^2 {pre,cut,anti}
+TCanvas* c_MM2;//pip Missing^2 {pre,cut,anti}
+TCanvas* c_MM3;//pim Missing^2 {pre,cut,anti}
+TCanvas* c_MM4;//zero Missing^2 {pre,cut,anti}
+TCanvas* c_MM5;//proton Missing {pre,cut,anti}
+TCanvas* c_MM6;//pip Missing {pre,cut,anti}
+TCanvas* c_MM7;//pim Missing {pre,cut,anti}
+TCanvas* c_MM8;//zero Missing {pre,cut,anti}
 
 void MakeHist_MM(){
 	//Create Pointer for Histograms
