@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "headers.h"
 #include "CartesianGenerator.hh"
+#include "TCanvas.h"
 /*
 cc_part
 cc_sect
@@ -98,6 +99,13 @@ void Write_MinCC(TFile *file){
 	TDirectory * Min_CC_4 = Min_CC_plots->mkdir("Min_CC_4");
 	TDirectory * Min_CC_5 = Min_CC_plots->mkdir("Min_CC_5");
 	TDirectory * Min_CC_6 = Min_CC_plots->mkdir("Min_CC_6");
+
+	double h_cc = 300; 
+	double w_cc = 400;
+	
+	
+	
+	
 	//std::cout<<"doop" <<std::endl;
 
   	std::vector<long> space_dims(4);
@@ -113,16 +121,23 @@ void Write_MinCC(TFile *file){
 
   		switch(cart[0]){
       	case 0: Min_CC_1->cd();
+      	//TCanvas c1("c1", "c1", w_cc, h_cc);
+      	//c1->Divide()
       	break;
       	case 1: Min_CC_2->cd();
+		//TCanvas c2("c2", "c2", w_cc, h_cc);
       	break;
       	case 2: Min_CC_3->cd();
+      	//TCanvas c3("c3", "c3", w_cc, h_cc);
       	break;
       	case 3: Min_CC_4->cd();
+      	//TCanvas c4("c4", "c4", w_cc, h_cc);
       	break;
       	case 4: Min_CC_5->cd();
+      	//TCanvas c5("c5", "c5", w_cc, h_cc);
       	break;
       	case 5: Min_CC_6->cd();
+      	//TCanvas c6("c6", "c6", w_cc, h_cc);
       	break;
       }
       cc_min_hist[cart[0]][cart[1]][cart[2]][cart[3]]->SetXTitle("nphe");

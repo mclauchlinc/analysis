@@ -1,5 +1,5 @@
-#ifndef HEADERS_H
-#define HEADERS_H
+#ifndef TEST_HEADERS_H
+#define TEST_HEADERS_H
 
 
 #include "TROOT.h"      //Allow access to all root libraries 
@@ -39,8 +39,8 @@
 
 #include "directories.h"
 
-//Teset
-//#include "test sf histograms.h"
+//Test thngs
+#include "test sf histograms.h"
 
 
 /*

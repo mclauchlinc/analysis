@@ -34,7 +34,7 @@ bool eid_2( int dc, int cc, int ec, int sc, int dc_stat, int q, int stat){
 	bool pass = false;
 	//pass Level 1 && Sanity Electron
 	//std::cout<<std::endl<<"In eid 2" <<std::endl;
-	if(eid_1(dc,cc,ec,sc) && (int)q == -1){//6/19/18 && (int)dc_stat > 0 && (int)stat >0){ //Changed q to +1 9/21/2017
+	if(eid_1(dc,cc,ec,sc) && (int)q == -1 && (int)dc_stat > 0 && (int)stat >0){ //Changed q to +1 9/21/2017
 		pass = true;
 		//std::cout<<std::endl <<"eid 2 pass" <<std::endl;
 	}

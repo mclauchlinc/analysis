@@ -82,8 +82,13 @@ void Write_MM(TFile *file){
       	case 3: zero_MM_plots->cd();
       	break;
       }
-      MM_hist[cart[0]][cart[1]][cart[2]]->SetXTitle("MM (GeV)");
-      MM_hist[cart[0]][cart[1]][cart[2]]->SetYTitle("Counts");
+      if(cart[0]==3){
+        MM_hist[cart[0]][cart[1]][cart[2]]->SetXTitle("MM^2 (GeV^2)");
+        MM_hist[cart[0]][cart[1]][cart[2]]->SetYTitle("Counts");
+      }else{
+        MM_hist[cart[0]][cart[1]][cart[2]]->SetXTitle("MM (GeV)");
+        MM_hist[cart[0]][cart[1]][cart[2]]->SetYTitle("Counts");
+      }
       MM_hist[cart[0]][cart[1]][cart[2]]->Write();
     }
 }

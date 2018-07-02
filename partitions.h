@@ -224,6 +224,7 @@ void Fill_pip(int q, double W_val ,double p, double cx, double cy, double cz, in
 }
 
 void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, double cc, double ec, double etot, double vx, double vy, double vz, int id){
+   // std::cout<<std::endl <<"q is: " <<q <<std::endl;
     if( q == -1){
         //Pre Cut
        // std::cout<<std::endl <<"PIM: ";
@@ -279,9 +280,13 @@ void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, in
 //q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
 
 void Fill_Hadron(int q, double W_val, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_t0, double sc_r0, double cc, double ec, double etot, double vx, double vy, double vz, int id){
+   // std::cout<<std::endl <<"Fill Proton Enter" <<std::endl;
     Fill_proton(q, W_val, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, id);
+    //std::cout<<std::endl <<"Fill Pip Enter" <<std::endl;
     Fill_pip(q, W_val, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, id);
+    //std::cout<<std::endl <<"Fill Pim Enter" <<std::endl;
     Fill_pim(q, W_val, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0, sc_t0, sc_r0, cc, ec, etot, vx, vy, vz, id);
+    //std::cout<<std::endl <<"Leaving Hadron Filling" <<std::endl;
 }
 
 

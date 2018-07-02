@@ -1,22 +1,22 @@
-#ifndef SF_HISTOGRAMS_H
-#define SF_HISTOGRAMS_H
+#ifndef TEST_SF_HISTOGRAMS_H
+#define TEST_SF_HISTOGRAMS_H
 
 #include "variables.h"
 #include "constants.h"
 #include "headers.h"
 #include "CartesianGenerator.hh"
 #include "debugger.h"
+#include "TCanvas.h"//Use of T canvasas
 
 TH2D* SF_hist[5][11];//Various cuts {pre,cut,anti,pid,bank},{W binning}
-
 TCanvas* tsf1;
 TCanvas* tsf2;
 TCanvas* tsf3;
 TCanvas* tsf4;
 TCanvas* tsf5;
 
-const double tsfw = 2400;
-const double tsfh = 1200;
+const double tsfw = 1200;
+const double tsfh = 600;
 
 
 void MakeHist_SF(){
@@ -74,7 +74,7 @@ void Write_sf(TFile *file){
     - All = All cuts
   */
 
-   //Create TCanvasas
+  //Create TCanvasas
   tsf1 = new TCanvas("c1","c1",tsfw,tsfh);
   tsf1->Divide(4,3);
   tsf2 = new TCanvas("c2","c2",tsfw,tsfh);
@@ -85,6 +85,7 @@ void Write_sf(TFile *file){
   tsf4->Divide(4,3);
   tsf5 = new TCanvas("c5","c5",tsfw,tsfh);
   tsf5->Divide(4,3);
+
 
   std::vector<long> space_dims(2);
   space_dims[0] = 5; //cuts
@@ -120,14 +121,13 @@ void Write_sf(TFile *file){
       SF_hist[cart[0]][cart[1]]->Draw("colz");
       break;
     }
-  }
 
+  }
   tsf1->SaveAs("SF_Pre.pdf");
   tsf2->SaveAs("SF_Cut.pdf");
   tsf3->SaveAs("SF_Anti.pdf");
   tsf4->SaveAs("SF_PID.pdf");
   tsf5->SaveAs("SF_Bank.pdf");
-
 }
 
 
