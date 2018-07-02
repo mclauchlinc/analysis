@@ -12,6 +12,13 @@ TH2D* dt_hist[3][5][11]; //delta t, cuts, W binning
 TH2D* dt_hist_MM[3][5][11][4]; //particle, cuts, W binning, MM hist cuts
 TH2D* dt_hist_pe[5][11];//electron cuts, W binning
 
+TCanvas * c_dt1;//all W delta t {pre, cut, anti, pid, bank} (5x3)
+TCanvas * c_dt2;//Proton delta t W variance (4x3)
+TCanvas * c_dt3;//Pip delta t W variance (4x3)
+TCanvas * c_dt4;//Pim delta t W variance (4x3)
+
+const double dtw = 2400;
+const double dth = 1200;
 
 //Delta t
 /*
@@ -89,6 +96,17 @@ void Write_dt(TFile *file){
     space_dims[1] = 5; //cut
     space_dims[2] = 11;//Wbinning
 
+    c_dt1 = new TCanvas("c1","c1",dtw,dth);
+    c_dt1->Divide(5,3);
+    c_dt2 = new TCanvas("c2","c2",dtw,dth);
+    c_dt2->Divide(4,3);
+    c_dt3 = new TCanvas("c3","c3",dtw,dth);
+    c_dt3->Divide(4,3);
+    c_dt4 = new TCanvas("c4","c4",dtw,dth);
+    c_dt4->Divide(4,3);
+    c_dt5 = new TCanvas("c5","c5",dtw,dth);
+    c_dt5->Divide(4,3);
+
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
 
@@ -115,7 +133,31 @@ void Write_dt(TFile *file){
       dt_hist[cart[0]][cart[1]][cart[2]]->SetXTitle("Momentum (GeV/c)");
       dt_hist[cart[0]][cart[1]][cart[2]]->SetYTitle("Delta t (ns)");
       dt_hist[cart[0]][cart[1]][cart[2]]->Write();
-    }
+
+      //TCanvas
+      if(cart[2]=0){
+        c_dt1->cd(4*cart[0]+1+cart[1]);
+        dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+      }
+
+      if(cart[1]==0){
+        switch(cart[0]){
+          case 0: c_dt2->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+          break;
+          case 1: c_dt3->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+          break;
+          case 2: c_dt4->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+          break;
+        }
+      }
+
+    c_dt1->SaveAs("Delta T all W.pdf");
+    c_dt2->SaveAs("Proton dt W variance.pdf");
+    c_dt3->SaveAs("Pip dt W Variance.pdf");
+    c_dt4->SaveAs("Pim dt W Variance.pdf");
 }
 
 void MakeHist_dt_MM(){

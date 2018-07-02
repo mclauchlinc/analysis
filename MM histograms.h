@@ -12,14 +12,15 @@ TH1D* MM_hist[4][3][11];//Topology, Cut, W Binning
 TH2D* MM_Cross_hist[6][11];//Topology crosses, W Binning 
 
 //TCanvas
-TCanvas* c_MM1;//proton Missing^2 {pre,cut,anti}
-TCanvas* c_MM2;//pip Missing^2 {pre,cut,anti}
-TCanvas* c_MM3;//pim Missing^2 {pre,cut,anti}
-TCanvas* c_MM4;//zero Missing^2 {pre,cut,anti}
-TCanvas* c_MM5;//proton Missing {pre,cut,anti}
-TCanvas* c_MM6;//pip Missing {pre,cut,anti}
-TCanvas* c_MM7;//pim Missing {pre,cut,anti}
-TCanvas* c_MM8;//zero Missing {pre,cut,anti}
+TCanvas* c_MM1;//Missing^2 {pre,cut,anti} (3x4)
+TCanvas* c_MM2;//proton missing W range (4x3)
+TCanvas* c_MM3;//pip missing W range (4x3)
+TCanvas* c_MM4;//pim missing W range (4x3)
+TCanvas* c_MM5;//zero missing W range (4x3)
+
+
+const double MMw = 2400;
+const double MMh = 1200;
 
 void MakeHist_MM(){
 	//Create Pointer for Histograms
@@ -70,7 +71,17 @@ void Write_MM(TFile *file){
 	TDirectory * pip_MM_plots = MM_plots->mkdir("pip_MM_plots");
 	TDirectory * pim_MM_plots = MM_plots->mkdir("pim_MM_plots");
 	TDirectory * zero_MM_plots = MM_plots->mkdir("zero_MM_plots");
-	
+
+	c_MM1 = new TCanvas("c1","c1",MMw,MMh);
+	c_MM1->Divide(3,4);
+	c_MM2 = new TCanvas("c2","c2",MMw,MMh);
+	c_MM2->Divide(4,3);
+	c_MM3 = new TCanvas("c3","c3",MMw,MMh);
+	c_MM3->Divide(4,3);
+	c_MM4 = new TCanvas("c4","c4",MMw,MMh);
+	c_MM4->Divide(4,3);
+	c_MM5 = new TCanvas("c5","c5",MMw,MMh);
+	c_MM5->Divide(4,3);
 
   	std::vector<long> space_dims(3);
   	space_dims[0] = 4; //proton, pip, pim, zero
@@ -101,7 +112,35 @@ void Write_MM(TFile *file){
         MM_hist[cart[0]][cart[1]][cart[2]]->SetYTitle("Counts");
       }
       MM_hist[cart[0]][cart[1]][cart[2]]->Write();
+
+      //TCanvas
+      if(cart[2]==0){
+      	c_MM1->cd(4*cart[0]+1+cart[1]);
+      	MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
+      }
+
+      if(cart[1]==0){
+	      switch(cart[0]){
+	      	case 0: c_MM2->cd(cart[2]+1);
+	      		MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
+	      	break;
+	      	case 1: c_MM3->cd(cart[2]+1);
+	      		MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
+	      	break;
+	      	case 2: c_MM4->cd(cart[2]+1);
+	      		MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
+	      	break;
+	      	case 3: c_MM5->cd(cart[2]+1);
+	      		MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
+	      	break;
+	      }
+	  	}
     }
+    c_MM1->SaveAs("MM Canvas all W.pdf");
+    c_MM2->SaveAs("Proton MM W variance.pdf");
+    c_MM3->SaveAs("Pip MM W Variance.pdf");
+    c_MM4->SaveAs("Pim MM W Variance.pdf");
+    c_MM5->SaveAs("Zero MM W variance.pdf");
 }
 
 void MakeHist_MM_Cross(){
