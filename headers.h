@@ -36,6 +36,7 @@
 #include "debugger.h"
 #include "event_selection.h"//slecting events 
 #include "cc_cut.h"
+#include "yield.h"
 
 #include "directories.h"
 

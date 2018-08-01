@@ -220,10 +220,20 @@ const double p_MMxmin = -0.2;
 const double p_MMxmax = 8.0;
 
 //binning
-const float Wbin_res = 0.2;//The width of a W bin
-const float Wbin_start = 1.0;//The starting of W bins
+const float Wbin_res = 0.025;//The width of a W bin //30 steps
+const float Wbin_start = 1.4;//The starting of W bins
+
+const float Q2bin_res = 0.5;//6 steps
+const float Q2bin_start = 2.0; 
 
 const int MinCC_Cut[6][18] = {{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35},{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35}};
+
+const double Yth_start = 9.0;
+const double Yth_res = 18.0;
+const double Yal_start = 10.0;
+const double Yal_res = 40.0;
+const double YM_start[3] = {1.1,1.1,0.3};
+const double YM_res[3] = {0.06,0.06,0.06};
 
 
 const char * species[] = {"e","p","pip","pim","all"};
@@ -241,6 +251,8 @@ const char* pe_cut[] = {"none", "e_dt", "cc", "ec", "sf"};
 const char* dxc_pro[] = {"pro1, pro2,pro3,pro4,pro5,pro6,pro7,pro8"};
 const char* cc_cuts[] = {"none","sf","fid","sf_fid","eid"};
 const char* cc_pos[] ={"left","coinc","right","all"};
+const char* fid_can[] = {"all","e","p","pip","pim"};
+const char* yield_n[] = {"Mppip","Mppim","Mpippim","Theta pim","Theta pim", "Theta p", "alpha ppip", "alpha ppim", "alpha pippim"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

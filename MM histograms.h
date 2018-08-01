@@ -8,8 +8,8 @@
 #include "debugger.h"
 #include "TCanvas.h"
 
-TH1D* MM_hist[4][3][11];//Topology, Cut, W Binning
-TH2D* MM_Cross_hist[6][11];//Topology crosses, W Binning 
+TH1D* MM_hist[4][3][30];//Topology, Cut, W Binning
+TH2D* MM_Cross_hist[6][30];//Topology crosses, W Binning 
 
 //TCanvas
 TCanvas* c_MM1;//Missing^2 {pre,cut,anti} (3x4)
@@ -19,8 +19,8 @@ TCanvas* c_MM4;//pim missing W range (4x3)
 TCanvas* c_MM5;//zero missing W range (4x3)
 
 
-const double MMw = 2400;
-const double MMh = 1200;
+const double MMw = 4800;
+const double MMh = 2400;
 
 void MakeHist_MM(){
 	//Create Pointer for Histograms
@@ -30,7 +30,7 @@ void MakeHist_MM(){
   	std::vector<long> space_dims(3);
   	space_dims[0] = 4; //proton, pip, pim, zero
   	space_dims[1] = 3; //No cut, cut, anti-cut
-    space_dims[2] = 11; //W binnings with 0 being no discrimination 
+    space_dims[2] = 30; //W binnings with 0 being no discrimination 
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	float bot, top; 
@@ -54,7 +54,7 @@ void MakeHist_MM(){
 
 void Fill_MM(int part, int cut, double Wval, double MM){
 	float bot, top;
-	for(int i = 1; i < 11 ; i++){
+	for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     if(Wval > bot && Wval < top){
@@ -72,21 +72,21 @@ void Write_MM(TFile *file){
 	TDirectory * pim_MM_plots = MM_plots->mkdir("pim_MM_plots");
 	TDirectory * zero_MM_plots = MM_plots->mkdir("zero_MM_plots");
 
-	c_MM1 = new TCanvas("c1","c1",MMw,MMh);
+	c_MM1 = new TCanvas("cmm1","cmm1",MMw,MMh);
 	c_MM1->Divide(3,4);
-	c_MM2 = new TCanvas("c2","c2",MMw,MMh);
-	c_MM2->Divide(4,3);
-	c_MM3 = new TCanvas("c3","c3",MMw,MMh);
-	c_MM3->Divide(4,3);
-	c_MM4 = new TCanvas("c4","c4",MMw,MMh);
-	c_MM4->Divide(4,3);
-	c_MM5 = new TCanvas("c5","c5",MMw,MMh);
-	c_MM5->Divide(4,3);
+	c_MM2 = new TCanvas("cmm2","cmm2",MMw,MMh);
+	c_MM2->Divide(6,5);
+	c_MM3 = new TCanvas("cmm3","cmm3",MMw,MMh);
+	c_MM3->Divide(6,5);
+	c_MM4 = new TCanvas("cmm4","cmm4",MMw,MMh);
+	c_MM4->Divide(6,5);
+	c_MM5 = new TCanvas("cmm5","cmm5",MMw,MMh);
+	c_MM5->Divide(6,5);
 
   	std::vector<long> space_dims(3);
   	space_dims[0] = 4; //proton, pip, pim, zero
   	space_dims[1] = 3; //No cut, cut, anti-cut
-    space_dims[2] = 11; //W binnings with 0 being no discrimination 
+    space_dims[2] = 30; //W binnings with 0 being no discrimination 
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	float bot, top; 
@@ -115,7 +115,7 @@ void Write_MM(TFile *file){
 
       //TCanvas
       if(cart[2]==0){
-      	c_MM1->cd(4*cart[0]+1+cart[1]);
+      	c_MM1->cd(3*cart[0]+1+cart[1]);
       	MM_hist[cart[0]][cart[1]][cart[2]]->Draw();
       }
 
@@ -150,7 +150,7 @@ void MakeHist_MM_Cross(){
 
   	std::vector<long> space_dims(2);
   	space_dims[0] = 6; //{"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"}
-    space_dims[1] = 11; //W binnings with 0 being no discrimination 
+    space_dims[1] = 30; //W binnings with 0 being no discrimination 
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	float bot, top; 
@@ -174,7 +174,7 @@ void MakeHist_MM_Cross(){
 
 void Fill_MM_Cross(int tol, double Wval, double MM_1, double MM_2){
 	float bot, top;
-	for(int i = 1; i < 11 ; i++){
+	for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     //std::cout<<"Pre if-statment for i =" <<i <<std::endl;
@@ -201,7 +201,7 @@ void Write_MM_Cross(TFile *file){
 
   	std::vector<long> space_dims(2);
   	space_dims[0] = 6; //{"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "pim_zero"}
-    space_dims[1] = 11; //W binnings with 0 being no discrimination 
+    space_dims[1] = 30; //W binnings with 0 being no discrimination 
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	//std::cout<<"Here?" <<std::endl;

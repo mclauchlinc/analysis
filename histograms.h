@@ -799,10 +799,10 @@ void MakeHist(){
   MakeHist_MM_Cross();
   MakeHist_Alpha();
   MakeHist_MM_par();
-  MakeHist_theta_par();
-  //MakeHist_Alpha_bin();
+  //MakeHist_theta_par();
+  MakeHist_Alpha_bin();
   //MakeHist_MM_bin();
- // MakeHist_theta_bin();
+  //MakeHist_theta_bin();
   //MakeHist_MM_Wvar();
   //MakeHist_MMpim_Mvar();
   //MakeHist_MMpimM();

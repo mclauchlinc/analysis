@@ -344,9 +344,27 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             //Convert to COM frame
                 //First do with respect to gamma/proton COM frame
             COM_gp(0,ele_mu,pro_mu,pip_mu,pim_mu);
-            theta_p_pip = theta_com((pro_mu+pip_mu));
-            theta_p_pim = theta_com((pro_mu+pim_mu));
-            theta_pip_pim = theta_com((pip_mu+pim_mu));
+            theta_p_pip = theta_com((pim_mu));
+            theta_p_pim = theta_com((pip_mu));
+            theta_pip_pim = theta_com((pro_mu));
+
+            if(Qbinning_check(event_Q2) && Wbinning_check(event_W)){
+                //Top Row of MM
+                if(MMbinning_check(0,MM_p_pip)){
+                    y[0][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(0,MM_p_pip)][0][0] = y[0][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(0,MM_p_pip)][0][0] +1;
+                }
+                if(MMbinning_check(1,MM_p_pim)){
+                    y[1][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(1,MM_p_pip)][0][0] = y[1][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(1,MM_p_pip)][0][0] +1;
+                }
+                if(MMbinning_check(2,MM_pip_pim)){
+                    y[2][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(2,MM_p_pip)][0][0] = y[2][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(2,MM_p_pip)][0][0]+ 1;
+                }
+                //Second row
+                y[3][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pip)][0] = y[3][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pip)][0]+1;
+                y[4][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pim)][0]=y[4][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pim)][0]+1;
+                y[5][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_pip_pim)][0]=y[5][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_pip_pim)][0]+1;
+            }
+
             for(int r = 0; r<3 ; r++){
                 //cout<< endl <<"alpha plot?";
                 alph = alpha(r,ele_mu,pro_mu,pip_mu,pim_mu);
@@ -366,9 +384,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 }
 
                 //cout<< endl <<alph <<endl;
-                Fill_Alpha(r,alph);
-                Fill_MM_par(r,MM_event);
-                Fill_theta_par(r,theta_event);
+                //Fill_Alpha(r,alph);
+                //Fill_MM_par(r,MM_event);
+                //Fill_theta_par(r,theta_event);
+                
+
                 //Q2 Bins
                 /*for(int u = 0; u< 16 ; u++ ){
                     if(event_Q2 < (Q2min+(u*(Q2res/2))) && event_Q2 > (Q2min-(u*(Q2res/2)))){
@@ -385,8 +405,34 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 }//****
             }
         }*/ }
+
         }
     }
+
+    //Now for the graphing o stuff
+    //Assign MM x's 
+    for(int qq = 0; qq<6; qq++){
+        for(int ww = 0; ww<30; ww++){
+            for(int spice = 0; spice <3; spice++){
+                cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
+                for(int rage = 0; rage < 13; rage++){
+                    x[spice][qq][ww][rage][0][0]=MM_bincenter(spice,rage);
+                    cout<<endl <<x[spice][qq][ww][rage][0][0] <<endl;
+                }
+                cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
+                for(int against = 0; against < 10; against++){
+                    x[spice+3][qq][ww][0][against][0]=th_bincenter(against);
+                    x[spice+6][qq][ww][0][0][against]=al_bincenter(against);
+                    cout<<endl <<x[spice+3][qq][ww][0][against][0] <<endl;
+                    //cout<<endl <<x[spice][qq][ww][0][0][against] <<endl;
+                }
+            }
+
+        }
+    }
+    //cout<<endl <<"pre graph" <<endl;
+    Graph_yield1(x,y);
+    //cout<<endl <<"  post graph";    
 
     /*
     //Fitting

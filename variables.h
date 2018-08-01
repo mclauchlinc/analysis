@@ -138,10 +138,15 @@
     char  htitle[100]; //The name on the graph itself (can have spaces)
     char  hname[100]; //The name shown in the TBrowser (should have no spaces)
 
+    char cname1[100];
+    char cname2[100];
 
     //Form Directories
     //TDirectory 
     
+    //For fun TGraphs
+    double x[9][6][30][13][10][10];
+    double y[9][6][30][13][10][10];
 
 
 

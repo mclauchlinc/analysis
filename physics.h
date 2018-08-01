@@ -184,7 +184,7 @@ double alpha(int top, TLorentzVector p0, TLorentzVector p1, TLorentzVector p2, T
 }
 
 double theta_com(TLorentzVector p0){
-	return TMath::ATan2(sqrt(p0[0]*p0[0]+p0[1]*p0[1]),p0[2]); 
+	return TMath::ASin(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2]); 
 }
 
 double MM_2(TLorentzVector p1, TLorentzVector p2){

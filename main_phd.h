@@ -1,5 +1,5 @@
 #ifndef MAIN_PHD_H_GUARD
-#define MAIN__PHD_H_GUARD
+#define MAIN_PHD_H_GUARD
 #include <TFile.h>
 #include "TH1.h"
 

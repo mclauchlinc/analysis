@@ -8,17 +8,18 @@
 #include "debugger.h"
 #include "W Q2 histograms.h"
 
-TH2D* dt_hist[3][5][11]; //delta t, cuts, W binning
-TH2D* dt_hist_MM[3][5][11][4]; //particle, cuts, W binning, MM hist cuts
-TH2D* dt_hist_pe[5][11];//electron cuts, W binning
+TH2D* dt_hist[3][5][30]; //delta t, cuts, W binning
+TH2D* dt_hist_MM[3][5][30][4]; //particle, cuts, W binning, MM hist cuts
+TH2D* dt_hist_pe[5][30];//electron cuts, W binning
 
 TCanvas * c_dt1;//all W delta t {pre, cut, anti, pid, bank} (5x3)
 TCanvas * c_dt2;//Proton delta t W variance (4x3)
 TCanvas * c_dt3;//Pip delta t W variance (4x3)
 TCanvas * c_dt4;//Pim delta t W variance (4x3)
+TCanvas * c_dt5;
 
-const double dtw = 2400;
-const double dth = 1200;
+const double dtw = 4800;
+const double dth = 2400;
 
 //Delta t
 /*
@@ -30,7 +31,7 @@ void MakeHist_dt(){
   std::vector<long> space_dims(3);
     space_dims[0] = 3; //species
     space_dims[1] = 5; //cut
-    space_dims[2] = 11;//Wbinning
+    space_dims[2] = 30;//Wbinning
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
@@ -94,18 +95,18 @@ void Write_dt(TFile *file){
  std::vector<long> space_dims(3);
     space_dims[0] = 3; //species
     space_dims[1] = 5; //cut
-    space_dims[2] = 11;//Wbinning
+    space_dims[2] = 30;//Wbinning
 
-    c_dt1 = new TCanvas("c1","c1",dtw,dth);
+    c_dt1 = new TCanvas("cdt1","cdt1",dtw,dth);
     c_dt1->Divide(5,3);
-    c_dt2 = new TCanvas("c2","c2",dtw,dth);
-    c_dt2->Divide(4,3);
-    c_dt3 = new TCanvas("c3","c3",dtw,dth);
-    c_dt3->Divide(4,3);
-    c_dt4 = new TCanvas("c4","c4",dtw,dth);
-    c_dt4->Divide(4,3);
-    c_dt5 = new TCanvas("c5","c5",dtw,dth);
-    c_dt5->Divide(4,3);
+    c_dt2 = new TCanvas("cdt2","cdt2",dtw,dth);
+    c_dt2->Divide(6,5);
+    c_dt3 = new TCanvas("cdt3","cdt3",dtw,dth);
+    c_dt3->Divide(6,5);
+    c_dt4 = new TCanvas("cdt4","cdt4",dtw,dth);
+    c_dt4->Divide(6,5);
+    c_dt5 = new TCanvas("cdt5","cdt5",dtw,dth);
+    c_dt5->Divide(6,5);
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
@@ -135,36 +136,38 @@ void Write_dt(TFile *file){
       dt_hist[cart[0]][cart[1]][cart[2]]->Write();
 
       //TCanvas
-      if(cart[2]=0){
-        c_dt1->cd(4*cart[0]+1+cart[1]);
-        dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+      if(cart[2]==0){
+        c_dt1->cd(5*cart[0]+1+cart[1]);
+        dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
       }
 
       if(cart[1]==0){
         switch(cart[0]){
           case 0: c_dt2->cd(cart[2]+1);
-            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
           break;
           case 1: c_dt3->cd(cart[2]+1);
-            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
           break;
           case 2: c_dt4->cd(cart[2]+1);
-            dt_hist[cart[0]][cart[1]][cart[2]]->Draw();
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
           break;
         }
       }
+    }
 
     c_dt1->SaveAs("Delta T all W.pdf");
     c_dt2->SaveAs("Proton dt W variance.pdf");
     c_dt3->SaveAs("Pip dt W Variance.pdf");
     c_dt4->SaveAs("Pim dt W Variance.pdf");
+
 }
 
 void MakeHist_dt_MM(){
   std::vector<long> space_dims(4);
     space_dims[0] = 3; //species
     space_dims[1] = 5; //cut
-    space_dims[2] = 11;//Wbinning
+    space_dims[2] = 30;//Wbinning
     space_dims[3] = 4; //MM cut
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
@@ -210,7 +213,7 @@ void Fill_dt_MM(double MM, double Wval, int s, int cut, int m, int sc, double p,
     }
     double dt = delta_t(p, p0, d, d0, t, t0, mass );
     //W Binning
-    for(int i = 1; i < 11 ; i++){
+    for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     if(Wval > bot && Wval < top){
@@ -239,7 +242,7 @@ void Write_dt_MM(TFile *file){
  std::vector<long> space_dims(4);
     space_dims[0] = 3; //species
     space_dims[1] = 5; //cut
-    space_dims[2] = 11;//Wbinning
+    space_dims[2] = 30;//Wbinning
     space_dims[3] = 4; //Missing particle 
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
@@ -283,7 +286,7 @@ void Write_dt_MM(TFile *file){
 void MakeHist_dt_pe(){
   std::vector<long> space_dims(2);
     space_dims[0] = 5; //cuts
-    space_dims[1] = 11; //W binning
+    space_dims[1] = 30; //W binning
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
@@ -317,7 +320,7 @@ void Fill_dt_pe(double Wval, int cut, int sc, double p, double p0, double d, dou
     
     double dt = delta_t(p, p0, d, d0, t, t0, mpi );
     //W Binning
-    for(int i = 1; i < 11 ; i++){
+    for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     if(Wval > bot && Wval < top){
@@ -339,7 +342,7 @@ void Write_dt_pe(TFile *file){
     
  std::vector<long> space_dims(2);
     space_dims[0] = 5; //cuts 
-    space_dims[1] = 11; //W Binning
+    space_dims[1] = 30; //W Binning
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
