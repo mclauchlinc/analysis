@@ -184,7 +184,7 @@ void COM_gp(int set, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2,
 	TLorentzVector q_mu = k_mu-p0;
 	TLorentzVector bulga_mu; //combined photon/proton system
 	bulga_mu = q_mu + p_mu;
-	std::cout<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	//std::cout<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
 	double phigp = TMath::ATan2(bulga_mu[1],bulga_mu[0]);
 	//std::cout<<"phi com: " <<phigp <<std::endl;
 	
@@ -201,7 +201,7 @@ void COM_gp(int set, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2,
 	//std::cout<<"Rotate Z" <<std::endl <<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
 	double b = bulga_mu.Beta();
 	bulga_mu.Boost(0.0,0.0,-b);
-	std::cout<<std::endl<<"post boost"<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	//std::cout<<std::endl<<"post boost"<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
 	Rotate_4Vecs(thgp, phigp, p0, p1, p2, p3);
 	Boost_4Vecs(-b,p0,p1,p2,p3);
 	/*

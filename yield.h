@@ -81,7 +81,7 @@ int MM_stuff_binning(int s, double MM){
 			i = j;
 		}
 	}
-	std::cout<<i <<std::endl;
+	//std::cout<<i <<std::endl;
 	return i;
 }
 
@@ -93,7 +93,7 @@ int theta_binning(double th){
 			i = j;
 		}
 	}
-	std::cout<<i <<std::endl;
+	//std::cout<<i <<std::endl;
 	return i;
 }
 
@@ -105,7 +105,7 @@ int alpha_binning(double a){
 			i = j;
 		}
 	}
-	std::cout<<i <<std::endl;
+	//std::cout<<i <<std::endl;
 	return i;
 }
 
