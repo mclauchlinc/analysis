@@ -141,6 +141,10 @@
     char cname1[100];
     char cname2[100];
 
+    int Qbin_now; 
+    int Wbin_now; 
+
+    TLorentzVector p_mu_event;
     //Form Directories
     //TDirectory 
     

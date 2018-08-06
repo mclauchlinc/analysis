@@ -15,6 +15,10 @@ TGraph* g_yield_Q2Wbin[9][6][30];//{Place on canvas}{Q2 binning},{W binning}
 //13 for MM 0.6 start at 1.1
 //10 for angles starting at 10 for alpha with bins of 40 sep and 9 for theta with bins of 18
 
+int MM2bins = 13;
+int thbins = 10;
+int albins = 10;
+
 TCanvas* c_yield_Q2Wbin[6][30];//{Q2 binning},{W binning}(3x3)
 
 const double cW = 4800;
@@ -50,10 +54,9 @@ bool MMbinning_check(int s, double MM){
 int Q2binning(double Q2){
 	bool pass =false;
 	int i = -1;
-	while(!pass){
-		i++;
-		if(Q2 <= Q2bin_start + i*Q2bin_res && Q2 >= Q2bin_start + (i-1)*Q2bin_res){
-			pass = true;
+	for(int j = 0; j < 7; j++){
+		if(Q2 <= Q2bin_start + i*Q2bin_res && Q2 >= Q2bin_start + (j-1)*Q2bin_res){
+			i = j;
 		}
 	}
 	return i;
@@ -61,62 +64,61 @@ int Q2binning(double Q2){
 
 int Wbinning(double W){
 	bool pass =false;
-	int i = -1;
-	while(!pass){
-		i++;
+	int j = -1;
+	for(int i = 0; i < 31; i++){
 		if(W <= Wbin_start + i*Wbin_res && W >= Wbin_start + (i-1)*Wbin_res){
-			pass = true;
+			j = i;
 		}
 	}
-	return i;
+	return j;
 }
 
 int MM_stuff_binning(int s, double MM){
-	bool pass =false;
+	//std::cout<<std::endl <<"The MM: " <<MM <<" and the bin is: ";
 	int i = -1;
-	while(!pass){
-		i++;
-		if(MM <= YM_start[s] + i*YM_res[s] && MM >= YM_start[s] + (i-1)*YM_res[s]){
-			pass = true;
+	for(int j = 0; j < MM2bins; j++){
+		if(MM <= YM_start[s] + j*YM_res[s] && MM >= YM_start[s] + (j-1)*YM_res[s]){
+			i = j;
 		}
 	}
+	std::cout<<i <<std::endl;
 	return i;
 }
 
 int theta_binning(double th){
-	bool pass =false;
+	//std::cout<<std::endl <<"The theta: " <<th <<" and the bin is: ";
 	int i = -1;
-	while(!pass){
-		i++;
-		if(th <= Yth_start + i*Yth_res && th >= Yth_start + (i-1)*Yth_res){
-			pass = true;
+	for(int j = 0; j < thbins; j++){
+		if(th <= Yth_start + j*Yth_res && th >= Yth_start + (j-1)*Yth_res){
+			i = j;
 		}
 	}
+	std::cout<<i <<std::endl;
 	return i;
 }
 
 int alpha_binning(double a){
-	bool pass =false;
+	//std::cout<<std::endl <<"The alpha: " <<a <<" and the bin is: ";
 	int i = -1;
-	while(!pass){
-		i++;
-		if(a <= Yal_start + i*Yal_res && a >= Yal_start + (i-1)*Yal_res){
-			pass = true;
+	for(int j = 0; j < albins; j++){
+		if(a <= Yal_start + j*Yal_res && a >= Yal_start + (j-1)*Yal_res){
+			i = j;
 		}
 	}
+	std::cout<<i <<std::endl;
 	return i;
 }
 
 double MM_bincenter(int s,int i){
-	return YM_start[s] + i*YM_res[s] - (YM_res[s]/2.0); 
+	return YM_start[s] + i*YM_res[s]; 
 }
 
 double th_bincenter(int i){
-	return Yth_start + i*Yth_res - (Yth_res/2.0); 
+	return Yth_start + i*Yth_res; 
 }
 
 double al_bincenter(int i){
-	return Yal_start + i*Yal_res - (Yal_res/2.0); 
+	return Yal_start + i*Yal_res; 
 }
 
 //MM
@@ -170,8 +172,8 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
       		//std::cout<<std::endl <<"3.1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       		x1[go]=x[cart[0]][cart[1]][cart[2]][go][0][0];
       		y1[go]=y[cart[0]][cart[1]][cart[2]][go][0][0];
-      		std::cout<<std::endl <<"MM "<<"x: "<<x1[go] <<" y: " <<y1[go];
-      		std::cout<<std::endl <<"MM "<<"x: "<<x[cart[0]][cart[1]][cart[2]][go][0][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][go][0][0];
+      		//std::cout<<std::endl <<"MM "<<"x: "<<x1[go] <<" y: " <<y1[go];
+      		//std::cout<<std::endl <<"MM "<<"x: "<<x[cart[0]][cart[1]][cart[2]][go][0][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][go][0][0];
       		
       		//std::cout<<std::endl <<"3.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       	}
@@ -185,8 +187,8 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
       		//	std::cout<<std::endl <<"4.1.1: "  <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       		x2[ho]=x[cart[0]][cart[1]][cart[2]][0][ho][0];
       		y2[ho]=y[cart[0]][cart[1]][cart[2]][0][ho][0];
-      		std::cout<<std::endl <<"theta "<<"x: "<<x2[ho] <<" y: " <<y2[ho];
-      		std::cout<<std::endl <<"theta "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][ho][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][ho][0];
+      		//std::cout<<std::endl <<"theta "<<"x: "<<x2[ho] <<" y: " <<y2[ho];
+      		//std::cout<<std::endl <<"theta "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][ho][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][ho][0];
       		//std::cout<<std::endl <<"4.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       	}
       	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]] = new TGraph(10,x2,y2);
@@ -198,6 +200,8 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
       		//std::cout<<std::endl <<"5.1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       		x3[jo]=x[cart[0]][cart[1]][cart[2]][0][0][jo];
       		y3[jo]=y[cart[0]][cart[1]][cart[2]][0][0][jo];
+      		//std::cout<<std::endl <<"alpha "<<"x: "<<x3[jo] <<" y: " <<y3[jo];
+      		//std::cout<<std::endl <<"alpha "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][0][jo] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][0][jo];
       		//std::cout<<std::endl <<"5.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       	}
       	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]] = new TGraph(10,x3,y3);
@@ -206,6 +210,7 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerColor(2);
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetLineColorAlpha(kBlue,0.0);
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerStyle(21);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerSize(4);
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetTitle(hname);
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->GetYaxis()->SetTitle("Raw Yield");
       g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->GetXaxis()->SetTitle(yield_n[cart[0]]);

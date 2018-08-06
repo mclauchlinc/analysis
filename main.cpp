@@ -331,7 +331,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     Fill_MM_Cross(3, W_var,MM_pip_pass,MM_pim_pass);//
                 }
             }//j loop ends
-        }
+        }//eid if statement ends
         //cout<<endl;
         
         //This is the complete event selection. Now do things with the four vectors 
@@ -347,27 +347,36 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             theta_p_pip = theta_com((pim_mu));
             theta_p_pim = theta_com((pip_mu));
             theta_pip_pim = theta_com((pro_mu));
-
-            if(Qbinning_check(event_Q2) && Wbinning_check(event_W)){
+            //cout<<endl <<"Q2= " <<event_Q2 <<" _ W= " <<event_W; 
+            if(Qbinning_check(event_Q2) && Wbinning_check(event_W)){//yield.h
+                //cout<<" __ and we passed the check";
+                Qbin_now = Q2binning(event_Q2);
+                Wbin_now = Wbinning(event_W);
                 //Top Row of MM
-                if(MMbinning_check(0,MM_p_pip)){
-                    y[0][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(0,MM_p_pip)][0][0] = y[0][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(0,MM_p_pip)][0][0] +1;
+                if(MMbinning_check(0,MM_p_pip)){//yield.h
+                    y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0] += 1;
                 }
-                if(MMbinning_check(1,MM_p_pim)){
-                    y[1][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(1,MM_p_pip)][0][0] = y[1][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(1,MM_p_pip)][0][0] +1;
+                if(MMbinning_check(1,MM_p_pim)){//yield.h
+                    y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pip)][0][0] += 1;
                 }
-                if(MMbinning_check(2,MM_pip_pim)){
-                    y[2][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(2,MM_p_pip)][0][0] = y[2][Q2binning(event_Q2)][Wbinning(event_W)][MM_stuff_binning(2,MM_p_pip)][0][0]+ 1;
+                if(MMbinning_check(2,MM_pip_pim)){//yield.h
+                    y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_p_pip)][0][0] += 1;
                 }
                 //Second row
-                y[3][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pip)][0] = y[3][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pip)][0]+1;
-                y[4][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pim)][0]=y[4][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_p_pim)][0]+1;
-                y[5][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_pip_pim)][0]=y[5][Q2binning(event_Q2)][Wbinning(event_W)][0][theta_binning(theta_pip_pim)][0]+1;
-            }
+                y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0] += 1;
+                y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0] += 1;
+                y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0] += 1;
+                //Third Row
+                y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
 
+
+            }
+            /*
             for(int r = 0; r<3 ; r++){
                 //cout<< endl <<"alpha plot?";
-                alph = alpha(r,ele_mu,pro_mu,pip_mu,pim_mu);
+                alph = alpha(r,ele_mu,pro_mu,pip_mu,pim_mu);//physics.h
                 switch (r){
                 case 0: 
                 MM_event = MM_p_pip;
@@ -404,7 +413,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     }
                 }//****
             }
-        }*/ }
+        }*/ //}
 
         }
     }
@@ -414,24 +423,24 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     for(int qq = 0; qq<6; qq++){
         for(int ww = 0; ww<30; ww++){
             for(int spice = 0; spice <3; spice++){
-                cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
+                //cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
                 for(int rage = 0; rage < 13; rage++){
-                    x[spice][qq][ww][rage][0][0]=MM_bincenter(spice,rage);
-                    cout<<endl <<x[spice][qq][ww][rage][0][0] <<endl;
+                    x[spice][qq][ww][rage][0][0]=MM_bincenter(spice,rage);//yield.h
+                    //cout<<endl <<"MM bin: " <<rage <<" is: "<<x[spice][qq][ww][rage][0][0] <<endl;
                 }
-                cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
+                //cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
                 for(int against = 0; against < 10; against++){
-                    x[spice+3][qq][ww][0][against][0]=th_bincenter(against);
-                    x[spice+6][qq][ww][0][0][against]=al_bincenter(against);
-                    cout<<endl <<x[spice+3][qq][ww][0][against][0] <<endl;
-                    //cout<<endl <<x[spice][qq][ww][0][0][against] <<endl;
+                    x[spice+3][qq][ww][0][against][0]=th_bincenter(against);//yield.h
+                    x[spice+6][qq][ww][0][0][against]=al_bincenter(against);//yield.h
+                   // cout<<endl <<"theta bin: " <<against <<" is: "<<x[spice+3][qq][ww][0][against][0] <<endl;
+                    //cout<<endl <<"alpha bin: " <<against <<" is: "<<x[spice+6][qq][ww][0][0][against] <<endl;
                 }
             }
 
         }
     }
     //cout<<endl <<"pre graph" <<endl;
-    Graph_yield1(x,y);
+    Graph_yield1(x,y);//yield.h
     //cout<<endl <<"  post graph";    
 
     /*

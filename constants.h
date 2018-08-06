@@ -230,8 +230,8 @@ const int MinCC_Cut[6][18] = {{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,3
 
 const double Yth_start = 9.0;
 const double Yth_res = 18.0;
-const double Yal_start = 10.0;
-const double Yal_res = 40.0;
+const double Yal_start = 18.0;//10.0;
+const double Yal_res = 36.0;//40.0;
 const double YM_start[3] = {1.1,1.1,0.3};
 const double YM_res[3] = {0.06,0.06,0.06};
 

@@ -103,6 +103,8 @@ double MM_4_com(double p1, double p2, double p3, double p4, double cx1, double c
 	return MM;
 }
 
+
+
 void Boost_z(double beta, TLorentzVector &p0){
 	double m = sqrt(p0[3]*p0[3]-p0[0]*p0[0]-p0[1]*p0[1]-p0[2]*p0[2]);
 	double p = sqrt(p0[0]*p0[0]+p0[1]*p0[1]+p0[2]*p0[2]);
@@ -134,6 +136,40 @@ void COM_ep(TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentz
 	Rotate_x(t,p3);
 }
 
+
+void Rotate_4Vecs(double thet, double phip, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentzVector &p3){
+	//std::cout<<"4 vector 1" <<"||px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] <<std::endl;
+	p0.RotateZ(-phip);
+	p0.RotateX(-thet);
+	p0.RotateZ(phip);
+	//std::cout<<"Rotation" <<std::endl;
+	//std::cout<<"4 vector 1" <<"||px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] <<std::endl;
+	p1.RotateZ(-phip);
+	p1.RotateX(-thet);
+	p1.RotateZ(phip);
+	p2.RotateZ(-phip);
+	p2.RotateX(-thet);
+	p2.RotateZ(phip);
+	p3.RotateZ(-phip);
+	p3.RotateX(-thet);
+	p3.RotateZ(phip);
+	p_mu_event.RotateZ(-phip);
+	p_mu_event.RotateX(-thet);
+	p_mu_event.RotateZ(phip);
+}
+
+void Boost_4Vecs(double bet, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentzVector &p3){
+	//std::cout<<"4 vector 1" <<"||px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] <<std::endl;
+	p0.Boost(0.0,0.0,bet);
+	//std::cout<<"Boost" <<std::endl;
+	//std::cout<<"4 vector 1" <<"||px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] <<std::endl;
+	p1.Boost(0.0,0.0,bet);
+	p2.Boost(0.0,0.0,bet);
+	p3.Boost(0.0,0.0,bet);
+	p_mu_event.Boost(0.0,0.0,bet);
+}
+
+//Remember TLorentz Vectors {x,y,z,t}
 void COM_gp(int set, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentzVector &p3){
 	TLorentzVector k_mu;
 	switch (set){
@@ -144,43 +180,72 @@ void COM_gp(int set, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2,
 		k_mu = k_mu_e1f;
 		break;
 	}
+	p_mu_event = p_mu;
 	TLorentzVector q_mu = k_mu-p0;
 	TLorentzVector bulga_mu; //combined photon/proton system
 	bulga_mu = q_mu + p_mu;
-	double p = sqrt(bulga_mu[0]*bulga_mu[0]+bulga_mu[1]*bulga_mu[1]+bulga_mu[2]*bulga_mu[2]);
-	double b = (p/bulga_mu[3]);
-	double t = angle_x(p0);
-	Boost_z(b,p0);
-	Boost_z(b,p1);
-	Boost_z(b,p2);
-	Boost_z(b,p3);
+	std::cout<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	double phigp = TMath::ATan2(bulga_mu[1],bulga_mu[0]);
+	//std::cout<<"phi com: " <<phigp <<std::endl;
+	
+	double pgp = sqrt(bulga_mu[0]*bulga_mu[0]+bulga_mu[1]*bulga_mu[1]+bulga_mu[2]*bulga_mu[2]);
+	//Need to allign the vector with the correct orientation
+	
+	bulga_mu.RotateZ(-phigp);
+	//std::cout<<"Rotate -Z" <<std::endl <<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	double thgp = TMath::ATan2(bulga_mu[0],bulga_mu[2]);
+	//std::cout<<"theta com: " <<thgp <<std::endl;
+	bulga_mu.RotateY(-thgp);
+	//std::cout<<"Rotate -Y" <<std::endl <<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	bulga_mu.RotateZ(phigp);
+	//std::cout<<"Rotate Z" <<std::endl <<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	double b = bulga_mu.Beta();
+	bulga_mu.Boost(0.0,0.0,-b);
+	std::cout<<std::endl<<"post boost"<<std::endl<<"4 vector COM" <<"||px: " <<bulga_mu[0] <<" py: " <<bulga_mu[1] <<" pz: " <<bulga_mu[2] <<" E: " <<bulga_mu[3] <<std::endl;
+	Rotate_4Vecs(thgp, phigp, p0, p1, p2, p3);
+	Boost_4Vecs(-b,p0,p1,p2,p3);
+	/*
 	Rotate_x(t,p0);
 	Rotate_x(t,p1);
 	Rotate_x(t,p2);
 	Rotate_x(t,p3);
+	Boost_z(b,p0);
+	Boost_z(b,p1);
+	Boost_z(b,p2);
+	Boost_z(b,p3);*/
+	//p0.Boost()
 }
 
 
 
 //Angle between Hadron scattering plane and electron scattering plane
 //4-Momentum should already be both boosted and rotated
-double alpha(int top, TLorentzVector p0, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3){
+//{p' ,p, pip, pim}
+double alpha(int top, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3, TLorentzVector p4){
 	//pi -> {0,1,2,3} -> {e,p,pip,pim}
 	//top -> {p/pip, p/pim, pip,pim}
-	double a = 40;
-	TLorentzVector other;
+	double other1mag;
+	double other2mag;
+	TLorentzVector other1, other2;
 	switch(top){
 		case 0:
-		other = p1+p2;
+		other1 = p1+p3;
+		other2 = p2+p4;
 		break;
 		case 1:
-		other = p1+p3;
+		other1 = p3+p4;
+		other2 = p1+p2;
 		break;
 		case 2:
-		other = p2+p3;
+		other1 = p1+p4;
+		other2 = p2+p3;
 		break;
 	}
-	return TMath::ATan2(other[1],other[0]);
+	other1mag = other1.Mag();
+	other2mag = other2.Mag();
+
+	//return TMath::ATan2(other1[1],other1[0]);
+	return TMath::ACos((other1*other2)/(other1mag*other2mag));
 }
 
 double theta_com(TLorentzVector p0){
