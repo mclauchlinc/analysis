@@ -10,7 +10,9 @@
 #include "four_vector.h"
 
 
-
+void See_4Vec(TLorentzVector p0){
+	std::cout<<std::endl <<"px: " <<p0[0] <<"py: " <<p0[1] <<"pz: " <<p0[2] <<"E: " <<p0[3] ;
+}
 
 
 double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
@@ -226,6 +228,7 @@ double alpha(int top, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3, T
 	//top -> {p/pip, p/pim, pip,pim}
 	double other1mag;
 	double other2mag;
+	double dotpro;
 	TLorentzVector other1, other2;
 	switch(top){
 		case 0:
@@ -241,15 +244,21 @@ double alpha(int top, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3, T
 		other2 = p2+p3;
 		break;
 	}
-	other1mag = other1.Mag();
-	other2mag = other2.Mag();
-
+	//See_4Vec(other1);
+	//See_4Vec(other2);
+	dotpro = (other1[0]*other2[0]+other1[1]*other2[1]+other1[2]*other2[2]);
+	other1mag = sqrt(other1[0]*other1[0]+other1[1]*other1[1]+other1[2]*other1[2]);
+	other2mag = sqrt(other2[0]*other2[0]+other2[1]*other2[1]+other2[2]*other2[2]);
+	//std::cout<<std::endl <<"dot product " <<(other1[0]*other2[0]+other1[1]*other2[1]+other1[2]*other2[2]);
+	//std::cout<<std::endl <<"product of mags " <<other1mag*other2mag;
+	//std::cout<<std::endl <<"Just the Cosine " <<(dotpro)/(other1mag*other2mag);
+	//std::cout<<" alpha = "<<TMath::ACos((dotpro)/(other1mag*other2mag))*180.0/TMath::Pi();
 	//return TMath::ATan2(other1[1],other1[0]);
-	return TMath::ACos((other1*other2)/(other1mag*other2mag));
+	return TMath::ACos((other1*other2)/(other1mag*other2mag))*180.0/TMath::Pi();
 }
 
 double theta_com(TLorentzVector p0){
-	return TMath::ASin(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2]); 
+	return TMath::ASin(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2])*180.0/TMath::Pi(); 
 }
 
 double MM_2(TLorentzVector p1, TLorentzVector p2){

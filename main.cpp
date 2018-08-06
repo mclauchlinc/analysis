@@ -357,16 +357,19 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0] += 1;
                 }
                 if(MMbinning_check(1,MM_p_pim)){//yield.h
-                    y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pip)][0][0] += 1;
+                    y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pim)][0][0] += 1;
                 }
                 if(MMbinning_check(2,MM_pip_pim)){//yield.h
-                    y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_p_pip)][0][0] += 1;
+                    y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_pip_pim)][0][0] += 1;
                 }
                 //Second row
                 y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0] += 1;
                 y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0] += 1;
                 y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0] += 1;
                 //Third Row
+                //cout<<endl <<"Alpha angles" <<endl <<"[p',pip][p,pim]: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu);
+                //cout <<endl <<"[pip,pim][p',p]: " <<alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu);
+                //cout <<endl <<"[p',pim][p,pip]: " <<alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu);
                 y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
                 y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
                 y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;

@@ -76,11 +76,13 @@ int Wbinning(double W){
 int MM_stuff_binning(int s, double MM){
 	//std::cout<<std::endl <<"The MM: " <<MM <<" and the bin is: ";
 	int i = -1;
+	//std::cout<<std::endl <<"MM set " <<s <<" is: " <<MM <<" in bin: ";
 	for(int j = 0; j < MM2bins; j++){
 		if(MM <= YM_start[s] + j*YM_res[s] && MM >= YM_start[s] + (j-1)*YM_res[s]){
 			i = j;
 		}
 	}
+	//ßstd::cout<<i <<std::endl;
 	//std::cout<<i <<std::endl;
 	return i;
 }
@@ -100,11 +102,13 @@ int theta_binning(double th){
 int alpha_binning(double a){
 	//std::cout<<std::endl <<"The alpha: " <<a <<" and the bin is: ";
 	int i = -1;
+	//std::cout<<std::endl <<"alpha is: " <<a <<" in bin: ";
 	for(int j = 0; j < albins; j++){
 		if(a <= Yal_start + j*Yal_res && a >= Yal_start + (j-1)*Yal_res){
 			i = j;
 		}
 	}
+	//std::cout<<i <<std::endl;
 	//std::cout<<i <<std::endl;
 	return i;
 }
