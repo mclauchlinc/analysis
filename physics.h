@@ -11,7 +11,7 @@
 
 
 void See_4Vec(TLorentzVector p0){
-	std::cout<<std::endl <<"px: " <<p0[0] <<"py: " <<p0[1] <<"pz: " <<p0[2] <<"E: " <<p0[3] ;
+	std::cout<<std::endl <<"px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] ;
 }
 
 
@@ -168,7 +168,7 @@ void Boost_4Vecs(double bet, TLorentzVector &p0, TLorentzVector &p1, TLorentzVec
 	p1.Boost(0.0,0.0,bet);
 	p2.Boost(0.0,0.0,bet);
 	p3.Boost(0.0,0.0,bet);
-	p_mu_event.Boost(0.0,0.0,bet);
+	p_mu_event.Boost(0.0,0.0,bet);//Also boost the at rest proton so that we can do angle stuff with it
 }
 
 //Remember TLorentz Vectors {x,y,z,t}
@@ -258,7 +258,7 @@ double alpha(int top, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3, T
 }
 
 double theta_com(TLorentzVector p0){
-	return TMath::ASin(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2])*180.0/TMath::Pi(); 
+	return TMath::ATan(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2])*180.0/TMath::Pi(); //Fixed from Sin 8/7/18
 }
 
 double MM_2(TLorentzVector p1, TLorentzVector p2){

@@ -343,7 +343,13 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             MM_pip_pim = MM_2(pip_mu,pim_mu);
             //Convert to COM frame
                 //First do with respect to gamma/proton COM frame
+            //cout<<endl <<"Pre COM: ";
+            //See_4Vec(pip_mu);
             COM_gp(0,ele_mu,pro_mu,pip_mu,pim_mu);
+            //cout<<endl <<"Post COM: ";
+            //See_4Vec(pip_mu);
+            cout<<endl;
+            //Extract scattering angle in center of mass now that
             theta_p_pip = theta_com((pim_mu));
             theta_p_pim = theta_com((pip_mu));
             theta_pip_pim = theta_com((pro_mu));
@@ -422,7 +428,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     }
 
     //Now for the graphing o stuff
-    //Assign MM x's 
+    //Assign x's for 3x3 Plots 
     for(int qq = 0; qq<6; qq++){
         for(int ww = 0; ww<30; ww++){
             for(int spice = 0; spice <3; spice++){
