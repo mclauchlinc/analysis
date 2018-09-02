@@ -7,13 +7,19 @@
 #include "CartesianGenerator.hh"
 #include "debugger.h"
 
-TH2D* SF_hist[5][11];//Various cuts {pre,cut,anti,pid,bank},{W binning}
+TH2D* SF_hist[11][30];//Various cuts {pre,cut,anti,pid,bank,fid,cc},{W binning}
 
 TCanvas* tsf1;
 TCanvas* tsf2;
 TCanvas* tsf3;
 TCanvas* tsf4;
 TCanvas* tsf5;
+TCanvas* tsf6;
+TCanvas* tsf7;
+TCanvas* tsf8;
+TCanvas* tsf9;
+TCanvas* tsf10;
+TCanvas* tsf11;
 
 const double tsfw = 2400;
 const double tsfh = 1200;
@@ -29,8 +35,8 @@ void MakeHist_SF(){
   */
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 5; //cuts
-  space_dims[1] = 11; //W binning
+  space_dims[0] = 11; //cuts
+  space_dims[1] = 30; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
   float bot, top;
@@ -53,7 +59,7 @@ void Fill_sf(int level, double Wval, double etot, double p){
   double sf_thing = sf(etot,p);
   // Cut: {0,1,2,3} -> {pre,cut,anti,all}
   float top,bot;
-  for(int i = 1; i < 11 ; i++){
+  for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     if(Wval > bot && Wval < top){
@@ -76,19 +82,31 @@ void Write_sf(TFile *file){
 
    //Create TCanvasas
   tsf1 = new TCanvas("c1","c1",tsfw,tsfh);
-  tsf1->Divide(4,3);
+  tsf1->Divide(6,5);
   tsf2 = new TCanvas("c2","c2",tsfw,tsfh);
-  tsf2->Divide(4,3);
+  tsf2->Divide(6,5);
   tsf3 = new TCanvas("c3","c3",tsfw,tsfh);
-  tsf3->Divide(4,3);
+  tsf3->Divide(6,5);
   tsf4 = new TCanvas("c4","c4",tsfw,tsfh);
-  tsf4->Divide(4,3);
+  tsf4->Divide(6,5);
   tsf5 = new TCanvas("c5","c5",tsfw,tsfh);
-  tsf5->Divide(4,3);
+  tsf5->Divide(6,5);
+  tsf6 = new TCanvas("c6","c6",tsfw,tsfh);
+  tsf6->Divide(6,5);
+  tsf7 = new TCanvas("c7","c7",tsfw,tsfh);
+  tsf7->Divide(6,5);
+  tsf8 = new TCanvas("c8","c8",tsfw,tsfh);
+  tsf8->Divide(6,5);
+  tsf9 = new TCanvas("c9","c9",tsfw,tsfh);
+  tsf9->Divide(6,5);
+  tsf10 = new TCanvas("c10","c10",tsfw,tsfh);
+  tsf10->Divide(6,5);
+  tsf11 = new TCanvas("c11","c11",tsfw,tsfh);
+  tsf11->Divide(6,5);
 
   std::vector<long> space_dims(2);
-  space_dims[0] = 5; //cuts
-  space_dims[1] = 11; //W binning
+  space_dims[0] = 11; //cuts
+  space_dims[1] = 30; //W binning
 
   CartesianGenerator cart(space_dims);//CartesianGenerator.hh
   float bot, top;
@@ -119,6 +137,30 @@ void Write_sf(TFile *file){
       tsf5->cd(cart[1]+1);
       SF_hist[cart[0]][cart[1]]->Draw("colz");
       break;
+      case 5:
+      tsf6->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
+      case 6:
+      tsf7->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
+      case 7:
+      tsf8->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
+      case 8:
+      tsf9->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
+      case 9:
+      tsf10->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
+      case 10:
+      tsf11->cd(cart[1]+1);
+      SF_hist[cart[0]][cart[1]]->Draw("colz");
+      break;
     }
   }
 
@@ -127,6 +169,23 @@ void Write_sf(TFile *file){
   tsf3->SaveAs("SF_Anti.pdf");
   tsf4->SaveAs("SF_PID.pdf");
   tsf5->SaveAs("SF_Bank.pdf");
+  tsf6->SaveAs("SF_Fid.pdf");
+  tsf7->SaveAs("SF_CC.pdf");
+  tsf8->SaveAs("SF_Anti-Fid.pdf");
+  tsf9->SaveAs("SF_Anti-CC.pdf");
+  tsf10->SaveAs("SF_CC+Fid.pdf");
+  tsf11->SaveAs("SF_Anti-CC+Fid.pdf");
+  tsf1->SaveAs("SF_Pre.root");
+  tsf2->SaveAs("SF_Cut.root");
+  tsf3->SaveAs("SF_Anti.root");
+  tsf4->SaveAs("SF_PID.root");
+  tsf5->SaveAs("SF_Bank.root");
+  tsf6->SaveAs("SF_Fid.root");
+  tsf7->SaveAs("SF_CC.root");
+  tsf8->SaveAs("SF_Anti-Fid.root");
+  tsf9->SaveAs("SF_Anti-CC.root");
+  tsf10->SaveAs("SF_CC+Fid.root");
+  tsf11->SaveAs("SF_Anti-CC+Fid.root");
 
 }
 

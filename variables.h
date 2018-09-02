@@ -148,9 +148,13 @@
     //Form Directories
     //TDirectory 
     
-    //For fun TGraphs
+    //For fun TGraphs for yields
     double x[9][6][30][13][10][10];
     double y[9][6][30][13][10][10];
+
+    //Differential Cross Section Values
+    double xc_x[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
+    double xc_y[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
 
 
 

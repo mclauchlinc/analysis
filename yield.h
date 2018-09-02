@@ -54,8 +54,8 @@ bool MMbinning_check(int s, double MM){
 int Q2binning(double Q2){
 	bool pass =false;
 	int i = -1;
-	for(int j = 0; j < 7; j++){
-		if(Q2 <= Q2bin_start + i*Q2bin_res && Q2 >= Q2bin_start + (j-1)*Q2bin_res){
+	for(int j = 0; j < 6; j++){
+		if(Q2 <= Q2bin_start + (j+0.5)*Q2bin_res && Q2 > Q2bin_start + (j-0.5)*Q2bin_res){//the max was set initially by i and so this was problematic 87/18
 			i = j;
 		}
 	}
@@ -65,8 +65,8 @@ int Q2binning(double Q2){
 int Wbinning(double W){
 	bool pass =false;
 	int j = -1;
-	for(int i = 0; i < 31; i++){
-		if(W <= Wbin_start + i*Wbin_res && W >= Wbin_start + (i-1)*Wbin_res){
+	for(int i = 0; i < 30; i++){
+		if(W <= Wbin_start + (i+0.5)*Wbin_res && W > Wbin_start + (i-0.5)*Wbin_res){
 			j = i;
 		}
 	}
@@ -78,7 +78,7 @@ int MM_stuff_binning(int s, double MM){
 	int i = -1;
 	//std::cout<<std::endl <<"MM set " <<s <<" is: " <<MM <<" in bin: ";
 	for(int j = 0; j < MM2bins; j++){
-		if(MM <= YM_start[s] + j*YM_res[s] && MM >= YM_start[s] + (j-1)*YM_res[s]){
+		if(MM <= YM_start[s] + (j+0.5)*YM_res[s] && MM > YM_start[s] + (j-0.5)*YM_res[s]){
 			i = j;
 		}
 	}
@@ -91,7 +91,7 @@ int theta_binning(double th){
 	//std::cout<<std::endl <<"The theta: " <<th <<" and the bin is: ";
 	int i = -1;
 	for(int j = 0; j < thbins; j++){
-		if(th <= Yth_start + j*Yth_res && th >= Yth_start + (j-1)*Yth_res){
+		if(th <= Yth_start + (j+0.5)*Yth_res && th > Yth_start + (j-0.5)*Yth_res){//Fixed the binning for theta and alpha 8/7/18
 			i = j;
 		}
 	}
@@ -104,7 +104,7 @@ int alpha_binning(double a){
 	int i = -1;
 	//std::cout<<std::endl <<"alpha is: " <<a <<" in bin: ";
 	for(int j = 0; j < albins; j++){
-		if(a <= Yal_start + j*Yal_res && a >= Yal_start + (j-1)*Yal_res){
+		if(a <= Yal_start + (j+0.5)*Yal_res && a > Yal_start + (j-0.5)*Yal_res){
 			i = j;
 		}
 	}
@@ -123,6 +123,14 @@ double th_bincenter(int i){
 
 double al_bincenter(int i){
 	return Yal_start + i*Yal_res; 
+}
+
+double Q2_from_bin(int i){
+	return Q2bin_start + i*Q2bin_res;
+}
+
+double W_from_bin(int i){
+	return Wbin_start + i*Wbin_res;
 }
 
 //MM
@@ -204,7 +212,11 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
       		//std::cout<<std::endl <<"5.1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       		x3[jo]=x[cart[0]][cart[1]][cart[2]][0][0][jo];
       		y3[jo]=y[cart[0]][cart[1]][cart[2]][0][0][jo];
-      		//std::cout<<std::endl <<"alpha "<<"x: "<<x3[jo] <<" y: " <<y3[jo];
+      		if(cart[0]==8){
+      			//std::cout<<std::endl <<"Q2: " <<Q2_from_bin(cart[1]) <<" W: " <<W_from_bin(cart[2]);
+      			//std::cout<<std::endl <<"alpha "<<"x: "<<x3[jo] <<" y: " <<y3[jo];
+      		}
+      		
       		//std::cout<<std::endl <<"alpha "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][0][jo] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][0][jo];
       		//std::cout<<std::endl <<"5.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       	}

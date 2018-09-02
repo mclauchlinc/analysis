@@ -14,6 +14,8 @@ const double energy_e16 = 5.759;
 //Check 4.794 GeV for e16
 const double energy_e1f = 5.499;
 
+const double fine_structure = 1.0/137.0; 
+
 //Masses of relevant particles
 const	double me = 0.0005109989; //mass of electron in GeV
 const	double mp = 0.93828;	//Mass of proton in GeV
@@ -24,6 +26,16 @@ const	double mpi = 0.1395;	//Mass of pion in GeV
 TLorentzVector k_mu_e16 = Make_4Vector(energy_e16,0.0,0.0,1.0,me);
 TLorentzVector k_mu_e1f = Make_4Vector(energy_e1f,0.0,0.0,1.0,me);
 TLorentzVector p_mu = Make_4Vector(0.0,0.0,0.0,0.0,mp);
+
+//e1-6 Luminosity Values
+const double lt_e16 = 5.0; //Target length in cm
+const double Dt_e16 = 0.073; //Density of target in g/cm^3
+const double NA = 6.022 * pow(10.0,23); //Avogadro's number
+const double qe = 1.602 * pow(10.0,-19); // fundamental Coulomb charge 
+const double Mt_e16 = 1.007; //Molar mass of target in g/mole
+const double Qt_e16 = 21.32*pow(10.0,-3); //Total charge incident on target from Arjun in Coulombs //Will need to verify myself
+const double L_e16 = Qt_e16*lt_e16*Dt_e16*NA/(qe*Mt_e16);
+const double cm2_to_mbarn = pow(10.0,-27);
 
 //Particle ID Numbers
 //anti particles are negative
@@ -230,7 +242,7 @@ const int MinCC_Cut[6][18] = {{35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,3
 
 const double Yth_start = 9.0;
 const double Yth_res = 18.0;
-const double Yal_start = 18.0;//10.0;
+const double Yal_start = 18.0;//10.0; 0-36, 36-72, 72-108,  
 const double Yal_res = 36.0;//40.0;
 const double YM_start[3] = {1.1,1.1,0.3};
 const double YM_res[3] = {0.06,0.06,0.06};
@@ -238,7 +250,7 @@ const double YM_res[3] = {0.06,0.06,0.06};
 
 const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank","eid5"};
-const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank"};
+const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank","fid","CC","Anti-Fid","Anti-CC","CC+Fid", "Anti-CC+Fid"};
 const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
 const char * charge[] = {"pos","neg"};
 const char * arguments[] = {"program", "input file","number of files", "output file"};//4
@@ -248,7 +260,7 @@ const char* cross_top[] = {"p_pip", "p_pim", "p_zero", "pip_pim", "pip_zero", "p
 const char* alpha_stuff[] = {"p_pip","p_pim", "pip_pim"};
 const char* mvar[] = {"switch","2pi"};
 const char* pe_cut[] = {"none", "e_dt", "cc", "ec", "sf"};
-const char* dxc_pro[] = {"pro1, pro2,pro3,pro4,pro5,pro6,pro7,pro8"};
+const char* dxc_pro[] = {"pro1", "pro2","pro3","pro4","pro5","pro6","pro7","pro8"};
 const char* cc_cuts[] = {"none","sf","fid","sf_fid","eid"};
 const char* cc_pos[] ={"left","coinc","right","all"};
 const char* fid_can[] = {"all","e","p","pip","pim"};

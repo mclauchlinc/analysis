@@ -100,10 +100,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     int s2h=1050;
     int s3h=2050;
     
-    
+
     
     for(int i = 0; i< events ; i++)
     {
+
         //Update on the progress
        // cout<<"got into the loop?" <<endl;
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
@@ -127,6 +128,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         
         W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
         Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
+        
+         //cout<<endl <<"here?" <<endl;
         Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
         if(cc_segm[cc[0]-1] < 1000){
             //cout<<endl <<"cc_segm: " <<cc_segm[cc[0]-1] <<endl;
@@ -348,7 +351,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             COM_gp(0,ele_mu,pro_mu,pip_mu,pim_mu);
             //cout<<endl <<"Post COM: ";
             //See_4Vec(pip_mu);
-            cout<<endl;
+            //cout<<endl;
             //Extract scattering angle in center of mass now that
             theta_p_pip = theta_com((pim_mu));
             theta_p_pim = theta_com((pip_mu));
@@ -377,8 +380,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //cout <<endl <<"[pip,pim][p',p]: " <<alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu);
                 //cout <<endl <<"[p',pim][p,pip]: " <<alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu);
                 y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                //cout<<endl <<"alpha 0: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu));
                 y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
                 y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                //cout<<endl <<"alpha 1: " <<alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu));
+                //cout<<endl <<"alpha 2: " <<alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu)) <<endl;
 
 
             }
@@ -435,6 +441,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 //cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
                 for(int rage = 0; rage < 13; rage++){
                     x[spice][qq][ww][rage][0][0]=MM_bincenter(spice,rage);//yield.h
+                    xc_y[spice][qq][ww][rage][0][0] = y[spice][qq][ww][rage][0][0]*(1.0/L_e16)*cm2_to_mbarn;//Create a differential cross section
                     //cout<<endl <<"MM bin: " <<rage <<" is: "<<x[spice][qq][ww][rage][0][0] <<endl;
                 }
                 //cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
@@ -443,6 +450,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     x[spice+6][qq][ww][0][0][against]=al_bincenter(against);//yield.h
                    // cout<<endl <<"theta bin: " <<against <<" is: "<<x[spice+3][qq][ww][0][against][0] <<endl;
                     //cout<<endl <<"alpha bin: " <<against <<" is: "<<x[spice+6][qq][ww][0][0][against] <<endl;
+                    xc_y[spice+6][qq][ww][0][0][against] = y[spice+6][qq][ww][0][0][against]*(1.0/L_e16)*cm2_to_mbarn;
+                    xc_y[spice+6][qq][ww][0][against][0] = y[spice+6][qq][ww][0][against][0]*(1.0/L_e16)*cm2_to_mbarn;
                 }
             }
 

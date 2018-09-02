@@ -11,12 +11,16 @@
 TH2D* dt_hist[3][5][30]; //delta t, cuts, W binning
 TH2D* dt_hist_MM[3][5][30][4]; //particle, cuts, W binning, MM hist cuts
 TH2D* dt_hist_pe[5][30];//electron cuts, W binning
+TH2D* dt_hist_ppip[2][30];//Looking at W separation of p and pip in the delta t cut 
 
 TCanvas * c_dt1;//all W delta t {pre, cut, anti, pid, bank} (5x3)
 TCanvas * c_dt2;//Proton delta t W variance (4x3)
 TCanvas * c_dt3;//Pip delta t W variance (4x3)
 TCanvas * c_dt4;//Pim delta t W variance (4x3)
 TCanvas * c_dt5;
+
+TCanvas * c_dt6[2];//W separation of p and pip in the delta t cut
+
 
 const double dtw = 4800;
 const double dth = 2400;
@@ -74,7 +78,7 @@ void Fill_dt(double Wval, int s, int cut, int sc, double p, double p0, double d,
     }
     double dt = delta_t(p, p0, d, d0, t, t0, mass );
     //W Binning
-    for(int i = 1; i < 11 ; i++){
+    for(int i = 1; i < 30 ; i++){
     top = Wbin_start + (i * Wbin_res);
     bot = top - Wbin_res;
     if(Wval > bot && Wval < top){
@@ -371,5 +375,7 @@ void Write_dt_pe(TFile *file){
       dt_hist_pe[cart[0]][cart[1]]->Write();
     }
 }
+
+
 
 #endif

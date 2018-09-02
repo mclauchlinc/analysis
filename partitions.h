@@ -17,8 +17,15 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             bool sf_p,fid_p;
             sf_p = false;
             fid_p = false;
+           bool cc_p = false;
 
-            
+            if(min_cc( cc_segm, cc_sect, nphe)){
+                Fill_sf(6,W_val,etot,p); //sf histograms.h
+                cc_p = true;
+            }
+            else{
+                Fill_sf(8,W_val,etot,p);//sf histograms.h
+            }
             if(eid_1(dc,cc,ec,sc)){//eid.h
               //  std::cout <<2;
                 Fill_WQ2( 0, 1,0, p, cx, cy, cz); // histograms.h
@@ -60,11 +67,13 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                 Fill_WQ2( 0, 6, 0, p, cx, cy, cz); // histograms.h
                 Fill_fid(0,1,W_val,cx,cy,cz);//histograms.h
                 Fill_MinCC(cc_sect, nphe,cc_segm, 2);
+                Fill_sf(5,W_val,etot,p); //histograms.h
                 fid_p=true;
             }
             else{
               //  std::cout <<8;
             	Fill_fid(0,2,W_val,cx,cy,cz);//histograms.h
+                Fill_sf(7,W_val,etot,p);//sf histograms.h
             }
             //Sampling Fraction
             if(sf_e(p,etot,cx,cy)){
@@ -88,6 +97,12 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             //Min CC
             if(sf_p && fid_p){
                 Fill_MinCC(cc_sect, nphe,cc_segm, 3);
+            }
+            if(fid_p && cc_p){
+                Fill_sf(9,W_val,etot,p);
+            }
+            else{
+                Fill_sf(10,W_val,etot,p);
             }
             
 }

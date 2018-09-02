@@ -14,6 +14,11 @@ void See_4Vec(TLorentzVector p0){
 	std::cout<<std::endl <<"px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] ;
 }
 
+void See_3Vec(TVector3 p0){
+	std::cout<<std::endl <<"px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2];
+}
+
+
 
 double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 	TVector3 k_mu_3(p*cx,p*cy,p*cz);
@@ -107,37 +112,6 @@ double MM_4_com(double p1, double p2, double p3, double p4, double cx1, double c
 
 
 
-void Boost_z(double beta, TLorentzVector &p0){
-	double m = sqrt(p0[3]*p0[3]-p0[0]*p0[0]-p0[1]*p0[1]-p0[2]*p0[2]);
-	double p = sqrt(p0[0]*p0[0]+p0[1]*p0[1]+p0[2]*p0[2]);
-	p0[2] = (p0[2]/sqrt(1-beta*beta))-p0[3]*beta/sqrt(1-beta*beta);
-	p0[3] = (p0[3]/sqrt(1-beta*beta))+p0[2]*beta/sqrt(1-beta*beta);
-}
-
-void Rotate_x(double theta, TLorentzVector &k){
-	k[0] = k[0]*TMath::Cos(theta)+k[1]*TMath::Sin(theta);
-	k[1] = k[1]*TMath::Cos(theta)-k[0]*TMath::Sin(theta);
-}
-
-double angle_x(TLorentzVector p0){
- 	return TMath::ATan2(p0[1],p0[0]); 
-}
-
-//All boosts also rotate the frame such that the scattered electron lies in the y=0 plane
-void COM_ep(TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentzVector &p3){
-	double p = sqrt(p0[0]*p0[0]+p0[1]*p0[1]+p0[2]*p0[2]);
-	double b = (me/(me+mp))*(p/p0[3]);
-	double t = angle_x(p0);
-	Boost_z(b,p0);
-	Boost_z(b,p1);
-	Boost_z(b,p2);
-	Boost_z(b,p3);
-	Rotate_x(t,p0);
-	Rotate_x(t,p1);
-	Rotate_x(t,p2);
-	Rotate_x(t,p3);
-}
-
 
 void Rotate_4Vecs(double thet, double phip, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2, TLorentzVector &p3){
 	//std::cout<<"4 vector 1" <<"||px: " <<p0[0] <<" py: " <<p0[1] <<" pz: " <<p0[2] <<" E: " <<p0[3] <<std::endl;
@@ -218,6 +192,42 @@ void COM_gp(int set, TLorentzVector &p0, TLorentzVector &p1, TLorentzVector &p2,
 	//p0.Boost()
 }
 
+TVector3 Cross_Product(TLorentzVector p1, TLorentzVector p2){
+	TVector3 product(p1[1]*p2[2]-p1[2]*p2[1],p1[0]*p2[2]-p1[2]*p2[0],p1[0]*p2[1]-p1[1]*p2[0]); 
+	return product; 
+}
+
+double Dot_Product(TVector3 p1, TVector3 p2){
+	return p1[0]*p2[0]+p1[1]*p2[1]+p1[2]*p2[2];
+}
+
+double Vec3_Mag(TVector3 p1){
+	return sqrt(p1[0]*p1[0]+p1[1]*p1[1]+p1[2]*p1[2]);
+}
+
+double Cos_Vecs(TVector3 p1, TVector3 p2){
+	double other1mag;
+	double other2mag;
+	double dotpro;
+	dotpro = p1 * p2;
+	other1mag = Vec3_Mag(p1);
+	other2mag = Vec3_Mag(p2);
+	return dotpro/(other2mag*other1mag);
+}
+
+double Sin_Vecs(TVector3 p1, TVector3 p2){
+	double other1mag;
+	double other2mag;
+	double Cross_Mag;
+	TVector3 product = p1.Cross(p2);
+	double sign = (Dot_Product(p1,p2)/(Vec3_Mag(p1)*Vec3_Mag(p2)));
+	Cross_Mag = Dot_Product(product,product)*sign;
+	other1mag = Vec3_Mag(p1);
+	other2mag = Vec3_Mag(p2);
+	return Cross_Mag/(other1mag*other2mag);
+}
+
+
 
 
 //Angle between Hadron scattering plane and electron scattering plane
@@ -229,40 +239,112 @@ double alpha(int top, TLorentzVector p1, TLorentzVector p2, TLorentzVector p3, T
 	double other1mag;
 	double other2mag;
 	double dotpro;
-	TLorentzVector other1, other2;
+	double alph; 
+	double sin, cos; 
+	TVector3 other1, other2;
 	switch(top){
 		case 0:
-		other1 = p1+p3;
-		other2 = p2+p4;
+		other1 = Cross_Product(p1,p3);
+		other2 = Cross_Product(p2,p4);
 		break;
 		case 1:
-		other1 = p3+p4;
-		other2 = p1+p2;
+		other1 = Cross_Product(p3,p4);
+		other2 = Cross_Product(p1,p2);
 		break;
 		case 2:
-		other1 = p1+p4;
-		other2 = p2+p3;
+		other1 = Cross_Product(p1,p4);
+		other2 = Cross_Product(p2,p3);
 		break;
 	}
 	//See_4Vec(other1);
 	//See_4Vec(other2);
+	/*
+	std::cout<<std::endl<<std::endl;
+	See_3Vec(other1);
+	See_3Vec(other2);
 	dotpro = (other1[0]*other2[0]+other1[1]*other2[1]+other1[2]*other2[2]);
+	std::cout<<std::endl <<"dot product = " <<dotpro;
 	other1mag = sqrt(other1[0]*other1[0]+other1[1]*other1[1]+other1[2]*other1[2]);
 	other2mag = sqrt(other2[0]*other2[0]+other2[1]*other2[1]+other2[2]*other2[2]);
+	std::cout<<std::endl <<"mags: " <<other1mag <<" and " <<other2mag;
+	std::cout<<std::endl <<"Cosine: " <<(dotpro)/(other1mag*other2mag);
+	*/
+	sin = Sin_Vecs(other1, other2);
+	//std::cout<<std::endl <<"Sin alpha = " <<sin;
+	cos = Cos_Vecs(other1, other2);
+	//std::cout<<std::endl <<"Cos alpha = " <<cos;
+	alph = TMath::ACos(cos)*180.0/TMath::Pi();
+	//std::cout<<std::endl <<"alpha pre= " <<alph;
+	if(sin < 0){
+		alph = 180.0 - (alph - 180.0); 
+	} 
+	
+	//std::cout<<std::endl <<"alpha post = " <<alph <<std::endl;
+	//std::cout<<std::endl <<"aCos(-.5)" <<TMath::ACos(-0.5) <<std::endl;
+
+	
+	return alph; 
+
 	//std::cout<<std::endl <<"dot product " <<(other1[0]*other2[0]+other1[1]*other2[1]+other1[2]*other2[2]);
+
+	/*if(TMath::ACos((dotpro)/(other1mag*other2mag))*180.0/TMath::Pi() == 0){
+		See_4Vec(other1);
+		See_4Vec(other2);
+		std::cout<<std::endl <<"dot product: " <<dotpro <<std::endl;
+		std::cout<< "product of mags" <<other1mag*other2mag <<std::endl;
+		std::cout<<"alpha?: " <<TMath::ACos((dotpro)/(other1mag*other2mag))*180.0/TMath::Pi() <<std::endl;
+	}	*/
 	//std::cout<<std::endl <<"product of mags " <<other1mag*other2mag;
 	//std::cout<<std::endl <<"Just the Cosine " <<(dotpro)/(other1mag*other2mag);
 	//std::cout<<" alpha = "<<TMath::ACos((dotpro)/(other1mag*other2mag))*180.0/TMath::Pi();
 	//return TMath::ATan2(other1[1],other1[0]);
-	return TMath::ACos((other1*other2)/(other1mag*other2mag))*180.0/TMath::Pi();
+	//return TMath::ACos((dotpro)/(other1mag*other2mag))*180.0/TMath::Pi();
 }
 
 double theta_com(TLorentzVector p0){
-	return TMath::ATan(sqrt(p0[0]*p0[0]+p0[1]*p0[1])/p0[2])*180.0/TMath::Pi(); //Fixed from Sin 8/7/18
+	double r = sqrt(p0[0]*p0[0]+p0[1]*p0[1]);
+	return TMath::ATan2(r,p0[2])*180.0/TMath::Pi(); //Fixed from Sin 8/7/18
 }
 
 double MM_2(TLorentzVector p1, TLorentzVector p2){
 	return (p1+p2).Mag();
+}
+
+//Luminosity
+/*
+const lt_e16 = 5.0; //Target length in cm
+const Dt_e16 = 0.073; //Density of target in g/cm^3
+const NA = 6.022 * 10^23; //Avogadro's number
+const qe = 1.602 * 10^-19; // fundamental Coulomb charge 
+const Mt_e16 = 1.007; //Molar mass of target in g/mole
+const Qt_e16 = 21.32*10^-3;
+*/
+//double Luminosity()
+
+
+//virtual photon transverse polarization
+double epsilon(int set, double Ep, double Q2 ){
+	double Enp, omega;//E not prime
+	switch(set){
+		case 0: Enp = energy_e16;
+		break;
+		case 1: Enp = energy_e1f;
+		break;
+	}
+	omega = Enp - Ep;
+	return 1.0/(1+(2*(Q2+omega)/(4*Enp*Ep-Q2)));
+}
+
+//Virtual photon flux
+double Gamma_nu(int set, double Ep, double Q2, double W){
+	double Enp;//E not prime
+	switch(set){
+			case 0: Enp = energy_e16;
+			break;
+			case 1: Enp = energy_e1f;
+			break;
+		}
+	return fine_structure*W*(W*W-mp*mp)/(4*TMath::Pi()*Enp*Enp*mp*mp*(1-epsilon(set,Ep,Q2))*Q2);
 }
 
 #endif /* PHYSICS_H */
