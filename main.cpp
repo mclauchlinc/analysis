@@ -63,6 +63,12 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         work++;//variables.h
         which = 2; //denote which set //variables.h
     }
+    if(comp == "three"){  //Mac Data set
+        cout<<endl<<"three?" <<endl;
+        loadChain(&data, "Nick_skim_e16.txt",file_num);//read_in_files.h;
+        work++;//variables.h
+        which = 3; //denote which set //variables.h
+    }
     if(work == 1){ //Did the function loadChain run without halting everything?
         std::cout<<"Complete" <<std::endl;
     }
@@ -77,7 +83,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
     //Set Branches
     std::cout<< "Setting Branches: ";
-    SetBranches(&data);//read_in_data.h
+    SetBranches(&data,which);//read_in_data.h
     std::cout<< "Complete" <<std::endl;
 
     //MakeDirectories(output);
@@ -123,10 +129,19 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
         //Get info for event i
         data.GetEntry(i);
-        Reassign(); //Converts to C++ data types variables.h
+        if(which != 3){
+            Reassign(); //Converts to C++ data types variables.h
+        }else{
+            Reassign3();
+        }
 
+          //cout<<"Particle: " <<"electron?" <<endl <<"Charge: " <<q[0] <<endl;
+
+          counts = 0;
         
         W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
+        counts = counts +1;
+        //cout<<endl <<"W: " <<W_var <<endl;
         Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
         
          //cout<<endl <<"here?" <<endl;
@@ -143,7 +158,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             //cout<<"is this the cc_sect " <<cc_sect[cc[j]-1] <<"  from the bank: " <<cc_sect_b[cc[j]-1] <<endl;       
             //Fill_MinCC(cc_sect[cc[j]-1],nphe[cc[j]-1],cc_segm[cc[j]-1],0);
             //cout<<"problem" <<endl;
-
+               // cout<<"Particle: " <<j <<endl <<"Charge: " <<q[j] <<endl <<endl;
             // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
 
                 //Brackets work

@@ -17,7 +17,9 @@ TCanvas * c_dt1;//all W delta t {pre, cut, anti, pid, bank} (5x3)
 TCanvas * c_dt2;//Proton delta t W variance (4x3)
 TCanvas * c_dt3;//Pip delta t W variance (4x3)
 TCanvas * c_dt4;//Pim delta t W variance (4x3)
-TCanvas * c_dt5;
+TCanvas * c_dt5;//Proton delta t W variance cut (4x3)
+TCanvas * c_dt7;//Pip delta t W variance cut (4x3)
+TCanvas * c_dt8;//Pim delta t W variance cut (4x3)
 
 TCanvas * c_dt6[2];//W separation of p and pip in the delta t cut
 
@@ -111,6 +113,10 @@ void Write_dt(TFile *file){
     c_dt4->Divide(6,5);
     c_dt5 = new TCanvas("cdt5","cdt5",dtw,dth);
     c_dt5->Divide(6,5);
+    c_dt7 = new TCanvas("cdt7","cdt7",dtw,dth);
+    c_dt7->Divide(6,5);
+    c_dt8 = new TCanvas("cdt8","cdt8",dtw,dth);
+    c_dt8->Divide(6,5);
 
     CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
     float top,bot;
@@ -145,7 +151,22 @@ void Write_dt(TFile *file){
         dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
       }
 
+      //Pre-Cuts
       if(cart[1]==0){
+        switch(cart[0]){
+          case 0: c_dt2->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
+          break;
+          case 1: c_dt3->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
+          break;
+          case 2: c_dt4->cd(cart[2]+1);
+            dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
+          break;
+        }
+      }
+      //Cuts on particle ID
+      if(cart[1]==1){
         switch(cart[0]){
           case 0: c_dt2->cd(cart[2]+1);
             dt_hist[cart[0]][cart[1]][cart[2]]->Draw("colz");
@@ -164,6 +185,9 @@ void Write_dt(TFile *file){
     c_dt2->SaveAs("Proton dt W variance.pdf");
     c_dt3->SaveAs("Pip dt W Variance.pdf");
     c_dt4->SaveAs("Pim dt W Variance.pdf");
+    c_dt5->SaveAs("Proton dt W variance Cuts.pdf");
+    c_dt7->SaveAs("Pip dt W Variance Cuts.pdf");
+    c_dt8->SaveAs("Pim dt W Variance Cuts.pdf");
 
 }
 

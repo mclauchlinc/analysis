@@ -45,32 +45,59 @@ void loadChain(TChain* c, std::string file, int max=-1)
 	}
 }
 
-void SetBranches(TChain* c)
+void SetBranches(TChain* c, int witch)
 {
-	c->SetBranchAddress("q",&q_b);
-    c->SetBranchAddress("gpart",&gpart);
-    c->SetBranchAddress("sc_t",&sc_t_b);
-    c->SetBranchAddress("sc_r",&sc_r_b);
-    c->SetBranchAddress("sc",&sc_b);
-    c->SetBranchAddress("p",&p_b);
-    c->SetBranchAddress("cx",&cx_b);
-    c->SetBranchAddress("cy",&cy_b);
-    c->SetBranchAddress("cz",&cz_b);
-    c->SetBranchAddress("stat",&stat_b);
-    c->SetBranchAddress("dc_stat",&dc_stat_b);
-    c->SetBranchAddress("vx",&vx_b);
-    c->SetBranchAddress("vy",&vy_b);
-    c->SetBranchAddress("vz",&vz_b);
-    c->SetBranchAddress("dc",&dc_b);
-    c->SetBranchAddress("cc",&cc_b);
-    c->SetBranchAddress("ec",&ec_b);
-    c->SetBranchAddress("etot",&etot_b);
-    c->SetBranchAddress("id",&id_b);
-    c->SetBranchAddress("cc_hit",&cc_hit_b);
-    c->SetBranchAddress("cc_sect",&cc_sect_b);
-    c->SetBranchAddress("cc_segm",&cc_segm_b);
-    c->SetBranchAddress("cc_part",&cc_part_b);
-    c->SetBranchAddress("nphe",&nphe_b);
+	if(witch == 3){
+		c->SetBranchAddress("q",&q_c);
+        c->SetBranchAddress("gpart",&gpart);
+        c->SetBranchAddress("sc_t",&sc_t_c);
+        c->SetBranchAddress("sc_r",&sc_r_c);
+        c->SetBranchAddress("sc",&sc_c);
+        c->SetBranchAddress("p",&p_c);
+        c->SetBranchAddress("cx",&cx_c);
+        c->SetBranchAddress("cy",&cy_c);
+        c->SetBranchAddress("cz",&cz_c);
+        c->SetBranchAddress("stat",&stat_c);
+        c->SetBranchAddress("dc_stat",&dc_stat_c);
+        c->SetBranchAddress("vx",&vx_c);
+        c->SetBranchAddress("vy",&vy_c);
+        c->SetBranchAddress("vz",&vz_c);
+        c->SetBranchAddress("dc",&dc_c);
+        c->SetBranchAddress("cc",&cc_c);
+        c->SetBranchAddress("ec",&ec_c);
+        c->SetBranchAddress("etot",&etot_c);
+        c->SetBranchAddress("id",&id_c);
+        c->SetBranchAddress("cc_hit",&cc_hit_c);
+        c->SetBranchAddress("cc_sect",&cc_sect_c);
+        c->SetBranchAddress("cc_segm",&cc_segm_c);
+        c->SetBranchAddress("cc_part",&cc_part_c);
+        c->SetBranchAddress("nphe",&nphe_c);
+	}else{
+		c->SetBranchAddress("q",&q_b);
+	    c->SetBranchAddress("gpart",&gpart);
+	    c->SetBranchAddress("sc_t",&sc_t_b);
+	    c->SetBranchAddress("sc_r",&sc_r_b);
+	    c->SetBranchAddress("sc",&sc_b);
+	    c->SetBranchAddress("p",&p_b);
+	    c->SetBranchAddress("cx",&cx_b);
+	    c->SetBranchAddress("cy",&cy_b);
+	    c->SetBranchAddress("cz",&cz_b);
+	    c->SetBranchAddress("stat",&stat_b);
+	    c->SetBranchAddress("dc_stat",&dc_stat_b);
+	    c->SetBranchAddress("vx",&vx_b);
+	    c->SetBranchAddress("vy",&vy_b);
+	    c->SetBranchAddress("vz",&vz_b);
+	    c->SetBranchAddress("dc",&dc_b);
+	    c->SetBranchAddress("cc",&cc_b);
+	    c->SetBranchAddress("ec",&ec_b);
+	    c->SetBranchAddress("etot",&etot_b);
+	    c->SetBranchAddress("id",&id_b);
+	    c->SetBranchAddress("cc_hit",&cc_hit_b);
+	    c->SetBranchAddress("cc_sect",&cc_sect_b);
+	    c->SetBranchAddress("cc_segm",&cc_segm_b);
+	    c->SetBranchAddress("cc_part",&cc_part_b);
+	    c->SetBranchAddress("nphe",&nphe_b);
+	}
 }
 
 

@@ -9,7 +9,7 @@
     int which = 0;//Variable which is assigned based on which file set is loaded so the user can be notified
     int naming_var = 0; //Variable used in switiching the index for outputs in the beginning. Used when inputing 3 inputs rather than 4
 
-  
+    int counts = 0;
 
     //Data parameters
     int events;//The variable for the total number of events
@@ -79,6 +79,31 @@
     Int_t cc_segm_b[100];
     UShort_t nphe_b[100];
 
+    //int gpart; //The nmcer of particles registered in a given event
+    int q_c[100]; //The charge of each given particle
+    float sc_t_c[100]; //The time taken for a particle to travel throgh as fond cy the sc
+    float sc_r_c[100]; //The distance taken cy a particle throgh the detector as fond cy the sc
+    int sc_c[100]; //The index sed to navigate any sc canks
+    float p_c[100]; //The momentm of given particles calclated from the cravtre throgh the dc //AH HA!!! The old file had this as an int, ct the good files have this as a Char
+    float cx_c[100]; //The Cosine projection of the particle's intitial trajectory in x-axis the lac frame
+    float cy_c[100]; //The Cosine projection of the particle's intitial trajectory in y-axis the lac frame
+    float cz_c[100]; //The Cosine projection of the particle's intitial trajectory in z-axis the lac frame
+    int stat_c[100]; //Shows how statistically sond the particlar particle is 
+    int dc_stat_c[100]; //Shows how statistically sond the particlar event is sing data from the dc
+    float vx_c[100]; //Vertex of interaction measred in cm in x-axis in lac frame
+    float vy_c[100]; //Vertex of interaction measred in cm in y-axis in lac frame
+    float vz_c[100]; //Vertex of interaction measred in cm in z-axis in lac frame
+    int dc_c[100]; // The index sed to navigate any dc canks
+    int cc_c[100]; // The index sed to navigate any sc canks
+    int ec_c[100]; //The index sed to navigate any ec canks
+    float etot_c[100]; //The total final energy of the particle deposited in the detector
+    int id_c[100];
+    int cc_hit_c[100];
+    int cc_part_c;
+    int cc_sect_c[100];
+    int cc_segm_c[100];
+    int nphe_c[100];
+
     //Put the various variables into straight C++ data types
     int q[100] ;// = (int) q_b; //The charge of each given particle
     double sc_t[100] ;// = (double) sc_t_b; //The time taken for a particle to travel through as found by the sc
@@ -107,7 +132,7 @@
     //Int_t gpart; //The number of particles registered in a given event
     //Need to reassign the individual pieces of the array rather than entire arrays at once 7/31/17
     void Reassign(){
-        for(int i = 0; i <100; i++){
+            for(int i = 0; i <100; i++){
             q[i] = (int) q_b[i];// = (int) q_b; //The charge of each given particle
             sc_t[i] = (double) sc_t_b[i];// = (double) sc_t_b; //The time taken for a particle to travel through as found by the sc
             sc_r[i] = (double) sc_r_b[i]; //= (double) sc_r_b; //The distance taken by a particle through the detector as found by the sc
@@ -131,7 +156,35 @@
             cc_segm[i] = (int) cc_segm_b[i];
             cc_sect[i] = (int) cc_sect_b[i];
             nphe[i] = (int) nphe_b[i];
-        }
+       }
+    }
+
+    void Reassign3(){
+            for(int i = 0; i <100; i++){
+            q[i] = (int) q_c[i];// = (int) q_c; //The charge of each given particle
+            sc_t[i] = (double) sc_t_c[i];// = (doucle) sc_t_c; //The time taken for a particle to travel through as found cy the sc
+            sc_r[i] = (double) sc_r_c[i]; //= (doucle) sc_r_c; //The distance taken cy a particle through the detector as found cy the sc
+            sc[i] = (int) sc_c[i]; //The index used to navigate any sc canks
+            p[i] = (double) p_c[i]; //The momentum of given particles calculated from the curavture through the dc
+            cx[i] = (double) cx_c[i]; //The Cosine projection of the particle's intitial trajectory in x-axis the lac frame
+            cy[i] = (double) cy_c[i]; //The Cosine projection of the particle's intitial trajectory in y-axis the lac frame
+            cz[i] = (double) cz_c[i]; //The Cosine projection of the particle's intitial trajectory in z-axis the lac frame
+            stat[i] = (int) stat_c[i]; //Shows how statistically sound the particular particle is 
+            dc_stat[i] = (int) dc_stat_c[i]; //Shows how statistically sound the particular event is using data from the dc
+            vx[i] = (double) vx_c[i]; //Vertex of interaction measured in cm in x-axis in lac frame
+            vy[i] = (double) vy_c[i]; //Vertex of interaction measured in cm in y-axis in lac frame
+            vz[i] = (double) vz_c[i]; //Vertex of interaction measured in cm in z-axis in lac frame
+            dc[i] = (int) dc_c[i]; // The index used to navigate any dc canks
+            cc[i] = (int) cc_c[i]; // The index used to navigate any sc canks
+            ec[i] = (int) ec_c[i]; //The index used to navigate any ec canks
+            etot[i] = (double) etot_c[i]; //The total final energy of the particle deposited in the detector
+            id[i] = (int) id_c[i];//The id assigned to it automatically through the standard parameters
+            cc_hit[i] = (int) cc_hit_c[i];
+            cc_part = (int) cc_part_c;
+            cc_segm[i] = (int) cc_segm_c[i];
+            cc_sect[i] = (int) cc_sect_c[i];
+            nphe[i] = (int) nphe_c[i];
+       }
     }
 
     //Histogram naming variables
@@ -155,6 +208,7 @@
     //Differential Cross Section Values
     double xc_x[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
     double xc_y[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
+    
 
 
 

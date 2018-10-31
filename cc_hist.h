@@ -110,7 +110,7 @@ void Write_MinCC(TFile *file){
 
   	std::vector<long> space_dims(4);
   	space_dims[0] = 6; //Sectors
-  	space_dims[1] = 18; //Sector
+  	space_dims[1] = 18; //Segmentj
   	space_dims[2] = 5;//Cuts
   	space_dims[3] =4;//left, coinc, right, all
 

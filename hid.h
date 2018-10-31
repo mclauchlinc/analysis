@@ -25,12 +25,12 @@ bool is_proton( int q, double p, double cx, double cy, double cz, int dc, int sc
 	{
 		if(q == 1){
 			if(delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
-				if(!delta_t_pion(p0,p,sc_r0,sc_r,sc_t0,sc_t)){
+				//if(!delta_t_pion(p0,p,sc_r0,sc_r,sc_t0,sc_t)){
 					if( fid_h( p, cx, cy, cz))
 					{
 						proton = true;
 					}
-				}
+				//}
 			}
 		}
 	}
@@ -48,13 +48,13 @@ bool is_pip( int q, double p, double cx, double cy, double cz, int dc, int sc, i
 			//std::cout<<std::endl<<"in is_pip p2" <<std::endl;
 			if(delta_t_pion(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
 				//std::cout<<std::endl<<"in is_pip p3" <<std::endl;
-				if(!delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
+				//if(!delta_t_proton(p0, p, sc_r0, sc_r, sc_t0, sc_t)){
 					//std::cout<<std::endl<<"in is_pip p4" <<std::endl;
 					if( fid_h( p, cx, cy, cz)){
 						//std::cout<<std::endl<<"in is_pip p5" <<std::endl;
 						pass = true;
 					}
-				}
+				//}
 			}
 		}
 	}

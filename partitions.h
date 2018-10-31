@@ -17,7 +17,7 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
             bool sf_p,fid_p;
             sf_p = false;
             fid_p = false;
-           bool cc_p = false;
+            bool cc_p = false;
 
             if(min_cc( cc_segm, cc_sect, nphe)){
                 Fill_sf(6,W_val,etot,p); //sf histograms.h
@@ -280,17 +280,17 @@ void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, in
     //Full ID
     //if(is_pim_plus(q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
         if(is_pim_plus(0,q, p, cx, cy, cz, dc, sc, stat, dc_stat, sc_t, sc_r, p0,sc_r0, sc_t0, cc, ec, etot, vx, vy, vz)){
-    //if(duck == 2){
-        Fill_fid(3,3,W_val,cx,cy,cz);
-        Fill_dt(W_val,2,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
-    }
-    //ID Bank
-    if((int)id == -PION){
-        Fill_fid(3,4,W_val,cx,cy,cz);
-        Fill_dt(W_val,2,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
+        //if(duck == 2){
+            Fill_fid(3,3,W_val,cx,cy,cz);
+            Fill_dt(W_val,2,3,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
+        }
+        //ID Bank
+        if((int)id == -PION){
+            Fill_fid(3,4,W_val,cx,cy,cz);
+            Fill_dt(W_val,2,4,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
 
+        }
     }
-}
 }
 //q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], id[j]);
 

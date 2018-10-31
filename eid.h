@@ -21,6 +21,7 @@ Sampling Fraction Cut:
 //Level 1 is it registering in all detector systems
 bool eid_1 ( int dc, int cc, int ec, int sc){
 	bool pass = false;
+	//std::cout<< dc <<" " <<cc <<" " <<ec <<" " <<sc ; 
 	//std::cout<<std::endl<<"In eid 1" <<std::endl;
 	if( (int)dc>0 && (int)cc>0 && (int)sc>0 && (int)ec>0){
 		pass = true;
@@ -32,6 +33,7 @@ bool eid_1 ( int dc, int cc, int ec, int sc){
 //Level 2 is a sanity check on charge and stats
 bool eid_2( int dc, int cc, int ec, int sc, int dc_stat, int q, int stat){
 	bool pass = false;
+	//std::cout<<" " <<q <<" ";
 	//pass Level 1 && Sanity Electron
 	//std::cout<<std::endl<<"In eid 2" <<std::endl;
 	if(eid_1(dc,cc,ec,sc) && (int)q == -1 && (int)dc_stat > 0 && (int)stat >0){ //Changed q to +1 9/21/2017
@@ -44,6 +46,7 @@ bool eid_2( int dc, int cc, int ec, int sc, int dc_stat, int q, int stat){
 //Level 3 are adding fiducial cuts
 bool eid_3(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat){
 	bool pass = false;
+	//std::cout<<p <<" " <<cx <<" " <<" " <<cy <<" " <<cz;
 	//pass Level 1 & 2 plus fiducial
 	//std::cout<<std::endl<<"In eid 3" <<std::endl;
 	if(eid_2(dc,cc,ec,sc,dc_stat,q,stat) && fid_e(p,cx,cy,cz)){

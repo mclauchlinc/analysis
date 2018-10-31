@@ -186,19 +186,37 @@ bool other_pim_miss(int cc_segm, int cc_sect, int nphe, double p0, int q0, doubl
 	P_0 = eid(p0, q0, cx0, cy0, cz0, vx0, vy0, vz0, dc0, cc0, ec0, sc0, dc_stat0, etot0, stat0, cc_sect, cc_segm, nphe, 5 );
 	P_1 = is_proton( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
 	P_2 = is_pip( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
-	//P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
-	//P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
-	if(P_0 && P_1 && P_2){
-		/*if(idx_1 != idx_2){ //Makes sure we aren't looking at the same particle
-			if(P_1 && !P_3){//Make sure proton doesn't also pass as a pi+
-				if(P_2 && !P_4){ //Make sure pi+ doesn't also pass as a proton
-					s++;
-				}
+	P_3 = is_pip( q1, p1, cx1, cy1, cz1, dc1, sc1, stat1, dc_stat1, sc_t1, sc_r1, p0, sc_r0, sc_t0);
+	P_4 = is_proton( q2, p2, cx2, cy2, cz2, dc2, sc2, stat2, dc_stat2, sc_t2, sc_r2, p0, sc_r0, sc_t0);
+	//If particle 1 is measured to be both a proton and a pip
+	if(P_1 && P_3){
+		if(MM_pi(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mp,mpi)){
+			P_1 = true;
+			P_3 = false;
+		}else{
+			if(MM_pi(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mpi,mp)){
+				P_1 = false;
+				P_3 = true;
 			}
 		}
 	}
-	if(s == 1){//To make sure the event is unique*/ //Check to see if this cross check is taking out too many guys
+	if(P_2 && P_4){
+		if(MM_pi(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mp,mpi)){
+			P_2 = true;
+			P_4 = false;
+		}else{
+			if(MM_pi(p0,p1,p2,cx0,cx1,cx2,cy0,cy1,cy2,cz0,cz1,cz2,me,mpi,mp)){
+				P_2 = false;
+				P_4 = true;
+			}
+		}
+	}
+	if(P_1 && P_2){
 		pass = true;
+	}else{
+		if(P_3 && P_4){
+			pass = true;
+		}
 	}
 	return pass;
 }

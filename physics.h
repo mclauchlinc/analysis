@@ -40,6 +40,7 @@ double Qsquared(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 //This will be the W for a proton target given that this is what I am dealing with in my analysis
 double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 	TLorentzVector k_mu;
+	//std::cout<<std::endl<<"momentum: " <<p <<"  cx: " <<cx <<"  cy: " <<cy <<"  cz: " <<cz <<std::endl;
 	switch (set){
 		case 0: 
 		k_mu = k_mu_e16;
@@ -47,20 +48,40 @@ double WP(int set, Float_t p, Float_t cx, Float_t cy, Float_t cz){
 		case 1:
 		k_mu = k_mu_e1f;
 		break;
+		case 2:
+		k_mu = k_mu_e16;
+		break;
 	}
-	//std::cout<< "Position 0:" << k_mu[0] <<std::endl;
-	//std::cout<< "Position 1:" << k_mu[1] <<std::endl;
-	//std::cout<< "Position 2:" << k_mu[2] <<std::endl;
-	//std::cout<< "Position 3:" << k_mu[3] <<std::endl <<std::endl;
 
 	TVector3 k_mu_3(p*cx,p*cy,p*cz);
 	TLorentzVector k_mu_prime;
 	k_mu_prime.SetVectM(k_mu_3,me);
+
+	
 	TLorentzVector q_mu;
 	//Write out
 	//std::cout<< "deflected electron four-vector W: {"<<k_mu_prime[0] <<", " <<k_mu_prime[1] <<", " <<k_mu_prime[2] <<", " <<k_mu_prime[3] <<"}" <<std::endl;
 	q_mu = (k_mu - k_mu_prime);
+
+	
 	//std::cout<< std::endl <<q_mu[0] <<", " <<q_mu[1] <<", " <<q_mu[2] <<", " <<q_mu[3] <<". mass: " <<q_mu.Mag() <<std::endl;
+	
+
+	/*if(co<1){
+		std::cout<< "k 0:" << k_mu[0] <<std::endl;
+	std::cout<< "k 1:" << k_mu[1] <<std::endl;
+	std::cout<< "k 2:" << k_mu[2] <<std::endl;
+	std::cout<< "k 3:" << k_mu[3] <<std::endl <<std::endl;
+	std::cout<< "k' 0:" << k_mu_prime[0] <<std::endl;
+	std::cout<< "k' 1:" << k_mu_prime[1] <<std::endl;
+	std::cout<< "k' 2:" << k_mu_prime[2] <<std::endl;
+	std::cout<< "k' 3:" << k_mu_prime[3] <<std::endl <<std::endl;
+	std::cout<< "q 0:" << q_mu[0] <<std::endl;
+	std::cout<< "q 1:" << q_mu[1] <<std::endl;
+	std::cout<< "q 2:" << q_mu[2] <<std::endl;
+	std::cout<< "q 3:" << q_mu[3] <<std::endl <<std::endl;
+	std::cout<<std::endl <<"W: " <<(p_mu + q_mu).Mag();
+	}*/
 	return (p_mu + q_mu).Mag();
 }
 
