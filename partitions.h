@@ -156,10 +156,12 @@ void Fill_proton(int q, double W_val, double p, double cx, double cy, double cz,
     		//std::cout<<"fid_p ";
             Fill_fid(1,1,W_val,cx,cy,cz);
             duck ++;
+            Fill_dt(W_val,0,5,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
     	}
         else{
            // std::cout<<"fid_p ";
             Fill_fid(1,2,W_val,cx,cy,cz);
+            Fill_dt(W_val,0,6,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
             
         }
     	//Full ID
@@ -214,11 +216,13 @@ void Fill_pip(int q, double W_val ,double p, double cx, double cy, double cz, in
            // std::cout<<"fid_pip ";
             Fill_fid(2,1,W_val,cx,cy,cz);
             duck++;
+            Fill_dt(W_val,1,5,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
             
         }
         else{
            // std::cout<<"fid_pip_anti ";
             Fill_fid(2,2,W_val,cx,cy,cz);
+            Fill_dt(W_val,1,6,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
             
         }
         
@@ -270,10 +274,12 @@ void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, in
          //   std::cout<<"fid_pi- ";
             Fill_fid(3,1,W_val,cx,cy,cz);
             duck++ ; 
+            Fill_dt(W_val,2,5,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
         }
         else{
          //   std::cout<<"fid_pi-_anti ";
             Fill_fid(3,2,W_val,cx,cy,cz);
+            Fill_dt(W_val,2,6,sc,p,p0,sc_r,sc_r0,sc_t,sc_t0);
             
         }
     

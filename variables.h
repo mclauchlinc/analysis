@@ -9,6 +9,97 @@
     int which = 0;//Variable which is assigned based on which file set is loaded so the user can be notified
     int naming_var = 0; //Variable used in switiching the index for outputs in the beginning. Used when inputing 3 inputs rather than 4
 
+    int ele_ints[10];
+    int pro_ints[5];
+    int pip_ints[5];
+    int pim_ints[7];
+    int had_ints[7];
+
+
+
+    double ele_dob[5];
+    double pro_dob[9];
+    double pip_dob[9];
+    double pim_dob[13];
+    double had_dob[13];
+
+    /*
+    //bool eid_5(double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int cc_sect, int cc_segm, int nphe)
+    void Assign_Elec(int *elecints[10], double *eledobs[5], double p, int q, double cx, double cy, double cz, int dc, int cc, int ec, int sc, int dc_stat, int stat, double etot, int cc_sect, int cc_segm, int nphe){
+        ele_ints[0] =  q;
+        ele_ints[1] = dc;
+        ele_ints[2] = cc;
+        ele_ints[3] = ec;
+        ele_ints[4] = sc;
+        ele_ints[5] = stat;
+        ele_ints[6] = dc_stat;
+        ele_ints[7] = cc_sect;
+        ele_ints[8] = cc_segm;
+        ele_ints[9] = nphe;
+        ele_dob[0] = p;
+        ele_dob[1] = cx;
+        ele_dob[2] = cy;
+        ele_dob[3] = cz;
+        ele_dob[4] = etot;
+    }
+
+    void Assign_Pro(int *pro_ints[10], double *pro_dob[9], int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0){
+        pro_ints[0] = q;
+        pro_ints[1] = dc;
+        pro_ints[2] = sc;
+        pro_ints[3] = stat;
+        pro_ints[4] = dc_stat;
+        pro_dob[0] = p;
+        pro_dob[1] = cx;
+        pro_dob[2] = cy;
+        pro_dob[3] = cz;
+        pro_dob[4] = sc_t;
+        pro_dob[5] = sc_r;
+        pro_dob[6] = sc_t0;
+        pro_dob[7] = sc_r0;
+        pro_dob[8] = p0; 
+    }
+
+    void Assign_Pip(int &pip_ints[10], double &pip_dob[9], int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0){
+        pip_ints[0] = q;
+        pip_ints[1] = dc;
+        pip_ints[2] = sc;
+        pip_ints[3] = stat;
+        pip_ints[4] = dc_stat;
+        pip_dob[0] = p;
+        pip_dob[1] = cx;
+        pip_dob[2] = cy;
+        pip_dob[3] = cz;
+        pip_dob[4] = sc_t;
+        pip_dob[5] = sc_r;
+        pip_dob[6] = sc_t0;
+        pip_dob[7] = sc_r0;
+        pip_dob[8] = p0; 
+    }
+
+    void Assign_Pim(int *pip_ints[10], double *pip_dob[9], int q, double p, double cx, double cy, double cz, int dc, int sc, int stat, int dc_stat, double sc_t, double sc_r, double p0, double sc_r0, double sc_t0, double cc, double ec, double etot, double vx, double vy, double vz){
+        pim_ints[0] = q;
+        pim_ints[1] = dc;
+        pim_ints[2] = sc;
+        pim_ints[3] = stat;
+        pim_ints[4] = dc_stat;
+        pim_ints[5] = cc;
+        pim_ints[6] = ec;
+        pim_dob[0] = p;
+        pim_dob[1] = cx;
+        pim_dob[2] = cy;
+        pim_dob[3] = cz;
+        pim_dob[4] = sc_t;
+        pim_dob[5] = sc_r;
+        pim_dob[6] = sc_t0;
+        pim_dob[7] = sc_r0;
+        pim_dob[8] = p0; 
+        pim_dob[9] = etot;
+        pim_dob[10] = vx;
+        pim_dob[11] = vy;
+        pim_dob[12] = vz; 
+    }*/
+
     int counts = 0;
 
     //Data parameters

@@ -21,6 +21,12 @@ const	double me = 0.0005109989; //mass of electron in GeV
 const	double mp = 0.93828;	//Mass of proton in GeV
 const	double mpi = 0.1395;	//Mass of pion in GeV
 
+//Range of W/Q2
+const double WminAna = 1.4;
+const double WmaxAna = 2.125;
+const double Q2minAna = 2.0;
+const double Q2maxAna = 5.0; 
+
 //Initial Four Vectors
 
 TLorentzVector k_mu_e16 = Make_4Vector(energy_e16,0.0,0.0,1.0,me);
@@ -251,6 +257,7 @@ const double YM_res[3] = {0.06,0.06,0.06};
 const char * species[] = {"e","p","pip","pim","all"};
 const char * eid_cut[] = {"pre","eid1","eid2","eid3","eid4","sanity","efid","sf","bank","eid5"};
 const char * norm_cut[] = {"pre", "cut", "anti", "pid", "bank","fid","CC","Anti-Fid","Anti-CC","CC+Fid", "Anti-CC+Fid"};
+const char * delt_cut[] = {"pre", "cut", "anti", "pid", "bank", "fid", "anti-fid", "event_sel", "anti-event_sel"};
 const char * char_cut[] = {"pre","cut","anti","combo","pid","bank"};
 const char * charge[] = {"pos","neg"};
 const char * arguments[] = {"program", "input file","number of files", "output file"};//4

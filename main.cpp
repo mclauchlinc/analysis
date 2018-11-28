@@ -98,6 +98,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
     //For W variance in plots
     double W_var; 
+    double Q2_var;
 
     int s1l=50;
     int s2l=1050;
@@ -105,18 +106,24 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     int s1h=50;
     int s2h=1050;
     int s3h=2050;
+
+    int looped; 
+    int p_loop;
+    int pip_loop;
+    int pim_loop;
     
 
     
     for(int i = 0; i< events ; i++)
     {
-
+        looped = 0; 
+        p_loop = 0;
+        pip_loop = 0;
+        pim_loop = 0;
         //Update on the progress
        // cout<<"got into the loop?" <<endl;
         progress = (int) 100.0*(((double)i+1.0)/(double)events);
        cout <<"Progess Percent " <<progress <<"\r";
-
-
 
        p_pass = false;
        pip_pass = false;
@@ -129,228 +136,220 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
         //Get info for event i
         data.GetEntry(i);
-        if(which != 3){
+        if(which != 3){//Data types are different for data location 3
             Reassign(); //Converts to C++ data types variables.h
         }else{
-            Reassign3();
+            Reassign3();//
         }
-
-          //cout<<"Particle: " <<"electron?" <<endl <<"Charge: " <<q[0] <<endl;
-
-          counts = 0;
-        
         W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
-        counts = counts +1;
-        //cout<<endl <<"W: " <<W_var <<endl;
-        Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
-        
-         //cout<<endl <<"here?" <<endl;
-        Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
-        if(cc_segm[cc[0]-1] < 1000){
-            //cout<<endl <<"cc_segm: " <<cc_segm[cc[0]-1] <<endl;
-        }
-        //cout << "did electron things about to enter for loop" <<endl;
-        //cout<<endl <<"enter event eid" <<endl;
-        if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
-            for(int j = 1; j<gpart ; j++){//332 is matching
-            //cout<<endl <<"cc: "<< cc[j] <<"  Segment: " <<cc_segm[cc[j]-1] <<" nphoe:" <<nphe[cc[j]-1]<<endl;
-            
-            //cout<<"is this the cc_sect " <<cc_sect[cc[j]-1] <<"  from the bank: " <<cc_sect_b[cc[j]-1] <<endl;       
-            //Fill_MinCC(cc_sect[cc[j]-1],nphe[cc[j]-1],cc_segm[cc[j]-1],0);
-            //cout<<"problem" <<endl;
-               // cout<<"Particle: " <<j <<endl <<"Charge: " <<q[j] <<endl <<endl;
-            // double p, int q, double cx, double cy, double cz, double vx, double vy, double vz, int dc, int cc, int ec, int sc, int dc_stat, double etot, int stat, int level
+        Q2_var = Qsquared(0,p[0],cx[0],cy[0],cz[0]);
+        //counts = counts +1;
+        //Assign_Ele(&ele_ints, &ele_dob, p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], cc_sect[cc[0]-1], cc_segm[cc[0]-1], nphe[cc[0]-1]);
+        //Limit W and Q2 to be in the regime we actually care about for the analysis
+        if(W_var > WminAna && W_var < WmaxAna && Q2_var > Q2minAna && Q2_var < Q2maxAna){
+            Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
+            Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
+            if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
+                for(int j = 1; j<gpart ; j++){//Hadron/Proton loop
+                    Fill_Hadron(q[j], W_var, p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);//partitions.h
+                    //Missing Mass
+                    for(int k = 1; k<gpart ; k++){//Pip Loop
+                        for(int l = 0; l < gpart; l++){//Pim Loop
+                            //Missing Mass for pion calculation
+                            MM_pi_val = MM_3_com(p[0],p[j],p[l],cx[0],cx[j],cx[l],cy[0],cy[j],cy[l],cz[0],cz[j],cz[l],me,mp,mpi);//Looking for pi+ with proton and  pim
+                            MM_pi2_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mp);
+                            MM_pi3_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
+                            //Proton missing mass topology Brackets work
+                            if(other_p_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1],  q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], cc[l], ec[l], etot[l], vx[l], vy[l], vz[l], k, l)){
+                                  //cout<<endl <<"other p miss pass" <<endl;
+                                  MM_p_val = MM_3_com(p[0],p[k],p[l],cx[0],cx[k],cx[l],cy[0],cy[k],cy[l],cz[0],cz[k],cz[l],me,mpi,mpi);
+                                  MM_p_pass = MM_p_val;
+                                  p_pre = true;
+                                Fill_MM(0,0,W_var,MM_p_val);
+                                //Proton Missing Cut
+                                if(MM_p2(MM_p_val)){
+                                    pip_loop++;
+                                    pim_loop++;
 
-                //Brackets work
-               // cout<<endl <<"entering Hadron for iteration: " <<j;
-                Fill_Hadron(q[j], W_var, p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1], p[0], sc_t[sc[0]-1], sc_r[sc[0]-1], cc[j], ec[j], etot[j], vx[j], vy[j], vz[j], id[j]);//partitions.h
-                //Pim electron ID work
-                for(int o = 0; o<5; o++){
-                    if(pim_eid(o, p[j], sc_r[sc[0]-1], sc_r[sc[j]-1], sc_t[sc[0]-1], sc_t[sc[j]-1], cc[j], etot[j], ec[j], cx[j], cy[j])){//hid.h
-                        if(q[j]==-1){
-                            Fill_dt_pe(W_var, o, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1],  sc_t[sc[j]-1], sc_t[sc[0]-1]);
-                        }
-                    }
-                }
-
-                //Missing Mass
-                   //Missing Mass 1 missing
-                for(int k = 1; k<gpart ; k++){//302 
-                    //Missing Mass for pion calculation
-                    MM_pi_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mp,mpi);
-                    MM_pi2_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mp);
-                    MM_pi3_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
-                    //Proton missing mass topology Brackets work
-                    if(other_p_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
-                          //cout<<endl <<"other p miss pass" <<endl;
-                          MM_p_val = MM_3_com(p[0],p[j],p[k],cx[0],cx[j],cx[k],cy[0],cy[j],cy[k],cz[0],cz[j],cz[k],me,mpi,mpi);
-                          MM_p_pass = MM_p_val;
-                          p_pre = true;
-                        Fill_MM(0,0,W_var,MM_p_val);
-                        //Fill_MM_Wall(0,W_var,MM_p_val);//*******
-                        
-                        //Proton Missing Cut
-                        if(MM_p2(MM_p_val)){
-
-                           // cout<< endl <<"p_pass";
-                            Fill_MM(0,1,W_var,MM_p_val);
-                            p_pass = true;
-                            Fill_WQ2(0,5,1,p[0],cx[0],cy[0],cz[0]);
-                            ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
-                            pip_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mpi);
-                            pim_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
-                            pro_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
-                        }
-                         //Proton Missing Anti
-                        else{
-                            Fill_MM(0,2,W_var,MM_p_val);
-                        }
-                    }
-
-                    //Pi+ missing mass topology bracket work
-                    if(other_pip_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], cc[k], ec[k], etot[k], vx[k], vy[k], vz[k], j, k)){
-                       // cout<<endl <<"other pip miss pass" <<endl;
-                        Fill_MM(1,0,W_var,MM_pi_val);
-                        //Fill_MM_Wall(1,W_var,MM_pi_val);//*********
-                        pip_pre = true;
-                        MM_pip_pass = MM_pi_val;
-                        //Pi+ Missing Cut
-                        if(MM_pi2(MM_pi_val)){
-                            Fill_MM(1,1,W_var,MM_pi_val);
-                            pip_pass = true;
-                            Fill_WQ2(0,5,2,p[0],cx[0],cy[0],cz[0]);
-                                if(p_pass){
-                                    //cout<< endl<< "p_pass && pip_pass";
-                                    pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
-                                }
-                                else{
-                                    //cout<< endl <<"pip_pass";
+                                    Fill_MM(0,1,W_var,MM_p_val);
+                                    p_pass = true;
+                                    Fill_WQ2(0,5,1,p[0],cx[0],cy[0],cz[0]);
                                     ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
-                                    pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
-                                    pim_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
-                                    pip_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
-                                }
-                        }                
-                        //Pi+ Missing Anti
-                        else{
-                            Fill_MM(1,2,W_var,MM_pi_val);
-                        }
-                    }
-
-                    //Pi- missing mass topology bracket work
-                    if(other_pim_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
-                        // cout<<endl <<"other pim miss pass" <<endl;
-                         Fill_MM(2,0,W_var,MM_pi_val);
-                         //proton
-                         Fill_dt_MM( MM_pi_val, W_var, 0, 1, 2, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
-                         //pip
-                         Fill_dt_MM( MM_pi_val, W_var, 1, 1, 2, sc[k], p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
-                         //pim
-                         //Fill_dt_MM( MM_pi_val, W_var, 2, 1, 2, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
-                         
-                         //W variance of the PIM MM plots
-                         //Fill_MM_Wall(2,W_var,MM_pi_val);//********
-                         //Fill_MMpim_Mall(0,W_var,MM_pi2_val);
-                         //Fill_MMpim_Mall(1,W_var,MM_pi3_val);
-                         //Fill_MMpimM(0,MM_pi2_val);
-                         //Fill_MMpimM(1,MM_pi3_val);
-
-                         pim_pre = true;
-                         MM_pim_pass = MM_pi_val;
-                        //Pi- Missing Cut
-                        if(MM_pi2(MM_pi_val)){
-                            Fill_MM(2,1,W_var,MM_pi_val);
-                            pim_pass = true;
-                            Fill_WQ2(0,5,2,p[0],cx[0],cy[0],cz[0]);
-                            if(p_pass && !pip_pass){
-                               // cout<<endl <<"p_pass && pim_pass";
-                                pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
-                            }
-                            if(pip_pass && !p_pass){
-                                //cout<<endl <<"pip_pass && pim_pass";
-                                pip_mu = Make_4Vector(p[k], cx[k],cy[k], cz[k], mpi);
-                            }
-                            if(!p_pass && !pip_pass){
-                               // cout<< endl <<"pim_pass";
-                                ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
-                                pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
-                                pip_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
-                                pim_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
-                            }
-                        }
-                        //Pi- Missing Anti
-                        else{
-                            Fill_MM(2,2,W_var,MM_pi_val);
-                        }
-                    }
-
-                    for(int l = 0; l < gpart; l++){
-                        //Full Topology Pre
-                        MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
-                        if(other_zero_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], cc[l], ec[l], etot[l], vx[l], vy[l], vz[l], j, k, l)){
-                            Fill_MM(3,0,W_var,MM_full);
-                            MM_full_pass = MM_full;
-                            zero_pre = true;
-                            if(MM_all2(MM_full)){
-                                //Full Topology cut
-                                Fill_MM(3,1,W_var,MM_full);
-                                zero_pass = true;
-                                Fill_WQ2(0,5,3,p[0],cx[0],cy[0],cz[0]);
-                                if(p_pass && !pip_pass && !pim_pass){
-                                    pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
-                                }
-                                if(pip_pass && !p_pass && !pim_pass){
-                                    pip_mu = Make_4Vector(p[k], cx[k],cy[k], cz[k], mpi);
-                                }
-                                if(!pip_pass && !p_pass && pim_pass){
-                                    pim_mu = Make_4Vector(p[l], cx[l],cy[l], cz[l], mpi);
-                                }
-                                if(!p_pass && !pip_pass && !pim_pass){
-                                    ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
-                                    pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
                                     pip_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
                                     pim_mu = Make_4Vector(p[l],cx[l],cy[l],cz[l],mpi);
+                                    pro_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
+                                    if(pip_loop == 1){
+                                        Fill_dt(W_var,1,7,sc[k],p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(pim_loop == 1){
+                                        Fill_dt(W_var,2,7,sc[l],p[l], p[0], sc_r[sc[l]-1], sc_r[sc[0]-1], sc_t[sc[l]-1], sc_t[sc[0]-1]);
+                                    }
+                                }
+                                 //Proton Missing Anti
+                                else{
+                                    Fill_MM(0,2,W_var,MM_p_val);
                                 }
                             }
-                            /*else{
-                                //Full topology anti 
-                                Fill_MM(3,2,MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi));
+                            //Pi+ missing mass topology bracket work
+                            if(other_pip_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[k]-1], sc_r[sc[l]-1], cc[l], ec[l], etot[l], vx[l], vy[l], vz[l], j, l)){
+                               // cout<<endl <<"other pip miss pass" <<endl;
+                                Fill_MM(1,0,W_var,MM_pi_val);
+                                pip_pre = true;
+                                MM_pip_pass = MM_pi_val;
+                                //Pi+ Missing Cut
+                                if(MM_pi2(MM_pi_val)){
+                                    Fill_MM(1,1,W_var,MM_pi_val);
+                                    looped++;
+                                    p_loop++;
+                                    pim_loop++;
+                                    pip_pass = true;
+                                    Fill_WQ2(0,5,2,p[0],cx[0],cy[0],cz[0]);
+                                    if(pim_loop == 1){
+                                        Fill_dt(W_var,2,7,sc[l],p[l], p[0], sc_r[sc[l]-1], sc_r[sc[0]-1], sc_t[sc[l]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(p_loop == 1){
+                                        Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
+                                    }
+                                        if(p_pass){
+                                            pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                        }
+                                        else{
+                                            ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
+                                            pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                            pim_mu = Make_4Vector(p[l],cx[l],cy[l],cz[l],mpi);
+                                            pip_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
+                                        }
+                                }                
+                                //Pi+ Missing Anti
+                                else{
+                                    Fill_MM(1,2,W_var,MM_pi_val);
+                                }
+                            }
+                            //Pi- missing mass topology bracket work
+                            if(other_pim_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], j, k)){
+                                 Fill_MM(2,0,W_var,MM_pi_val);
+                                 Fill_dt_MM( MM_pi_val, W_var, 0, 1, 2, sc[j], p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
+                                 Fill_dt_MM( MM_pi_val, W_var, 1, 1, 2, sc[k], p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                                 pim_pre = true;
+                                 MM_pim_pass = MM_pi_val;
+                                //Pi- Missing Cut
+                                if(MM_pi2(MM_pi_val)){
+                                    Fill_MM(2,1,W_var,MM_pi_val);
+                                    pim_pass = true;
+                                    looped++;
+                                    p_loop++;
+                                    pip_loop++;
+                                    Fill_WQ2(0,5,2,p[0],cx[0],cy[0],cz[0]);
+                                    if(pip_loop == 1){
+                                        Fill_dt(W_var,1,7,sc[k],p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(p_loop == 1){
+                                        Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(p_pass && !pip_pass){
+                                        pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                    }
+                                    if(pip_pass && !p_pass){
+                                        pip_mu = Make_4Vector(p[k], cx[k],cy[k], cz[k], mpi);
+                                    }
+                                    if(!p_pass && !pip_pass){
+                                        ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
+                                        pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                        pip_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
+                                        pim_mu = k_mu_e16 + p_mu - ele_mu - pro_mu - pim_mu;
+                                    }
+                                }
+                                //Pi- Missing Anti
+                                else{
+                                    Fill_MM(2,2,W_var,MM_pi_val);
+                                }
+                            }
+                            //Full Topology Pre
+                            MM_full = MM_4_com(p[0],p[j],p[k],p[l],cx[0],cx[j],cx[k],cx[l],cy[0],cy[j],cy[k],cy[l],cz[0],cz[j],cz[k],cz[l],me,mp,mpi,mpi);
+                            if(other_zero_miss(cc_segm[cc[0]-1], cc_sect[cc[0]-1], nphe[cc[0]-1],p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], sc_r[sc[0]-1], sc_t[sc[0]-1],  q[j], p[j], cx[j], cy[j], cz[j], dc[j], sc[j], stat[j], dc_stat[dc[j]-1], sc_t[sc[j]-1], sc_r[sc[j]-1],  q[k], p[k], cx[k], cy[k], cz[k], dc[k], sc[k], stat[k], dc_stat[dc[k]-1], sc_t[sc[k]-1], sc_r[sc[k]-1], q[l], p[l], cx[l], cy[l], cz[l], dc[l], sc[l], stat[l], dc_stat[dc[l]-1], sc_t[sc[l]-1], sc_r[sc[l]-1], cc[l], ec[l], etot[l], vx[l], vy[l], vz[l], j, k, l)){
+                                Fill_MM(3,0,W_var,MM_full);
+                                MM_full_pass = MM_full;
+                                zero_pre = true;
+                                if(MM_all2(MM_full)){
+                                    //Full Topology cut
+                                    Fill_MM(3,1,W_var,MM_full);
+                                    zero_pass = true;
+                                    Fill_WQ2(0,5,3,p[0],cx[0],cy[0],cz[0]);
+                                    p_loop++;
+                                    pip_loop++;
+                                    pim_loop++;
+                                    looped++;
+                                    if(pip_loop == 1){
+                                        Fill_dt(W_var,1,7,sc[k],p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(p_loop == 1){
+                                        Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(pim_loop == 1){
+                                        Fill_dt(W_var,2,7,sc[l],p[l], p[0], sc_r[sc[l]-1], sc_r[sc[0]-1], sc_t[sc[l]-1], sc_t[sc[0]-1]);
+                                    }
+                                    if(p_pass && !pip_pass && !pim_pass){
+                                        pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                    }
+                                    if(pip_pass && !p_pass && !pim_pass){
+                                        pip_mu = Make_4Vector(p[k], cx[k],cy[k], cz[k], mpi);
+                                    }
+                                    if(!pip_pass && !p_pass && pim_pass){
+                                        pim_mu = Make_4Vector(p[l], cx[l],cy[l], cz[l], mpi);
+                                    }
+                                    if(!p_pass && !pip_pass && !pim_pass){
+                                        ele_mu = Make_4Vector(p[0],cx[0],cy[0],cz[0],me);
+                                        pro_mu = Make_4Vector(p[j],cx[j],cy[j],cz[j],mp);
+                                        pip_mu = Make_4Vector(p[k],cx[k],cy[k],cz[k],mpi);
+                                        pim_mu = Make_4Vector(p[l],cx[l],cy[l],cz[l],mpi);
+                                    }
+                                    //Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
+                                    //Fill_dt(W_var,1,7,sc[k],p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                                    //Fill_dt(W_var,2,7,sc[l],p[l], p[0], sc_r[sc[l]-1], sc_r[sc[0]-1], sc_t[sc[l]-1], sc_t[sc[0]-1]);
+                                }
+                            }//if other_zero_miss   
+                            /*if(!p_pass && !pim_pass && zero_pass){
+                                Fill_dt(W_var,1,7,sc[k],p[k], p[0], sc_r[sc[k]-1], sc_r[sc[0]-1], sc_t[sc[k]-1], sc_t[sc[0]-1]);
+                            }
+                            if(!p_pass && !pip_pass && zero_pass){
+                                Fill_dt(W_var,2,7,sc[l],p[l], p[0], sc_r[sc[l]-1], sc_r[sc[0]-1], sc_t[sc[l]-1], sc_t[sc[0]-1]);
+                            }
+                            if(!pip_pass && !pim_pass && zero_pass){
+                                Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                             }*/
-                        }
+                        }//l loop 
+                    }//k loop ends
+                    //Cross MM plots
+                    if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
+                        Fill_WQ2(0,5,5,p[0],cx[0],cy[0],cz[0]);
                     }
-                }//k loop ends
-                //Cross MM plots
-                
-                if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
-                    Fill_WQ2(0,5,5,p[0],cx[0],cy[0],cz[0]);
-                }
-                if(zero_pre && pim_pre){
-                   // cout<< endl <<"boop1" <<endl;
-                    Fill_MM_Cross(5, W_var, MM_pim_pass,MM_full_pass);
-                }
-                if(zero_pre && pip_pre){
-                   // cout<< endl <<"boop2" <<endl;
-                    Fill_MM_Cross(4, W_var, MM_pip_pass,MM_full_pass);
-                }
-                if(zero_pre && p_pre){
-                    //cout<< endl <<"boop3" <<endl;
-                    Fill_MM_Cross(2, W_var, MM_p_pass,MM_full_pass);
-                }
-                if(p_pre && pim_pre){
-                   // cout<< endl <<"boop4" <<endl;
-                    Fill_MM_Cross(1, W_var, MM_p_pass,MM_pim_pass);
-                }
-                if(p_pre && pip_pre){
-                    //cout<< endl <<"boop5" <<endl;
-                    Fill_MM_Cross(0, W_var, MM_p_pass,MM_pip_pass);
-                }
-                if(pip_pre && pim_pre){
-                    //cout<< endl <<"boop6" <<endl;
-                    Fill_MM_Cross(3, W_var,MM_pip_pass,MM_pim_pass);//
-                }
-            }//j loop ends
-        }//eid if statement ends
-        //cout<<endl;
+                    if(zero_pre && pim_pre){
+                       // cout<< endl <<"boop1" <<endl;
+                        Fill_MM_Cross(5, W_var, MM_pim_pass,MM_full_pass);
+                    }
+                    if(zero_pre && pip_pre){
+                       // cout<< endl <<"boop2" <<endl;
+                        Fill_MM_Cross(4, W_var, MM_pip_pass,MM_full_pass);
+                    }
+                    if(zero_pre && p_pre){
+                        //cout<< endl <<"boop3" <<endl;
+                        Fill_MM_Cross(2, W_var, MM_p_pass,MM_full_pass);
+                    }
+                    if(p_pre && pim_pre){
+                       // cout<< endl <<"boop4" <<endl;
+                        Fill_MM_Cross(1, W_var, MM_p_pass,MM_pim_pass);
+                    }
+                    if(p_pre && pip_pre){
+                        //cout<< endl <<"boop5" <<endl;
+                        Fill_MM_Cross(0, W_var, MM_p_pass,MM_pip_pass);
+                    }
+                    if(pip_pre && pim_pre){
+                        //cout<< endl <<"boop6" <<endl;
+                        Fill_MM_Cross(3, W_var,MM_pip_pass,MM_pim_pass);//
+                    }
+                }//j loop ends
+            }//eid if statement ends
+        }
         
         //This is the complete event selection. Now do things with the four vectors 
         if(p_pass || pip_pass || pim_pass || zero_pass){
@@ -361,17 +360,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             MM_pip_pim = MM_2(pip_mu,pim_mu);
             //Convert to COM frame
                 //First do with respect to gamma/proton COM frame
-            //cout<<endl <<"Pre COM: ";
-            //See_4Vec(pip_mu);
             COM_gp(0,ele_mu,pro_mu,pip_mu,pim_mu);
-            //cout<<endl <<"Post COM: ";
-            //See_4Vec(pip_mu);
-            //cout<<endl;
             //Extract scattering angle in center of mass now that
             theta_p_pip = theta_com((pim_mu));
             theta_p_pim = theta_com((pip_mu));
             theta_pip_pim = theta_com((pro_mu));
-            //cout<<endl <<"Q2= " <<event_Q2 <<" _ W= " <<event_W; 
             if(Qbinning_check(event_Q2) && Wbinning_check(event_W)){//yield.h
                 //cout<<" __ and we passed the check";
                 Qbin_now = Q2binning(event_Q2);
