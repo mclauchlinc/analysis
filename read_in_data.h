@@ -48,6 +48,7 @@ void loadChain(TChain* c, std::string file, int max=-1)
 void SetBranches(TChain* c, int witch)
 {
 	if(witch == 3){
+		c->SetBranchAddress("evntclas2",&evntclas2);
 		c->SetBranchAddress("q",&q_c);
         c->SetBranchAddress("gpart",&gpart);
         c->SetBranchAddress("sc_t",&sc_t_c);
@@ -72,7 +73,9 @@ void SetBranches(TChain* c, int witch)
         c->SetBranchAddress("cc_segm",&cc_segm_c);
         c->SetBranchAddress("cc_part",&cc_part_c);
         c->SetBranchAddress("nphe",&nphe_c);
+        c->SetBranchAddress("q_l",&q_l_c);
 	}else{
+		c->SetBranchAddress("evntclas2",&evntclas2);
 		c->SetBranchAddress("q",&q_b);
 	    c->SetBranchAddress("gpart",&gpart);
 	    c->SetBranchAddress("sc_t",&sc_t_b);
@@ -97,6 +100,7 @@ void SetBranches(TChain* c, int witch)
 	    c->SetBranchAddress("cc_segm",&cc_segm_b);
 	    c->SetBranchAddress("cc_part",&cc_part_b);
 	    c->SetBranchAddress("nphe",&nphe_b);
+	    c->SetBranchAddress("q_l",&q_l_b);
 	}
 }
 

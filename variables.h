@@ -15,6 +15,7 @@
     int pim_ints[7];
     int had_ints[7];
 
+    int q_las;
 
 
     double ele_dob[5];
@@ -104,6 +105,8 @@
 
     //Data parameters
     int events;//The variable for the total number of events
+    int eventsIN;
+    int eventsOUT;
     int progress;//The Variable for the percentage of events looped through
     double MM_p_val; //The variable for the value of the Missing Mass Squared for proton missing topology
     double MM_pi_val;//The variable for the value of the Missing Mass Squared for pion missing topology
@@ -133,6 +136,8 @@
     double MM_p_pim;
     double MM_pip_pim;
     double MM_event;
+    int e_helicity; //Helicity of the electron beam for an event (+ = 1, - = -1, unknonwn = 0)
+    int plate_stat; //status of the half wave plate: whether in or out (1 = in, -1 = out, 0 = not stated)
 
     TLorentzVector ele_mu;//Four vector for scattered election
     TLorentzVector pro_mu;//Four vector for scattered proton
@@ -169,6 +174,8 @@
     UChar_t cc_sect_b[100];
     Int_t cc_segm_b[100];
     UShort_t nphe_b[100];
+    Float_t q_l_b;
+    Int_t evntclas2;
 
     //int gpart; //The nmcer of particles registered in a given event
     int q_c[100]; //The charge of each given particle
@@ -194,6 +201,9 @@
     int cc_sect_c[100];
     int cc_segm_c[100];
     int nphe_c[100];
+    float q_l_c;
+    //int evntclas_c;
+
 
     //Put the various variables into straight C++ data types
     int q[100] ;// = (int) q_b; //The charge of each given particle
@@ -219,6 +229,8 @@
     int cc_sect[100]; //The sector a particle was registered in
     int cc_segm[100];//The segment the CC hit was registered in 
     int nphe[100];//number of photo-electrons
+    float q_l; //Charge accumulated for individual runs on the Faraday Cup 
+    //int evntclas2; //The helicity state of the event, but needs 1/2 wave plate info for consistent definition 
 
     //Int_t gpart; //The number of particles registered in a given event
     //Need to reassign the individual pieces of the array rather than entire arrays at once 7/31/17
@@ -247,6 +259,8 @@
             cc_segm[i] = (int) cc_segm_b[i];
             cc_sect[i] = (int) cc_sect_b[i];
             nphe[i] = (int) nphe_b[i];
+            q_l = (float) q_l_b;
+            //evntclas2 = (int) evntclas2_b;
        }
     }
 
@@ -275,6 +289,8 @@
             cc_segm[i] = (int) cc_segm_c[i];
             cc_sect[i] = (int) cc_sect_c[i];
             nphe[i] = (int) nphe_c[i];
+            //q_l = (int) q_l_c;
+            //evntclas2 = (int) evntclas2_c; 
        }
     }
 

@@ -105,6 +105,10 @@ void Fill_eid(double W_val, double p, int q, double cx, double cy, double cz, in
                 Fill_sf(10,W_val,etot,p);
             }
             
+            //Pdep Fid
+            if(sf_p && cc_p){
+                Fill_fid_pdep(0,0,W_val,cx,cy,cz,p);
+            }
 }
 
 /*
@@ -145,6 +149,7 @@ void Fill_proton(int q, double W_val, double p, double cx, double cy, double cz,
             duck ++;
             Fill_dt(W_val,0,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
            //std::cout<<"Delta T is: " <<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
+            Fill_fid_pdep(1,0,W_val,cx,cy,cz,p);
     	}
         else{
         //    std::cout<<"delta_proton_anti ";
@@ -204,6 +209,7 @@ void Fill_pip(int q, double W_val ,double p, double cx, double cy, double cz, in
             //std::cout<<"dt_pip ";
             Fill_dt(W_val,1,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
             duck++;
+            Fill_fid_pdep(2,0,W_val,cx,cy,cz,p);
            // std::cout<<delta_t(p,p0,sc_r,sc_r0,sc_t,sc_t0,mp);
         }
         else{
@@ -263,6 +269,7 @@ void Fill_pim(int q, double W_val, double p, double cx, double cy, double cz, in
         //    std::cout<<"dt_pi- ";
             Fill_dt(W_val,2,1,sc,p, p0, sc_r, sc_r0, sc_t, sc_t0);
             duck ++;
+            Fill_fid_pdep(3,0,W_val,cx,cy,cz,p);
         }
         else{
          //   std::cout<<"dt_pi-_anti ";

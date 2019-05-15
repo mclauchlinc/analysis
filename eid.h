@@ -120,14 +120,6 @@ bool eid( double p, int q, double cx, double cy, double cz, double vx, double vy
 			break;
 		}
 	}
-	/*
-	if(is_electron){
-		std::cout<<" Passed 5" <<std::endl;
-	}else{
-		std::cout<<" didn't pass 5" <<std::endl;
-	}*/
-
-
 	return is_electron;
 }
 

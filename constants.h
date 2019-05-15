@@ -9,7 +9,7 @@ const double c_special = 29.9792458; //speed of light in cm/ns
 const double c_convert = 10000000; //Convert c_special to m/s
 
 //Beam energies in GeV
-const double energy_e16 = 5.759;
+const double energy_e16 = 5.7696;
 //3_14 was 5.754, but led to bad results: updated to 5.759 after reading Paremuzyan's thesis 
 //Check 4.794 GeV for e16
 const double energy_e1f = 5.499;
@@ -272,6 +272,7 @@ const char* cc_cuts[] = {"none","sf","fid","sf_fid","eid"};
 const char* cc_pos[] ={"left","coinc","right","all"};
 const char* fid_can[] = {"all","e","p","pip","pim"};
 const char* yield_n[] = {"Mppip","Mppim","Mpippim","Theta pim","Theta pim", "Theta p", "alpha ppip", "alpha ppim", "alpha pippim"};
+const char* plates[] = {"Half Plate IN","Half Plate OUT"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};
