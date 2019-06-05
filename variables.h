@@ -150,6 +150,11 @@
     double parameters[6];//First three are parameters with the latter three as their errors
     double parameters2[6];//Parameters for a second layer of fits if multiple gaussians are being fit simultaneously
 
+    //Electron angle corrections
+    double eac1_pars[14][41][6][8];//{theta}{phi}{sector}{parameters and errors}//For the angular electron momentum corrections step 1
+    double eac2_x[14][6];//{theta}{sector}
+    double eac2_pars[14][6][5];//{theta}{sector}{A,B,C,D,E}
+
     Int_t gpart; //The number of particles registered in a given event
     Char_t q_b[100]; //The charge of each given particle
     Float_t sc_t_b[100]; //The time taken for a particle to travel through as found by the sc
@@ -202,6 +207,7 @@
     int cc_segm_c[100];
     int nphe_c[100];
     float q_l_c;
+    int evntclas2_c; 
     //int evntclas_c;
 
 
@@ -309,12 +315,13 @@
     //TDirectory 
     
     //For fun TGraphs for yields
-    double x[9][6][30][13][10][10];
-    double y[9][6][30][13][10][10];
+    double x[9][6][30][13][10][10][5];//Single Diff xc, Q2, W, MM binning, theta binning, alpha binning, helicity
+    double y[9][6][30][13][10][10][5];//Single Diff xc, Q2, W, MM binning, theta binning, alpha binning, helicity
 
     //Differential Cross Section Values
-    double xc_x[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
-    double xc_y[9][6][30][13][10][10];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning}
+    double xc_x[9][6][30][13][10][10][5];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning,helicity}
+    double xc_y[9][6][30][13][10][10][5];//{Single Diff xc, Q2, W, MM binning, Theta binning, Alpha binning,helicity}
+    //{Helicity binning is 0 = - 1 = ?? 2 = +, 3 = sum of all, 4 = + minus -}
     
 
 

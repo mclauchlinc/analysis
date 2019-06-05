@@ -9,7 +9,7 @@
 #include "headers.h"
 #include "four_vector.h"
 
-int event_helicity(int event_class, int plate){//To give a consistent definition of the helicity by taking into account the status of the half wave plate
+int event_helicity(int event_class, int platestat){//To give a consistent definition of the helicity by taking into account the status of the half wave plate
 	int eh = 0; 
 	if(event_class >= 1000){
             eh = 1; 
@@ -20,10 +20,10 @@ int event_helicity(int event_class, int plate){//To give a consistent definition
     if(event_class < 1000 && event_class > -1000){
         eh = 0; 
     }
-    if(plate = 0){
-    	plate = 1; //This is treating everything as if the half wave plate is in. Used for looking at non-wave plate dependencies 
+    if(platestat == 0){
+    	eh = 1; //This is treating everything as if the half wave plate is in. Used for looking at non-wave plate dependencies 
     }
-    return plate*eh; 
+    return platestat*eh; 
 }
 
 

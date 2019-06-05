@@ -11,7 +11,7 @@
 #include "TCanvas.h"
 #include "TGraph.h"
 
-TGraph* g_yield_Q2Wbin[9][6][30];//{Place on canvas}{Q2 binning},{W binning}
+TGraph* g_yield_Q2Wbin[9][6][30][5];//{Place on canvas}{Q2 binning},{W binning} {helicity binning}
 //13 for MM 0.6 start at 1.1
 //10 for angles starting at 10 for alpha with bins of 40 sep and 9 for theta with bins of 18
 
@@ -19,7 +19,7 @@ int MM2bins = 13;
 int thbins = 10;
 int albins = 10;
 
-TCanvas* c_yield_Q2Wbin[6][30];//{Q2 binning},{W binning}(3x3)
+TCanvas* c_yield_Q2Wbin[6][30][5];//{Q2 binning},{W binning}(3x3), {helicity binning -, ??, +, all, diff}
 
 const double cW = 4800;
 const double cH = 4800;
@@ -134,11 +134,12 @@ double W_from_bin(int i){
 }
 
 //MM
-void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]){
-	std::vector<long> space_dims(3);
+void Graph_yield1(double x[9][6][30][13][10][10][5], double y[9][6][30][13][10][10][5], TFile *file){
+	std::vector<long> space_dims(4);
   	space_dims[0] = 9;
   	space_dims[1] = 6; //Q2 binning
   	space_dims[2] = 30; //W binning
+    space_dims[3] = 5; //helicity binning
 
   	double x1[13], y1[13];
   	double x2[10], y2[10];
@@ -146,115 +147,104 @@ void Graph_yield1(double x[9][6][30][13][10][10], double y[9][6][30][13][10][10]
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	float Qbot, Qtop, Wbot, Wtop; 
-  	//std::cout<<std::endl <<"1";
   	for(int i = 0; i < 6; i++){
   		for(int j = 0; j <30; j++){
-  			sprintf(cname1,"yield_Q2bin:%d_Wbin:%d",i,j);
-  			c_yield_Q2Wbin[i][j] = new TCanvas(cname1,cname1,cW,cH);
-  			c_yield_Q2Wbin[i][j]->Divide(3,3);
+        for(int k = 0; k < 5; k++){
+    			sprintf(cname1,"yield_Q2bin:%d_Wbin:%d_h:%s",i,j,hel_stat[k]);
+    			c_yield_Q2Wbin[i][j][k] = new TCanvas(cname1,cname1,cW,cH);
+    			c_yield_Q2Wbin[i][j][k]->Divide(3,3);
+        }
   		}
   	}
-  	//std::cout<<std::endl <<"2" <<std::endl;
 
   	//in the loop
   	while(cart.GetNextCombination()) {//CartesianGenerator.hh
       //Establish Q2 range
   		Qtop = Q2bin_start + ((cart[1]+1)*Q2bin_res);
   		Qbot = Qtop - Q2bin_res;
-  		//std::cout<<std::endl <<"0.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2]<<std::endl;
       //Establish W range in titles
       if(cart[1] == 0 ){//All W
-      	//std::cout<<std::endl <<"1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2]<<std::endl;
-        sprintf(hname, "%s_Q2:%f-%f_All_W",yield_n[cart[0]],Qbot,Qtop); 
-       // std::cout<<std::endl <<"1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2]<<std::endl;
+        sprintf(hname, "%s_Q2:%f-%f_All_W_h:%s",yield_n[cart[0]],Qbot,Qtop,hel_stat[cart[3]]); 
       }
       else{
-      	//std::cout<<std::endl <<"2.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2]<<std::endl;
         Wtop = Wbin_start + (cart[2]*Wbin_res);//constant.h
         Wbot = Wtop - Wbin_res; //constants.h
-        sprintf(hname, "%s_Q2:%f-%f_W:%f-%f",yield_n[cart[0]],Qbot,Qtop,Wbot,Wtop); 
-       // std::cout<<std::endl <<"2.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2]<<std::endl;
+        sprintf(hname, "%s_Q2:%f-%f_W:%f-%f_h:%s",yield_n[cart[0]],Qbot,Qtop,Wbot,Wtop,hel_stat[cart[3]]); 
       }
-     //hisname = species[cart[1]] + "_fid_sec" + (cart[0]+1) + cut[cart[2]]; //Naming convention: species_type_of_plot_sector#_cut_type
-      //histitle = hisname; //For Fiducial I can make them both the same thing. 
-      //std::cout<<std::endl <<"boop ba doop?" <<std::endl;
+      //Invariant Masses of Intermediary Particles
       if(cart[0]<3){
-      	//std::cout<<std::endl <<"boop?" <<std::endl;
       	for(int go = 0; go < 13; go++){
-      		//std::cout<<std::endl <<"3.1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      		x1[go]=x[cart[0]][cart[1]][cart[2]][go][0][0];
-      		y1[go]=y[cart[0]][cart[1]][cart[2]][go][0][0];
-      		//std::cout<<std::endl <<"MM "<<"x: "<<x1[go] <<" y: " <<y1[go];
-      		//std::cout<<std::endl <<"MM "<<"x: "<<x[cart[0]][cart[1]][cart[2]][go][0][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][go][0][0];
-      		
-      		//std::cout<<std::endl <<"3.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      		x1[go]=x[cart[0]][cart[1]][cart[2]][go][0][0][cart[3]];
+      		y1[go]=y[cart[0]][cart[1]][cart[2]][go][0][0][cart[3]];
       	}
-      	//std::cout<<std::endl <<"3.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]] = new TGraph(13,x1,y1);
-      	//std::cout<<std::endl <<"3.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]] = new TGraph(13,x1,y1);
       }
+      //The Thetas
       if(3<= cart[0] && cart[0]<6){
-      	//std::cout<<std::endl <<"ba?" <<std::endl;
       	for(int ho = 0; ho < 10; ho++){
-      		//	std::cout<<std::endl <<"4.1.1: "  <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      		x2[ho]=x[cart[0]][cart[1]][cart[2]][0][ho][0];
-      		y2[ho]=y[cart[0]][cart[1]][cart[2]][0][ho][0];
-      		//std::cout<<std::endl <<"theta "<<"x: "<<x2[ho] <<" y: " <<y2[ho];
-      		//std::cout<<std::endl <<"theta "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][ho][0] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][ho][0];
-      		//std::cout<<std::endl <<"4.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      		x2[ho]=x[cart[0]][cart[1]][cart[2]][0][ho][0][cart[3]];
+      		y2[ho]=y[cart[0]][cart[1]][cart[2]][0][ho][0][cart[3]];
       	}
-      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]] = new TGraph(10,x2,y2);
-      ///	std::cout<<std::endl <<"4.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]] = new TGraph(10,x2,y2);
       }
+      //Alpha angles
       if(6<= cart[0] && cart[0]<9){
-      	//std::cout<<std::endl <<"doop?" <<std::endl;
       	for(int jo = 0; jo < 10; jo++){
-      		//std::cout<<std::endl <<"5.1.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      		x3[jo]=x[cart[0]][cart[1]][cart[2]][0][0][jo];
-      		y3[jo]=y[cart[0]][cart[1]][cart[2]][0][0][jo];
+      		x3[jo]=x[cart[0]][cart[1]][cart[2]][0][0][jo][cart[3]];
+      		y3[jo]=y[cart[0]][cart[1]][cart[2]][0][0][jo][cart[3]];
       		if(cart[0]==8){
-      			//std::cout<<std::endl <<"Q2: " <<Q2_from_bin(cart[1]) <<" W: " <<W_from_bin(cart[2]);
-      			//std::cout<<std::endl <<"alpha "<<"x: "<<x3[jo] <<" y: " <<y3[jo];
       		}
-      		
-      		//std::cout<<std::endl <<"alpha "<<"x: "<<x[cart[0]][cart[1]][cart[2]][0][0][jo] <<" y: " <<y[cart[0]][cart[1]][cart[2]][0][0][jo];
-      		//std::cout<<std::endl <<"5.1.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
       	}
-      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]] = new TGraph(10,x3,y3);
-      	//std::cout<<std::endl <<"5.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      	g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]] = new TGraph(10,x3,y3);
       }
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerColor(2);
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetLineColorAlpha(kBlue,0.0);
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerStyle(21);
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetMarkerSize(4);
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->SetTitle(hname);
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->GetYaxis()->SetTitle("Raw Yield");
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->GetXaxis()->SetTitle(yield_n[cart[0]]);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->SetMarkerColor(9);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->SetMarkerStyle(20);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->SetMarkerSize(1);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->SetTitle(hname);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->GetYaxis()->SetTitle("Raw Yield");
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->GetXaxis()->SetTitle(yield_n[cart[0]]);
 
       //assign to TCanvas 
-     // std::cout<<std::endl <<"6.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      c_yield_Q2Wbin[cart[1]][cart[2]]->cd(cart[0]+1);
-      //std::cout<<std::endl <<"6.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]]->Draw();
-      //std::cout<<std::endl <<"6.3: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+      c_yield_Q2Wbin[cart[1]][cart[2]][cart[3]]->cd(cart[0]+1);
+      g_yield_Q2Wbin[cart[0]][cart[1]][cart[2]][cart[3]]->Draw();
     }
-    //std::cout<<std::endl <<"3";
-    for(int i = 0; i < 6; i++){
-  		for(int j = 0; j <30; j++){
-  			//std::cout<<std::endl <<"7.1: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-  			Qtop = Q2bin_start + ((i+1)*Q2bin_res);
-  			Qbot = Qtop - Q2bin_res;
-  			Wtop = Wbin_start + (j*Wbin_res);//constant.h
-        	Wbot = Wtop - Wbin_res; //constants.h
-        	//std::cout<<std::endl <<"7.2: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-  			sprintf(cname2,"Yield Q2:%f-%f W:%f-%f.pdf",Qbot,Qtop,Wbot,Wtop);
-  			//std::cout<<std::endl <<"7.3: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
-  			c_yield_Q2Wbin[i][j]->SaveAs(cname2);
-  			//std::cout<<std::endl <<"7.4: " <<cart[0] <<" " <<cart[1] <<" " <<cart[2] <<std::endl;
+
+    TDirectory * yield_plots = file->mkdir("yield_plots");
+    yield_plots->cd();
+    TDirectory * hel_neg = yield_plots->mkdir("yield_hel_neg");
+    TDirectory * hel_unk = yield_plots->mkdir("yield_hel_???");
+    TDirectory * hel_pos = yield_plots->mkdir("yield_hel_pos");
+    TDirectory * hel_all = yield_plots->mkdir("yield_hel_all");
+    TDirectory * hel_diff = yield_plots->mkdir("yield_hel_diff");
+    for(int i = 0; i < 6; i++){//Sector
+  		for(int j = 0; j <30; j++){//W Binning
+        for(int k = 0; k<5; k++){//Helicity State
+          switch(k){
+            case 0:
+              hel_neg->cd();
+            break;
+            case 1:
+              hel_unk->cd();
+            break;
+            case 2:
+              hel_pos->cd();
+            break;
+            case 3:
+              hel_all->cd();
+            break;
+            case 4:
+              hel_diff->cd();
+            break;
+          }
+    			Qtop = Q2bin_start + ((i+1)*Q2bin_res);
+    			Qbot = Qtop - Q2bin_res;
+    			Wtop = Wbin_start + (j*Wbin_res);//constant.h
+          	Wbot = Wtop - Wbin_res; //constants.h
+    			sprintf(cname2,"Yield Q2:%f-%f W:%f-%f h:%s",Qbot,Qtop,Wbot,Wtop,hel_stat[k]);
+    			c_yield_Q2Wbin[i][j][k]->SaveAs(cname2);
+          c_yield_Q2Wbin[i][j][k]->Write();        }
   		}
   	}
-  	//std::cout<<std::endl <<"4";
-
 }
 
 /*

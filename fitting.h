@@ -129,6 +129,40 @@ void fit_gaus_mult_2(TH1D* hist,int t, double lowb, double upb, double m0, doubl
 	}
 }
 
+//For Angular Momentum Correction Step 1
+void fit_gaus_const(TH1D* hist, double lowb, double upb, double m0, double gamma0, double max, double con, double &par1, double &par2, double &par3, double &par4, double &err1, double &err2, double &err3, double &err4){
+	//double* pointer[4];
+	TF1 *b_wig = new TF1("Gaus and Constant","[2]*TMath::Exp(-(x-[0])*(x-[0])/(2*[1]*[1]))+[3]",lowb,upb);
+	b_wig->SetParameter(0,m0);
+	b_wig->SetParameter(1,gamma0);
+	b_wig->SetParameter(2,max);
+	b_wig->SetParameter(3,con);
+	hist->Fit(b_wig,"Q+","",lowb,upb);
+	par1 = b_wig->GetParameter(0);
+	par2 = b_wig->GetParameter(1);
+	par3 = b_wig->GetParameter(2);
+	par4 = b_wig->GetParameter(3);
+	err1 = b_wig->GetParError(0);
+	err2 = b_wig->GetParError(1);
+	err3 = b_wig->GetParError(2);
+	err4 = b_wig->GetParError(3);
+	//Let's do it again! 
+	b_wig->SetParameter(0,par1);
+	b_wig->SetParameter(1,par2);
+	b_wig->SetParameter(2,par3);
+	b_wig->SetParameter(3,par4);
+	hist->Fit(b_wig,"Q+","",lowb,upb);
+	par1 = b_wig->GetParameter(0);
+	par2 = b_wig->GetParameter(1);
+	par3 = b_wig->GetParameter(2);
+	par4 = b_wig->GetParameter(3);
+	err1 = b_wig->GetParError(0);
+	err2 = b_wig->GetParError(1);
+	err3 = b_wig->GetParError(2);
+	err4 = b_wig->GetParError(3);
+
+}
+
 /*
 void fit_MM(){
 	fit_b_wig(MM_hist[0][0],0.8,1.0,p_center,p_sig,100.0,parameters[0],parameters[1],parameters[2],parameters[3],parameters[4],parameters[5]);

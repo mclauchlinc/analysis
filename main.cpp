@@ -110,7 +110,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         std::cout<<"Events loaded: " <<eventsIN <<std::endl;
 
         eventsOUT = data_OUT.GetEntries(); //TTree.h //variables.h
-        std::cout<<"You have read in data from " <<"Nick Skim Plate IN" <<std::endl;
+        std::cout<<"You have read in data from " <<"Nick Skim Plate OUT" <<std::endl;
         std::cout<<"Events loaded: " <<eventsOUT <<std::endl;
 
         //Set Branches
@@ -127,6 +127,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     std::cout<< "Making Histograms: ";
     MakeHist();//histograms.h
     MakeHist_fid_pdep();//Make momentum dependent fiducial histograms 4/17/19
+    MakeHist_eac_corr1();//First step in electron angle correction
     //MakeHist_fid();//fiducial histograms.h
     std::cout<<"Complete" <<std::endl;
 
@@ -135,6 +136,15 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     //For W variance in plots
     double W_var; 
     double Q2_var;
+
+    int pos_h; 
+    int neg_h;
+    int pos_h_E;
+    int neg_h_E;
+
+    double theta_e;
+    double cz_corr; 
+    double theta_p;
 
     int s1l=50;
     int s2l=1050;
@@ -159,9 +169,11 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             switch(plate){
                 case 0: events = eventsIN;
                         plate_stat = 1;
+                        cout<<endl;
                 break;
                 case 1: events = eventsOUT;
                         plate_stat = -1;
+                        cout<<endl;
                 break;
             }
         }else{
@@ -218,11 +230,28 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             }else{
                 Reassign3();//
             }
-            //cout<<"event class: " <<evntclas2 <<endl;
+            //cout<<endl <<"event class: " <<evntclas2 <<endl;
             e_helicity = event_helicity(evntclas2,plate_stat); //Assign Helicity to the event
+            //cout<<"event helicity: " <<e_helicity <<endl;
             W_var = WP(0,p[0],cx[0],cy[0],cz[0]);
             Q2_var = Qsquared(0,p[0],cx[0],cy[0],cz[0]);
+            if(e_helicity == -1){
+                neg_h += 1;
+            }
+            if(e_helicity == 1){
+                pos_h +=1;
+            }
             //counts = counts +1;
+            //Electron angle correction
+            if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],1)){//eid.h
+                if(W_var < 1.05 && W_var > 0.7){//Look at just elastic peak
+                    theta_p = get_theta(cz[1]);
+                    if(theta_p > 35){
+                        //cout<<endl <<theta_p <<endl;
+                        Fill_eac_corr1(energy_e16,theta_p,cx[0],cy[0],cz[0]);
+                    }
+                }
+            }
             //Assign_Ele(&ele_ints, &ele_dob, p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], cc_sect[cc[0]-1], cc_segm[cc[0]-1], nphe[cc[0]-1]);
             //Limit W and Q2 to be in the regime we actually care about for the analysis
             if(W_var > WminAna && W_var < WmaxAna && Q2_var > Q2minAna && Q2_var < Q2maxAna){
@@ -436,6 +465,12 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             
             //This is the complete event selection. Now do things with the four vectors 
             if(p_pass || pip_pass || pim_pass || zero_pass){
+                if(e_helicity == -1){
+                    neg_h_E =+1;     
+                }
+                if(e_helicity == 1){
+                    pos_h_E +=1; 
+                }
                 event_W = WP(0,p[0],cx[0],cy[0],cz[0]);
                 event_Q2 = Qsquared(0,p[0],cx[0],cy[0],cz[0]);
                 MM_p_pip = MM_2(pro_mu,pip_mu);
@@ -454,29 +489,48 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                     Wbin_now = Wbinning(event_W);
                     //Top Row of MM
                     if(MMbinning_check(0,MM_p_pip)){//yield.h
-                        y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0] += 1;
+                        y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0][3] += 1;
+                        y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0][e_helicity+1] += 1;
+                        y[0][Qbin_now][Wbin_now][MM_stuff_binning(0,MM_p_pip)][0][0][4] += e_helicity;
                     }
                     if(MMbinning_check(1,MM_p_pim)){//yield.h
-                        y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pim)][0][0] += 1;
+                        y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pim)][0][0][3] += 1;
+                        y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pim)][0][0][e_helicity+1] += 1;
+                        y[1][Qbin_now][Wbin_now][MM_stuff_binning(1,MM_p_pim)][0][0][4] += e_helicity;
                     }
                     if(MMbinning_check(2,MM_pip_pim)){//yield.h
-                        y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_pip_pim)][0][0] += 1;
+                        y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_pip_pim)][0][0][3] += 1;
+                        y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_pip_pim)][0][0][e_helicity+1] += 1;
+                        y[2][Qbin_now][Wbin_now][MM_stuff_binning(2,MM_pip_pim)][0][0][4] += e_helicity;
                     }
                     //Second row
-                    y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0] += 1;
-                    y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0] += 1;
-                    y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0] += 1;
+                    y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0][3] += 1;
+                    y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0][3] += 1;
+                    y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0][3] += 1;
+                    y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0][e_helicity+1] += 1;
+                    y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0][e_helicity+1] += 1;
+                    y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0][e_helicity+1] += 1;
+                    y[3][Qbin_now][Wbin_now][0][theta_binning(theta_p_pip)][0][4] += e_helicity;
+                    y[4][Qbin_now][Wbin_now][0][theta_binning(theta_p_pim)][0][4] += e_helicity;
+                    y[5][Qbin_now][Wbin_now][0][theta_binning(theta_pip_pim)][0][4] += e_helicity;
                     //Third Row
                     //cout<<endl <<"Alpha angles" <<endl <<"[p',pip][p,pim]: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu);
                     //cout <<endl <<"[pip,pim][p',p]: " <<alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu);
                     //cout <<endl <<"[p',pim][p,pip]: " <<alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu);
-                    y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                    y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))][3] +=1;
                     //cout<<endl <<"alpha 0: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu));
-                    y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
-                    y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))] +=1;
+                    y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))][3] +=1;
+                    y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))][3] +=1;
                     //cout<<endl <<"alpha 1: " <<alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu));
                     //cout<<endl <<"alpha 2: " <<alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu)) <<endl;
-
+                    y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))][e_helicity+1] +=1;
+                    //cout<<endl <<"alpha 0: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu));
+                    y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))][e_helicity+1] +=1;
+                    y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))][e_helicity+1] +=1;
+                    y[6][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu))][4] += e_helicity;
+                    //cout<<endl <<"alpha 0: " <<alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu) <<" binning: " <<alpha_binning(alpha(0,p_mu_event,pro_mu,pip_mu,pim_mu));
+                    y[7][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(1,p_mu_event,pro_mu,pip_mu,pim_mu))][4] += e_helicity;
+                    y[8][Qbin_now][Wbin_now][0][0][alpha_binning(alpha(2,p_mu_event,pro_mu,pip_mu,pim_mu))][4] += e_helicity;
 
                 }
                 /*
@@ -526,32 +580,49 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
         //Now for the graphing o stuff
         //Assign x's for 3x3 Plots 
-        for(int qq = 0; qq<6; qq++){
-            for(int ww = 0; ww<30; ww++){
-                for(int spice = 0; spice <3; spice++){
-                    //cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
-                    for(int rage = 0; rage < 13; rage++){
-                        x[spice][qq][ww][rage][0][0]=MM_bincenter(spice,rage);//yield.h
-                        xc_y[spice][qq][ww][rage][0][0] = y[spice][qq][ww][rage][0][0]*(1.0/L_e16)*cm2_to_mbarn;//Create a differential cross section
-                        //cout<<endl <<"MM bin: " <<rage <<" is: "<<x[spice][qq][ww][rage][0][0] <<endl;
+        for(int h = 0; h<5; h++){//Over all the different Helicity bins
+            for(int qq = 0; qq<6; qq++){
+                for(int ww = 0; ww<30; ww++){ //W Qsquared binning
+                    for(int spice = 0; spice <3; spice++){ //Particle Binning
+                        //cout<<endl <<"x for MM binning " <<qq <<" " <<ww;
+                        for(int rage = 0; rage < 13; rage++){ //
+                            x[spice][qq][ww][rage][0][0][h]=MM_bincenter(spice,rage);//yield.h
+                            xc_y[spice][qq][ww][rage][0][0][h] = y[spice][qq][ww][rage][0][0][h]*(1.0/L_e16)*cm2_to_mbarn;//Create a differential cross section
+                            //cout<<endl <<"MM bin: " <<rage <<" is: "<<x[spice][qq][ww][rage][0][0] <<endl;
+                        }
+                        //cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
+                        for(int against = 0; against < 10; against++){
+                            x[spice+3][qq][ww][0][against][0][h]=th_bincenter(against);//yield.h
+                            x[spice+6][qq][ww][0][0][against][h]=al_bincenter(against);//yield.h
+                           // cout<<endl <<"theta bin: " <<against <<" is: "<<x[spice+3][qq][ww][0][against][0] <<endl;
+                            //cout<<endl <<"alpha bin: " <<against <<" is: "<<x[spice+6][qq][ww][0][0][against] <<endl;
+                            xc_y[spice+6][qq][ww][0][0][against][h] = y[spice+6][qq][ww][0][0][against][h]*(1.0/L_e16)*cm2_to_mbarn;
+                            xc_y[spice+6][qq][ww][0][against][0][h] = y[spice+6][qq][ww][0][against][0][h]*(1.0/L_e16)*cm2_to_mbarn;
+                        }
                     }
-                    //cout<<endl <<"x for theta binning " <<qq <<" " <<ww;
-                    for(int against = 0; against < 10; against++){
-                        x[spice+3][qq][ww][0][against][0]=th_bincenter(against);//yield.h
-                        x[spice+6][qq][ww][0][0][against]=al_bincenter(against);//yield.h
-                       // cout<<endl <<"theta bin: " <<against <<" is: "<<x[spice+3][qq][ww][0][against][0] <<endl;
-                        //cout<<endl <<"alpha bin: " <<against <<" is: "<<x[spice+6][qq][ww][0][0][against] <<endl;
-                        xc_y[spice+6][qq][ww][0][0][against] = y[spice+6][qq][ww][0][0][against]*(1.0/L_e16)*cm2_to_mbarn;
-                        xc_y[spice+6][qq][ww][0][against][0] = y[spice+6][qq][ww][0][against][0]*(1.0/L_e16)*cm2_to_mbarn;
-                    }
-                }
 
+                }
             }
         }
     }
-    //cout<<endl <<"pre graph" <<endl;
-    //Graph_yield1(x,y);//yield.h//commented out 4/17/19
-    //cout<<endl <<"  post graph";    
+    cout<<endl <<"pre graph" <<endl;
+    //Graph_yield1(x,y,output);//yield.h//commented out 5/28/19
+    cout<<endl <<"  post graph";    
+
+    cout<<endl <<"positive helicity events: " <<pos_h <<endl <<"negative helicity events: " <<neg_h;
+    cout<<endl <<"positive helicity events for channel : " <<pos_h <<endl <<"negative helicity events for channel: " <<neg_h;
+    
+    //momentum correction fitting
+    //Angle step 1
+    for(int th_e = 0; th_e < num_theta_e_bins ; th_e++){
+        for(int ph_e = 0; ph_e < num_phi_e_bins; ph_e++){
+            for(int secto = 0; secto < 6 ; secto++){
+                fit_gaus_const(eac_1[th_e][ph_e][secto],-0.2,0.2,-0.05,0.02,5.0,0.1,eac1_pars[th_e][ph_e][secto][0],eac1_pars[th_e][ph_e][secto][1],eac1_pars[th_e][ph_e][secto][2],eac1_pars[th_e][ph_e][secto][3],eac1_pars[th_e][ph_e][secto][4],eac1_pars[th_e][ph_e][secto][5],eac1_pars[th_e][ph_e][secto][6],eac1_pars[th_e][ph_e][secto][7]);
+            }
+        }
+    }
+    //fit_gaus_const(eac_1[])
+
 
     /*
     //Fitting
@@ -597,7 +668,8 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     //Write_dt_MM(output);
     //Write_dt_pe(output);//commented out 4/17/19
     //Write_MinCC(output);//commented out 4/17/19
-    Write_fid_pdep(output);
+   // Write_fid_pdep(output); commented out 5/28/19
+    Write_eac1(output);
     
 
     std::cout<<"Complete \nClose: ";

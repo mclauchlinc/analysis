@@ -273,6 +273,7 @@ const char* cc_pos[] ={"left","coinc","right","all"};
 const char* fid_can[] = {"all","e","p","pip","pim"};
 const char* yield_n[] = {"Mppip","Mppim","Mpippim","Theta pim","Theta pim", "Theta p", "alpha ppip", "alpha ppim", "alpha pippim"};
 const char* plates[] = {"Half Plate IN","Half Plate OUT"};
+const char* hel_stat[]={"-","?","+","all","diff"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};
