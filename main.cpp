@@ -91,7 +91,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     else{
         std::cout<<"Error" <<std::endl;
     }
-
+    int per1; 
     if(plate_separation == 0){
         //Outputs on what was input
         events = data.GetEntries(); //TTree.h //variables.h
@@ -122,6 +122,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     }
     
     //MakeDirectories(output);
+    
 
     //Make Histograms
     std::cout<< "Making Histograms: ";
@@ -141,7 +142,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     int neg_h;
     int pos_h_E;
     int neg_h_E;
-
+    //char progress_spin[4] = {"-","O","|","/"};
     double theta_e;
     double cz_corr; 
     double theta_p;
@@ -179,6 +180,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
         }else{
             plate_stat = 0;
         }
+        per1 = round(events/100.0);
 
         for(int i = 0; i< events ; i++)//Start of actual event loop 
         {
@@ -197,12 +199,14 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
             //Update on the progress
             // cout<<"got into the loop?" <<endl;
-            progress = (int) 100.0*(((double)i+1.0)/(double)events);
-            cout <<"Progess Percent " <<progress;
-            if(plate_separation == 1){
-            cout<<"|| " <<plates[plate];
-            } 
-            cout<<"\r";
+            if(i%per1==0){
+                progress = (int) 100.0*(((double)i+1.0)/(double)events);
+                cout <<"Progess Percent " <<progress;
+                if(plate_separation == 1){
+                cout/*<<" || " <<progress_spin[(i%(4*per1))-1]*/ <<" || " <<plates[plate];
+                } 
+                cout<<"\r\r"<<flush;//Nick wants me to stop having the fun moving cursor :'(
+            }
 
            p_pass = false;
            pip_pass = false;
@@ -254,7 +258,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
             }
             //Assign_Ele(&ele_ints, &ele_dob, p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], cc_sect[cc[0]-1], cc_segm[cc[0]-1], nphe[cc[0]-1]);
             //Limit W and Q2 to be in the regime we actually care about for the analysis
-            if(W_var > WminAna && W_var < WmaxAna && Q2_var > Q2minAna && Q2_var < Q2maxAna){
+            /*woop there it is if(W_var > WminAna && W_var < WmaxAna && Q2_var > Q2minAna && Q2_var < Q2maxAna){
                 Fill_MinCC(cc_sect[cc[0]-1],nphe[cc[0]-1],cc_segm[cc[0]-1],0);
                 Fill_eid(W_var,p[0], q[0], cx[0], cy[0], cz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], stat[0], etot[0], id[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1]);//partitions.h
                 if(eid(p[0], q[0], cx[0], cy[0], cz[0], vx[0], vy[0], vz[0], dc[0], cc[0], ec[0], sc[0], dc_stat[dc[0]-1], etot[0], stat[0], cc_segm[cc[0]-1], nphe[cc[0]-1], cc_sect[cc[0]-1],5)){//eid.h
@@ -429,7 +433,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                                 if(!pip_pass && !pim_pass && zero_pass){
                                     Fill_dt(W_var,0,7,sc[j],p[j], p[0], sc_r[sc[j]-1], sc_r[sc[0]-1], sc_t[sc[j]-1], sc_t[sc[0]-1]);
                                 }*/
-                            }//l loop 
+            /*Yeaaaaah                }//l loop 
                         }//k loop ends
                         //Cross MM plots
                         if(top_cross(zero_pass,pim_pass,pip_pass,p_pass)){
@@ -575,9 +579,10 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
                 }
             }*/ //}
 
-            }
+            //}*//************Get rid of to do analysis
         }
 
+        /*WOOP WOOP
         //Now for the graphing o stuff
         //Assign x's for 3x3 Plots 
         for(int h = 0; h<5; h++){//Over all the different Helicity bins
@@ -603,7 +608,7 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
 
                 }
             }
-        }
+        }*///WOOP WOOP
     }
     cout<<endl <<"pre graph" <<endl;
     //Graph_yield1(x,y,output);//yield.h//commented out 5/28/19
@@ -613,15 +618,47 @@ int main(int argc, char** argv){ //Main function that will return an integer. ar
     cout<<endl <<"positive helicity events for channel : " <<pos_h <<endl <<"negative helicity events for channel: " <<neg_h;
     
     //momentum correction fitting
-    //Angle step 1
+    //Electron Angle step 1
     for(int th_e = 0; th_e < num_theta_e_bins ; th_e++){
         for(int ph_e = 0; ph_e < num_phi_e_bins; ph_e++){
             for(int secto = 0; secto < 6 ; secto++){
-                fit_gaus_const(eac_1[th_e][ph_e][secto],-0.2,0.2,-0.05,0.02,5.0,0.1,eac1_pars[th_e][ph_e][secto][0],eac1_pars[th_e][ph_e][secto][1],eac1_pars[th_e][ph_e][secto][2],eac1_pars[th_e][ph_e][secto][3],eac1_pars[th_e][ph_e][secto][4],eac1_pars[th_e][ph_e][secto][5],eac1_pars[th_e][ph_e][secto][6],eac1_pars[th_e][ph_e][secto][7]);
+                fit_gaus_const(eac_1[th_e][ph_e][secto],-0.2,0.2,-0.05,0.02,5.0,0.1,eac1_pars[th_e][ph_e][secto][0],eac1_pars[th_e][ph_e][secto][1],eac1_pars[th_e][ph_e][secto][2],eac1_pars[th_e][ph_e][secto][3],eac1_pars[th_e][ph_e][secto][4],eac1_pars[th_e][ph_e][secto][5],eac1_pars[th_e][ph_e][secto][6],eac1_pars[th_e][ph_e][secto][7]);//fitting.h
+                cout<<endl <<"Sector: " <<secto+1 <<" theta_b: " <<th_e <<" phi: " <<ph_e <<" has mean error of: " <<eac1_pars[th_e][ph_e][secto][4];
+                if((eac1_pars[th_e][ph_e][secto][4]/eac1_pars[th_e][ph_e][secto][0]) <= 0.01 && eac1_pars[th_e][ph_e][secto][4] != 0){ //For only the good fits that have reasonable errors. 1% is arbitrary for now, but I'll fine tune this. It's looking at the error for the mean of the gaussian fits in step 1
+                    cout<<" and it passed the cut" <<endl;
+                    eac2_y[th_e][ph_e][secto] = eac1_pars[th_e][ph_e][secto][0];//Get those means of gaussians over here!
+                    eac2_x[th_e][ph_e][secto] = phi_bin_center(ph_e);//Center those phi bins! 
+                }
+
             }
         }
     }
     //fit_gaus_const(eac_1[])
+    //Electron Angle step 2
+    cout<<endl <<"graphing eac2" <<endl;
+    Graph_eac2_2(eac2_x,eac2_y,output);
+    cout<<"completed graphing eac2" <<endl;
+    cout<<"Readout of EAC2 parameters with their errors"; 
+    for(int o = 0; o<num_theta_e_bins;o++){
+        for(int s= 0; s<6; s++){
+            cout<<endl <<"Sector:" <<s+1 <<" theta bin:" <<o  <<endl <<"A = " <<eac2_pars[o][s][0] <<" plus or minus " <<eac2_pars[o][s][5] <<endl <<"B = " <<eac2_pars[o][s][1] <<"plus or minus " <<eac2_pars[o][s][6]<<endl <<"C = " <<eac2_pars[o][s][2] <<"plus or minus " <<eac2_pars[o][s][7]<<endl <<"D = " <<eac2_pars[o][s][3] <<"plus or minus " <<eac2_pars[o][s][8]<<endl <<"E = " <<eac2_pars[o][s][4] <<"plus or minus " <<eac2_pars[o][s][9] <<endl;
+        }
+    }
+
+    //Angle step 3 (final part)
+    cout<<endl <<"graphing eac3" <<endl;
+    Graph_eac3(eac2_pars,output);
+    cout<<"Completed Graphing and fitting eac3" <<endl;
+    cout<<"Readout of EAC3 parameters with their errors";
+    for(int s = 0; s<6; s++){
+        cout<<endl <<"Sector: " <<s+1 <<endl;
+        for(int o = 0; o<3; o++){
+            for( int v =0; v<5; v++){
+                cout<<eac3_word2[o] <<eac3_word1[v] <<" is " <<eac3_pars[v][s][o] <<" ";
+            }
+            cout<<endl;
+        }
+    }
 
 
     /*

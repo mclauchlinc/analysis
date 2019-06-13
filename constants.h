@@ -274,6 +274,8 @@ const char* fid_can[] = {"all","e","p","pip","pim"};
 const char* yield_n[] = {"Mppip","Mppim","Mpippim","Theta pim","Theta pim", "Theta p", "alpha ppip", "alpha ppim", "alpha pippim"};
 const char* plates[] = {"Half Plate IN","Half Plate OUT"};
 const char* hel_stat[]={"-","?","+","all","diff"};
+const char* eac3_word1[]={"A","B","C","D","E"};
+const char* eac3_word2[]={"alpha_","beta_","gamma_"};
 
 //project
 const char* p_deltas[] = {"Dpp","Dp","D0"};

@@ -136,7 +136,7 @@ double W_from_bin(int i){
 //MM
 void Graph_yield1(double x[9][6][30][13][10][10][5], double y[9][6][30][13][10][10][5], TFile *file){
 	std::vector<long> space_dims(4);
-  	space_dims[0] = 9;
+  	space_dims[0] = 9; //Which plot am I plotting?
   	space_dims[1] = 6; //Q2 binning
   	space_dims[2] = 30; //W binning
     space_dims[3] = 5; //helicity binning
@@ -147,9 +147,9 @@ void Graph_yield1(double x[9][6][30][13][10][10][5], double y[9][6][30][13][10][
 
   	CartesianGenerator cart(space_dims); //Look in CartesianGenerator.hh
   	float Qbot, Qtop, Wbot, Wtop; 
-  	for(int i = 0; i < 6; i++){
-  		for(int j = 0; j <30; j++){
-        for(int k = 0; k < 5; k++){
+  	for(int i = 0; i < 6; i++){//Q2 binning
+  		for(int j = 0; j <30; j++){//W binning
+        for(int k = 0; k < 5; k++){//Helicity state
     			sprintf(cname1,"yield_Q2bin:%d_Wbin:%d_h:%s",i,j,hel_stat[k]);
     			c_yield_Q2Wbin[i][j][k] = new TCanvas(cname1,cname1,cW,cH);
     			c_yield_Q2Wbin[i][j][k]->Divide(3,3);

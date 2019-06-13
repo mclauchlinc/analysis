@@ -6,6 +6,7 @@
 #include "TF1.h"
 #include "headers.h"
 #include "TMath.h"
+#include "TGraph.h"
 
 
 
@@ -161,6 +162,33 @@ void fit_gaus_const(TH1D* hist, double lowb, double upb, double m0, double gamma
 	err3 = b_wig->GetParError(2);
 	err4 = b_wig->GetParError(3);
 
+}
+
+//For angular Momentum Corection step 2
+void fit_eac2(TGraph* graph, double lowb, double upb, double a0, double b0, double c0, double d0, double e0, double pars[14][6][10] ,int i, int j){
+	TF1 *eac2_func = new TF1("Fourth order polynomial","[0]*x*x*x*x+[1]*x*x*x+[2]*x*x+[3]*x+[4]",lowb, upb);
+	eac2_func->SetParameter(0,a0);
+	eac2_func->SetParameter(1,b0);
+	eac2_func->SetParameter(2,c0);
+	eac2_func->SetParameter(3,d0);
+	eac2_func->SetParameter(4,e0);
+	graph->Fit(eac2_func,"Q+","",lowb,upb);
+	for(int o = 0; o<5; o++){
+		pars[i][j][o] = eac2_func->GetParameter(o);
+		pars[i][j][o+5] = eac2_func->GetParError(o);
+	}
+}
+
+void fit_eac3(TGraph* graph, double lowb, double upb, double a0, double b0, double c0, double pars[5][6][6] ,int i, int j){
+	TF1 *eac3_func = new TF1("Fourth order polynomial","[0]*x*x+[1]*x+[2]",lowb, upb);
+	eac3_func->SetParameter(0,a0);
+	eac3_func->SetParameter(1,b0);
+	eac3_func->SetParameter(2,c0);
+	graph->Fit(eac3_func,"Q+","",lowb,upb);
+	for(int o = 0; o<3; o++){
+		pars[i][j][o] = eac3_func->GetParameter(o);
+		pars[i][j][o+3] = eac3_func->GetParError(o);
+	}
 }
 
 /*
